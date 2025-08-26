@@ -81,7 +81,7 @@ func AddJSONInt64sContainsAny(sqb *sqlx.Builder, col string, vals []int64) {
 	}
 }
 
-func AddJSONFlagsContailsAll(sqb *sqlx.Builder, col string, vals []string) {
+func AddJSONFlagsContainsAll(sqb *sqlx.Builder, col string, vals []string) {
 	switch app.DBType() {
 	case "mysql":
 		mysqb.JSONFlagsContainsAll(sqb, col, vals...)
@@ -90,7 +90,7 @@ func AddJSONFlagsContailsAll(sqb *sqlx.Builder, col string, vals []string) {
 	}
 }
 
-func AddJSONFlagsContailsAny(sqb *sqlx.Builder, col string, vals []string) {
+func AddJSONFlagsContainsAny(sqb *sqlx.Builder, col string, vals []string) {
 	switch app.DBType() {
 	case "mysql":
 		mysqb.JSONFlagsContainsAny(sqb, col, vals...)

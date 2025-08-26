@@ -41,8 +41,8 @@ func initRouter() {
 
 	app.VAD = app.XIN.Validator.Engine().(*vad.Validate)
 	app.VAD.RegisterValidation("samlmeta", middles.ValidateSAMLMeta)
-
 	xvads.RegisterValidations(app.VAD)
+
 	xmwas.InitMiddlewares()
 
 	app.XBA = middleware.NewBasicAuth(tenant.CheckClientAndAuthenticate)

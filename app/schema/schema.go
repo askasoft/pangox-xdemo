@@ -78,6 +78,10 @@ func SM() xsm.SchemaManager {
 	return SSM(app.SDB)
 }
 
+func GetSchema(s string) (*xsm.SchemaInfo, error) {
+	return SM().GetSchema(s)
+}
+
 func ExistsSchema(s string) (bool, error) {
 	return SM().ExistsSchema(s)
 }
