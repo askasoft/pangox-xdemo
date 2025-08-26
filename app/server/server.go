@@ -1,8 +1,6 @@
 package server
 
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"fmt"
 	"os"
 	"time"
@@ -119,8 +117,7 @@ func Reload() {
 
 // Run start the http server
 func Run() {
-	// Starting the server in a goroutine so that
-	// it won't block the graceful shutdown handling below
+	// start serve http servers in go-routines (non-blocking)
 	xhsvs.Serves()
 
 	// Start jobs (Resume interrupted jobs)
@@ -163,15 +160,6 @@ func initConfigs() {
 	}
 }
 
-func initCertificate() {
-	xcert, err := loadCertificate()
-	if err != nil {
-		log.Fatal(app.ExitErrCFG, err)
-	}
-
-	app.Certificate = xcert
-}
-
 func initCaches() {
 	app.SCMAS = imc.New[string, bool](ini.GetDuration("cache", "schemaCacheExpires", time.Minute), time.Minute)
 	app.CONFS = imc.New[string, map[string]string](ini.GetDuration("cache", "configCacheExpires", time.Minute), time.Minute)
@@ -196,39 +184,6 @@ func initServers() {
 
 func reloadServers() {
 	xhsvs.ConfigServers()
-}
-
-func getCertificate(chi *tls.ClientHelloInfo) (*tls.Certificate, error) {
-	return app.Certificate, nil
-}
-
-// ------------------------------------------------------
-
-func loadCertificate() (*tls.Certificate, error) {
-	certificate := ini.GetString("server", "certificate")
-	certkeyfile := ini.GetString("server", "certkeyfile")
-
-	xcert, err := tls.LoadX509KeyPair(certificate, certkeyfile)
-	if err != nil {
-		return nil, fmt.Errorf("invalid certificate (%q, %q): %w", certificate, certkeyfile, err)
-	}
-
-	xcert.Leaf, err = x509.ParseCertificate(xcert.Certificate[0])
-	if err != nil {
-		return nil, fmt.Errorf("invalid certificate (%q, %q): %w", certificate, certkeyfile, err)
-	}
-
-	return &xcert, nil
-}
-
-func reloadCertificate() {
-	xcert, err := loadCertificate()
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	app.Certificate = xcert
 }
 
 func reloadConfigs() {

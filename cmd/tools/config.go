@@ -1,8 +1,7 @@
 package tools
 
 import (
-	"log"
-
+	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox/xwa"
 )

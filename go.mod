@@ -4,8 +4,8 @@ go 1.23.0
 
 require (
 	github.com/askasoft/gogormx v1.0.0
-	github.com/askasoft/pango v1.2.2
-	github.com/askasoft/pangox v1.2.2
+	github.com/askasoft/pango v1.2.3
+	github.com/askasoft/pangox v1.2.3
 	github.com/askasoft/pangox-assets v1.1.0
 	github.com/crewjam/saml v0.4.14
 	github.com/go-ldap/ldap/v3 v3.4.11
