@@ -7,7 +7,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/askasoft/pango/fsw"
 	"github.com/askasoft/pango/gwp"
 	"github.com/askasoft/pango/imc"
 	"github.com/askasoft/pango/ini"
@@ -18,6 +17,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/jobs"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox/xwa"
+	"github.com/askasoft/pangox/xwa/xfsws"
 	"github.com/askasoft/pangox/xwa/xhsvs"
 )
 
@@ -135,8 +135,8 @@ func Shutdown() {
 	// stop scheduler
 	sch.Stop()
 
-	// stop fs watch
-	fsw.Stop() //nolint: errcheck
+	// close fs watch
+	_ = xfsws.CloseFileWatch()
 
 	// shutdown http servers
 	xhsvs.Shutdowns()
@@ -245,13 +245,13 @@ func reloadConfigs() {
 
 	configMiddleware()
 
-	reloadFileWatch()
-
 	reloadMessages()
 
 	reloadTemplates()
 
 	runStatsMonitor()
+
+	reloadFileWatch()
 
 	reScheduler()
 }

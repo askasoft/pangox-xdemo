@@ -30,7 +30,7 @@ func initFileWatch() {
 }
 
 func reloadFileWatch() {
-	if err := xfsws.RunFileWatch(); err != nil {
+	if err := xfsws.ReloadFileWatch(); err != nil {
 		log.Error(err)
 	}
 }
