@@ -269,6 +269,50 @@ openssl req -x509 -newkey rsa:2048 -keyout xdemo.key -out xdemo.cer -days 3650 -
 ```
 
 
+## Local develop instructions
+
+### /etc/hosts or c:\windows\System32\drivers\etc\hosts
+```
+127.0.0.1           xdemo.local xdemo.xdemo.local
+```
+
+### conf/env.ini
+```ini
+[app]
+debug = true
+reloadable = true
+messages = txts
+templates = tpls
+webassets = web
+
+[server]
+listen = 127.0.0.1:6060
+domain = xdemo.local
+```
+
+### .vscode/launch.json
+```json
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "standalone",
+			"type": "go",
+			"request": "launch",
+			"mode": "debug",
+			"program": "${workspaceRoot}/main.go",
+			"env": {},
+			"args": []
+		},
+	]
+}
+```
+
+### browser
+http://xdemo.local:6060
+
+
+
 ## OpenSearch
 
 ```
