@@ -13,7 +13,7 @@ import (
 
 func init() {
 	xtxts.FSs = []fs.FS{txts.FS}
-	xfsws.ReloadMessages = reloadMessagesOnChange
+	xfsws.ReloadMsgsOnChange = reloadMessagesOnChange
 }
 
 func initMessages() {
@@ -23,9 +23,13 @@ func initMessages() {
 }
 
 func reloadMessages() {
-	xtxts.ReloadMessages()
+	if err := xtxts.ReloadMessages(); err != nil {
+		log.Error(err)
+	}
 }
 
 func reloadMessagesOnChange(path string, op fsw.Op) {
-	xtxts.ReloadMessagesOnChange(path, op.String())
+	if err := xtxts.ReloadMessagesOnChange(path, op.String()); err != nil {
+		log.Error(err)
+	}
 }

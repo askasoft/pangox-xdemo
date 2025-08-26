@@ -108,9 +108,11 @@ func Init() {
 
 // Relead reload the app
 func Reload() {
-	xwa.ReloadLogs("-")
+	log.Info("Reloading ...")
 
-	log.Infof("Reloading configurations")
+	if err := xwa.ReloadLogs("RELOAD"); err != nil {
+		log.Error(err)
+	}
 
 	reloadConfigs()
 }
@@ -129,8 +131,7 @@ func Run() {
 
 // Shutdown shutdown the app
 func Shutdown() {
-	// gracefully shutdown the server with a timeout of 5 seconds.
-	log.Info("Shutting down server ...")
+	log.Info("Shutting down ...")
 
 	// stop scheduler
 	sch.Stop()
@@ -138,10 +139,10 @@ func Shutdown() {
 	// close fs watch
 	_ = xfsws.CloseFileWatch()
 
-	// shutdown http servers
+	// gracefully shutdown the http servers with timeout '[server] shutdownTimeout' (defautl 5 seconds).
 	xhsvs.Shutdowns()
 
-	log.Info("Server exit.")
+	log.Info("EXIT.")
 
 	// close log
 	log.Close()
@@ -232,6 +233,7 @@ func reloadCertificate() {
 
 func reloadConfigs() {
 	if err := xwa.InitConfigs(); err != nil {
+		log.Error(err)
 		return
 	}
 

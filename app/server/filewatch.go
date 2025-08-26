@@ -9,12 +9,14 @@ import (
 )
 
 func init() {
-	xfsws.ReloadLogs = reloadLogsOnChange
-	xfsws.ReloadConfigs = reloadConfigsOnChange
+	xfsws.ReloadLogsOnChange = reloadLogsOnChange
+	xfsws.ReloadCfgsOnChange = reloadConfigsOnChange
 }
 
 func reloadLogsOnChange(path string, op fsw.Op) {
-	xwa.ReloadLogs(op.String())
+	if err := xwa.ReloadLogs(op.String()); err != nil {
+		log.Error(err)
+	}
 }
 
 func reloadConfigsOnChange(path string, op fsw.Op) {

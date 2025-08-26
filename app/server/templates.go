@@ -20,7 +20,7 @@ func init() {
 		"TIME":           app.FormatTime,
 		"SummernoteLang": summernote.Locale2Lang,
 	}
-	xfsws.ReloadTemplates = reloadTemplatesOnChange
+	xfsws.ReloadTplsOnChange = reloadTemplatesOnChange
 }
 
 func initTemplates() {
@@ -30,9 +30,13 @@ func initTemplates() {
 }
 
 func reloadTemplates() {
-	xtpls.ReloadTemplates()
+	if err := xtpls.ReloadTemplates(); err != nil {
+		log.Error(err)
+	}
 }
 
 func reloadTemplatesOnChange(path string, op fsw.Op) {
-	xtpls.ReloadTemplatesOnChange(path, op.String())
+	if err := xtpls.ReloadTemplatesOnChange(path, op.String()); err != nil {
+		log.Error(err)
+	}
 }
