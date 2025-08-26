@@ -141,8 +141,16 @@ func FormatDate(a any) string {
 	return tmu.LocalFormatDate(a)
 }
 
+func ParseDate(s string) (time.Time, error) {
+	return time.ParseInLocation(time.DateOnly, s, time.Local)
+}
+
 func FormatTime(a any) string {
 	return tmu.LocalFormatDateTime(a)
+}
+
+func ParseTime(s string) (time.Time, error) {
+	return time.ParseInLocation(time.DateTime, s, time.Local)
 }
 
 func RandomPassword() string {

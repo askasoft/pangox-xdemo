@@ -192,8 +192,8 @@ func NewJobRunner[T any](tt *tenant.Tenant, job *xjm.Job) *JobRunner[T] {
 
 	xjm.MustDecode(job.Param, &jr.Arg)
 
-	jr.Log().SetProp("VERSION", app.Version)
-	jr.Log().SetProp("REVISION", app.Revision)
+	jr.Log().SetProp("VERSION", app.Version())
+	jr.Log().SetProp("REVISION", app.Revision())
 	jr.Log().SetProp("TENANT", string(tt.Schema))
 	jr.Logger = jr.Log().GetLogger("JOB")
 

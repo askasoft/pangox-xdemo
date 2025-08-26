@@ -187,13 +187,13 @@ func StreamOrSubmitRun[T any, R any](ssr iStreamSubmitRun[T, R]) (err error) {
 	} else {
 		err = SubmitRun(ctx, ssr)
 		if errors.Is(err, xjm.ErrJobComplete) {
-			if er := ssr.WaitAndProcessResults(ssr.ProcessResult); er != nil {
+			if er := ssr.WaitAndProcessResults(ssr.ProcessResult); er != nil { //nolint: staticcheck
 				err = er
 			}
 			cancel(err)
 		} else {
 			cancel(err)
-			_ = ssr.WaitAndProcessResults(ssr.ProcessResult)
+			_ = ssr.WaitAndProcessResults(ssr.ProcessResult) //nolint: staticcheck
 		}
 	}
 
