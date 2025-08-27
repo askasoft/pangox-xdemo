@@ -391,8 +391,8 @@ body {
 .s-section-head > h2 > i, .s-section-head > h3 > i {
 	font-size: 1.25em;
 }
-.s-section-head > h2 > i + *, .s-section-head > h3 > i + * {
-	margin-left: 0.5rem;
+.s-section-head > h1 > i + *, .s-section-head > h2 > i + *, .s-section-head > h3 > i + * {
+	margin-left: 0.25em;
 }
 .s-section-body {
 	background-color: var(--bs-body-bg);

@@ -1,0 +1,18 @@
+{{define "styles"}}
+{{range $s := .Ctx.Attrs.xstyles}}
+<link rel="stylesheet" type="text/css" href="{{$s}}"/>
+{{end}}
+<link rel="stylesheet" type="text/css" href="{{$.Base}}/static/{{$.REV}}/bootstrap5/css/bootstrap.min.css"/>
+{{/*<link rel="stylesheet" type="text/css" href="{{$.Base}}/static/{{$.REV}}/bootswatch5/cosmo/bootstrap.min.css"/>*/}}
+{{/*<link rel="stylesheet" type="text/css" href="{{$.Base}}/static/{{$.REV}}/bootswatch5/flatly/bootstrap.min.css"/>*/}}
+{{/*<link rel="stylesheet" type="text/css" href="{{$.Base}}/static/{{$.REV}}/bootswatch5/pulse/bootstrap.min.css"/>*/}}
+<link rel="stylesheet" type="text/css" href="{{$.Base}}/static/{{$.REV}}/fontawesome6/css/all.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{$.Base}}/static/{{$.REV}}/plugins/css/plugins.min.css"/>
+<link rel="stylesheet" type="text/css" href="{{$.Base}}/assets/{{$.REV}}/main.css"/>
+{{range $s := .Ctx.Attrs.sstyles}}
+<link rel="stylesheet" type="text/css" href="{{$.Base}}/static/{{$.REV}}/{{$s}}"/>
+{{end}}
+{{range $s := .Ctx.Attrs.astyles}}
+<link rel="stylesheet" type="text/css" href="{{$.Base}}/assets/{{$.REV}}/{{$s}}"/>
+{{end}}
+{{end}}

@@ -1,4 +1,7 @@
 {{define "scripts"}}
+{{range $s := .Ctx.Attrs.xscripts}}
+<script type="text/javascript" src="{{$s}}"></script>
+{{end}}
 {{if eq .CFG.app.debug "true"}}
 <script type="text/javascript" src="{{$.Base}}/static/{{$.REV}}/jquery3/jquery-3.7.1.js"></script>
 <script type="text/javascript" src="{{$.Base}}/static/{{$.REV}}/bootstrap5/js/bootstrap.bundle.js"></script>

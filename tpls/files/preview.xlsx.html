@@ -1,0 +1,41 @@
+{{$f := .File}}
+{{MapSet .Ctx.Attrs "title" $f.Name}}
+
+{{template "main_header" .}}
+
+<div class="s-section">
+	<div class="s-section-head">
+		<h1><i class="fas fa-fw fa-file-excel"></i><span>{{$f.Name}}</span></h1>
+		<div class="me-auto"></div>
+		<p>{{T .Loc "file.time"}} {{TIME $f.Time}}</p>
+		<a id="xlsx_dnload" class="btn btn-sm btn-outline-primary ms-4" href="{{$.Base}}/files/dnload{{$f.ID}}">{{I "dnload"}}</a>
+	</div>
+	<div class="s-section-body">
+		{{if .Sheets}}
+		<ul class="nav nav-tabs">
+			{{range $i, $s := .Sheets.Keys}}
+			<li class="nav-item"><a class="nav-link{{if eq $i 0}} active{{end}}" href="#sh_{{$s}}" data-bs-toggle="tab">{{$s}}</a></li>
+			{{end}}
+		</ul>
+		<div class="tab-content table-responsive my-4">
+			{{range $i, $s := .Sheets.Entries}}
+			<div id="sh_{{$s.Key}}" class="tab-pane{{if eq $i 0}} active{{end}}">
+				{{if $s.Val}}
+				<table class="table table-bordered table-striped" linkify>
+					{{range $r := $s.Val}}
+					<tr>
+						{{range $c := $r}}
+						<td><pre>{{$c}}</pre></td>
+						{{end}}
+					</tr>
+					{{end}}
+				</table>
+				{{end}}
+			</div>
+			{{end}}
+		</div>
+		{{end}}
+	</div>
+</div>
+
+{{template "main_footer" .}}

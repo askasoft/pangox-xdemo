@@ -1,0 +1,20 @@
+{{$f := .File}}
+{{MapSet .Ctx.Attrs "title" $f.Name}}
+{{MapSet .Ctx.Attrs "xscripts" (Array "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js")}}
+{{MapSet .Ctx.Attrs "ascripts" (Array "files/preview.xls.js")}}
+
+{{template "main_header" .}}
+
+<div class="s-section">
+	<div class="s-section-head">
+		<h1><i class="fas fa-fw fa-file-excel"></i><span>{{$f.Name}}</span></h1>
+		<div class="me-auto"></div>
+		<p>{{T .Loc "file.time"}} {{TIME $f.Time}}</p>
+		<a id="xls_dnload" class="btn btn-sm btn-outline-primary ms-4" href="{{$.Base}}/files/dnload{{$f.ID}}">{{I "dnload"}}</a>
+	</div>
+	<div class="s-section-body">
+		<div id="xls_preview" class="table-responsive"></div>
+	</div>
+</div>
+
+{{template "main_footer" .}}

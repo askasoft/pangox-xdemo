@@ -1,6 +1,6 @@
 # Xdemo
 
-## Linux
+## Database
 
 ### install postgresql server
 ```sh
@@ -31,8 +31,7 @@ CREATE DATABASE xdemo WITH OWNER=xdemo ENCODING='UTF-8';
 GRANT ALL ON DATABASE xdemo TO xdemo;
 ```
 
-
-### install mariadb server
+### install mariadb server (if you want to use mysql)
 ```sh
 sudo apt update
 sudo apt install postgresql postgresql-contrib libpq-dev
@@ -61,6 +60,8 @@ CREATE DATABASE xdemo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 GRANT ALL PRIVILEGES ON *.* TO 'xdemo'@'%';
 ```
 
+
+## Linux
 
 ### install golang (1.24)
 ```sh
@@ -125,7 +126,7 @@ sudo systemctl enable xdemo
 sudo systemctl start xdemo
 ```
 
-### test slack notify
+test slack notify 
 ```sh
 sudo systemctl start slack-alert@xdemo.service.service
 ```
@@ -159,12 +160,6 @@ SET LOG_SLACK_WEBHOOK=https://hooks.slack.com/services/...
 deploy.bat
 ```
 
-### init database
-```sh
-cd /app/xdemo
-./xdemo schema init
-```
-
 ### install as windows service
 Run As Administrator
 
@@ -173,7 +168,7 @@ xdemo.exe install
 ```
 
 
-## apache proxy setting
+## apache proxy setting (optional)
 
 ### Virtual Host
 ```xml
@@ -226,7 +221,7 @@ prefix = /xdemo
 ```
 
 
-## nginx proxy setting
+## nginx proxy setting (optional)
 ```xml
 upstream xdemo {
 	server    127.0.0.1:6060;
@@ -259,6 +254,12 @@ server {
 }
 ```
 
+## init database
+```sh
+cd /app/xdemo
+./xdemo schema init
+```
+
 
 ## SSL
 ```sh
@@ -288,6 +289,7 @@ webassets = web
 [server]
 listen = 127.0.0.1:6060
 domain = xdemo.local
+httpsRedirect = false
 ```
 
 ### .vscode/launch.json
@@ -303,6 +305,34 @@ domain = xdemo.local
 			"program": "${workspaceRoot}/main.go",
 			"env": {},
 			"args": []
+		},
+		{
+			"name": "migrate config",
+			"type": "go",
+			"request": "launch",
+			"mode": "debug",
+			"program": "${workspaceRoot}/main.go",
+			"env": {},
+			"args": [ "migrate", "config" ]
+		},
+		{
+			"name": "execsql",
+			"type": "go",
+			"request": "launch",
+			"mode": "debug",
+			"program": "${workspaceRoot}/main.go",
+			"env": {},
+			"args": [ "execsql", "${workspaceRoot}/data/dev.sql" ]
+		},
+		{
+			"name": "cmd/generate schema",
+			"type": "go",
+			"request": "launch",
+			"mode": "debug",
+			"program": "${workspaceRoot}/cmd/main.go",
+			"cwd": "${workspaceRoot}",
+			"env": {},
+			"args": [ "generate" ]
 		},
 	]
 }
