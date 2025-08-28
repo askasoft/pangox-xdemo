@@ -183,7 +183,9 @@ func initServers() {
 }
 
 func reloadServers() {
-	xhsvs.ConfigServers()
+	if err := xhsvs.ReloadServers(); err != nil {
+		log.Error(err)
+	}
 }
 
 func reloadConfigs() {
