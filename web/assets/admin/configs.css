@@ -35,4 +35,5 @@ label[editor="%"] {
 
 .schedule > .doms, .schedule > .dows, .schedule > .hours {
 	border-top: dashed 1px var(--ui-lined-color, #ccc);
+	display: block;
 }
