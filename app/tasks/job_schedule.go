@@ -35,23 +35,22 @@ func startConfigScheduleJobChain(tt *tenant.Tenant, cfgkey, jcname string, fn fu
 		return nil
 	}
 
-	now := time.Now()
-	stm := tmu.TruncateHours(now).Add(-time.Millisecond)
-	jtm := cron.Next(stm)
-
-	if now.Before(jtm) {
-		return nil
-	}
-
 	xjc := tt.JC()
 	jc, err := xjc.FindJobChain(jcname, false)
 	if err != nil {
 		return err
 	}
 
-	if jc == nil || jc.CreatedAt.Before(jtm) {
-		return fn(tt)
+	now := time.Now()
+	stm := tmu.TruncateMinutes(now).Add(-time.Minute)
+
+	if jc != nil && jc.CreatedAt.After(stm) {
+		stm = jc.CreatedAt
 	}
 
+	jtm := cron.Next(stm)
+	if jtm.Before(now) {
+		return fn(tt)
+	}
 	return nil
 }
