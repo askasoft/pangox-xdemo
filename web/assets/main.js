@@ -123,12 +123,19 @@ var main = {
 	},
 
 	// ajax error handler
-	ajax_error: function(xhr, status, err, $f) {
-		if (xhr.readyState == 0) { // window unload
-			console.log('ajax canceled.');
-			return;
+	ajax_errmsg: function(xhr, status, err) {
+		// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+		if (xhr.readyState != XMLHttpRequest.DONE) {
+			return 'Failed to connect to the server.';
 		}
 
+		err = (xhr.status ? xhr.status + ' ' : '') + (err || status || 'error');
+		if (xhr.responseJSON) {
+			err = xhr.responseJSON.error || JSON.stringify(xhr.responseJSON, null, 2) || err;
+		}
+		return err;
+	},
+	ajax_error: function(xhr, status, err, $f) {
 		var afterHidden;
 		if (xhr.status == 401 || xhr.status == 403) { // unauthorized, forbidden
 			afterHidden = function() {
@@ -136,11 +143,7 @@ var main = {
 			};
 		}
 
-		err = (xhr.status ? xhr.status + ' ' : '') + (err || status || 'error');
-		if (xhr.responseJSON) {
-			err = xhr.responseJSON.error || JSON.stringify(xhr.responseJSON, null, 2) || err;
-		}
-
+		err = main.ajax_errmsg(xhr, status, err);
 		if (!$.isArray(err)) {
 			err = [ err ];
 		}
@@ -177,10 +180,10 @@ var main = {
 			});
 		}
 	},
-	popup_ajax_fail: function(paf) {
+	popup_ajax_fail: function() {
 		return function(xhr, status, err) {
-			main.ajax_error(xhr, status, err);
-			paf.call(this, xhr, status, err);
+			err = main.ajax_errmsg(xhr, status, err);
+			$(this).empty().append($('<div class="ui-popup-error text">').text(err));
 		}
 	},
 
@@ -398,9 +401,10 @@ var main = {
 		});
 		return ids;
 	},
-	set_table_tr_values: function($tr, vs) {
+	set_table_tr_values: function($tr, vs, px) {
+		px ||= '';
 		for (var k in vs) {
-			var $td = $tr.find('td.' + k);
+			var $td = $tr.find('td.' + px + k);
 			if ($td.length == 0 || $td.hasClass('ro')) {
 				continue;
 			}
