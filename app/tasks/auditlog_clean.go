@@ -17,7 +17,7 @@ func CleanOutdatedAuditLogs() {
 			return err
 		}
 
-		tt.Logger("SCH").Infof("CleanOutdatedAuditLogs(%q): %d", tt.Schema, cnt)
+		tt.Logger("SCH").Infof("[%s] CleanOutdatedAuditLogs(%q): %d", tt.Schema, before.Format(time.RFC3339), cnt)
 		return nil
 	})
 }
