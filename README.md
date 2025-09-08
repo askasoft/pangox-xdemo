@@ -104,7 +104,7 @@ Group = systemd-journal
 
 echo '
 [Unit]
-Description = Pango Xdemo
+Description = Pangox Xdemo
 After = syslog.target network.target local-fs.target
 OnFailure = slack-alert@%n.service
 

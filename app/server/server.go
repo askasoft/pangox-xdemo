@@ -37,12 +37,12 @@ func (s *service) Name() string {
 
 // DisplayName app/service display name
 func (s *service) DisplayName() string {
-	return "Pango Xdemo"
+	return "Pangox Xdemo"
 }
 
 // Description app/service description
 func (s *service) Description() string {
-	return "Pango Xdemo Service"
+	return "Pangox Xdemo Service"
 }
 
 // Version app version
