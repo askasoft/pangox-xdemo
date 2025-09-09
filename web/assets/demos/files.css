@@ -4,6 +4,7 @@
 }
 
 #files_table th.ext, #files_table td.ext,
+#files_table th.tag, #files_table td.tag,
 #files_table th.size, #files_table td.size,
 #files_table th.time, #files_table td.time {
 	white-space: nowrap;

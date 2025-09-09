@@ -3,6 +3,7 @@ CREATE TABLE "SCHEMA"."files" (
 	"id" varchar(255) NOT NULL,
 	"name" text NOT NULL,
 	"ext" text NOT NULL,
+	"tag" text NOT NULL,
 	"time" timestamptz NOT NULL,
 	"size" bigint NOT NULL,
 	"data" bytea NOT NULL,

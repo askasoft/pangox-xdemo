@@ -62,3 +62,21 @@ func (sm Schema) DeleteFiles(tx sqlx.Sqlx, ids ...string) (int64, error) {
 
 	return r.RowsAffected()
 }
+
+func (sm Schema) UpdateFiles(tx sqlx.Sqlx, fua *args.FileUpdatesArg) (int64, error) {
+	sqb := tx.Builder()
+
+	sqb.Update(sm.TableFiles())
+	fua.AddUpdates(sqb)
+
+	xsqbs.AddIn(sqb, "id", fua.IDs())
+
+	sql, args := sqb.Build()
+
+	r, err := tx.Exec(sql, args...)
+	if err != nil {
+		return 0, err
+	}
+
+	return r.RowsAffected()
+}

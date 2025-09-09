@@ -21,6 +21,12 @@
 			<button class="btn btn-sm btn-outline-danger" popup-target="#files_deleteall_popup">
 				{{I "deleteall"}} {{T .Loc "button.deleteall"}}
 			</button>
+			<button class="btn btn-sm btn-outline-primary" id="files_editsel" enableby="#files_list td.check input">
+				{{I "editsel"}} {{T .Loc "button.editsel"}}
+			</button>
+			<button class="btn btn-sm btn-outline-primary" id="files_editall">
+				{{I "editall"}} {{T .Loc "button.editall"}}
+			</button>
 		</div>
 
 		<div id="files_alert">{{template "alerts" .}}</div>
@@ -37,6 +43,10 @@
 					<label class="col-md-2 col-xxl-1 col-form-label">{{T .Loc "file.id"}}</label>
 					<div class="col-md-4 col-xxl-5">
 						<input name="id" type="text" class="form-control" textclear value="{{.Q.ID}}" placeholder="{{T .Loc "filter.keywords"}}"/>
+					</div>
+					<label class="col-md-2 col-xxl-1 col-form-label">{{T .Loc "file.tag"}}</label>
+					<div class="col-md-4 col-xxl-5">
+						<input name="tag" type="text" class="form-control" textclear value="{{.Q.Tag}}" placeholder="{{T .Loc "filter.keywords"}}"/>
 					</div>
 				</div>
 				<div class="row">
@@ -131,6 +141,12 @@
 				</div>
 			</div>
 			<div class="row">
+				<label class="col-md-2 col-form-label">{{T .Loc "file.tag"}}</label>
+				<div class="col">
+					<input name="tag" type="text" class="form-control" textclear value="{{.Q.Tag}}" placeholder="{{T .Loc "filter.keywords"}}"/>
+				</div>
+			</div>
+			<div class="row">
 				<label class="col-md-2 col-form-label">{{T .Loc "file.size"}}</label>
 				<div class="col">
 					<input name="size" type="text" class="form-control" textclear value="{{.Q.Size}}" placeholder="{{T .Loc "filter.uintegers"}}"/>
@@ -149,6 +165,30 @@
 	</div>
 	<div class="ui-popup-footer">
 		<button type="submit" class="btn btn-danger">{{I "deletebat"}} {{T .Loc "button.deletebat"}}</button>
+		<button type="button" class="btn btn-secondary" popup-dismiss="true">{{I "cancel"}} {{T .Loc "button.cancel"}}</button>
+	</div>
+</div>
+
+<div id="files_bulkedit_popup" class="ui-popup s-popup-detail" data-spy="popup" tabindex="-1"
+	popup-position="center" popup-mask="true" popup-scroll="false" popup-mouse="false" popup-closer="true">
+	<div class="ui-popup-header">
+		<h4 class="editsel"><span>{{I "editsel"}} {{T .Loc "button.editsel"}}</span></h4>
+		<h4 class="editall"><span>{{I "editall"}} {{T .Loc "button.editall"}}</span></h4>
+	</div>
+	<div class="ui-popup-body grey">
+		<form class="ui-form lined" autocomplete="off">
+			<input type="hidden" name="id"/>
+			<div class="row">
+				<label class="col-md-2 col-form-label">{{T .Loc "file.tag"}} <input type="checkbox"></label>
+				<div class="col-md-10">
+					<input name="tag" type="text" class="form-control" disabled textclear>
+				</div>
+			</div>
+			<button type="submit" class="hidden"></button>
+		</form>
+	</div>
+	<div class="ui-popup-footer">
+		<button type="submit" class="btn btn-primary" enableby="#files_bulkedit_popup .col-form-label > input">{{I "save"}} {{T .Loc "button.update"}}</button>
 		<button type="button" class="btn btn-secondary" popup-dismiss="true">{{I "cancel"}} {{T .Loc "button.cancel"}}</button>
 	</div>
 </div>

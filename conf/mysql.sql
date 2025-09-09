@@ -3,6 +3,7 @@ CREATE TABLE `SCHEMA`.`files` (
 	`id` varchar(255) NOT NULL,
 	`name` longtext NOT NULL,
 	`ext` longtext NOT NULL,
+	`tag` longtext NOT NULL,
 	`time` datetime(3) NOT NULL,
 	`size` bigint NOT NULL,
 	`data` longblob NOT NULL,

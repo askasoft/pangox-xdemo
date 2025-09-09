@@ -60,7 +60,7 @@ func (pc *PetClearJob) clear() error {
 	pc.Logger.Infof("Delete Pet Files: /%s ...", models.PrefixPetFile)
 
 	sfs := tt.SFS(db)
-	cnt, err := sfs.DeletePrefix("/" + models.PrefixPetFile + "/")
+	cnt, err := sfs.DeleteTag(models.PrefixPetFile)
 	if err != nil {
 		return err
 	}

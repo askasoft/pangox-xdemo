@@ -9,6 +9,7 @@
 			<th class="id sortable" data-sort-col="id">{{T .Loc "file.id"}}</th>
 			<th class="name sortable" data-sort-col="name">{{T .Loc "file.name"}}</th>
 			<th class="ext sortable" data-sort-col="ext">{{T .Loc "file.ext"}}</th>
+			<th class="tag sortable" data-sort-col="tag">{{T .Loc "file.tag"}}</th>
 			<th class="size sortable" data-sort-col="size">{{T .Loc "file.size"}}</th>
 			<th class="time sortable" data-sort-col="time">{{T .Loc "file.time"}}</th>
 		</tr>
@@ -20,6 +21,7 @@
 			<td class="id"><a href="{{$.Base}}/files/preview{{$f.ID}}" target="_blank">{{$f.ID}} {{I "exlink"}}</a></td>
 			<td class="name">{{$f.Name}}</td>
 			<td class="ext">{{$f.Ext}}</td>
+			<td class="tag">{{$f.Tag}}</td>
 			<td class="size">{{HumanSize $f.Size}}</td>
 			<td class="time date">{{TIME $f.Time}}</td>
 		</tr>

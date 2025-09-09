@@ -16,7 +16,7 @@ func SaveUploadedFile(c *xin.Context, mfh *multipart.FileHeader) (*xfs.File, err
 
 	tt := tenant.FromCtx(c)
 	tfs := tt.FS()
-	return xfs.SaveUploadedFile(tfs, fid, mfh)
+	return xfs.SaveUploadedFile(tfs, fid, mfh, models.PrefixTmpFile)
 }
 
 func Upload(c *xin.Context) {

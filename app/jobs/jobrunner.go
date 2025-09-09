@@ -53,7 +53,7 @@ func (fa *FileArg) GetFile() string {
 func (fa *FileArg) SetFile(tt *tenant.Tenant, mfh *multipart.FileHeader) error {
 	fid := app.MakeFileID(models.PrefixJobFile, mfh.Filename)
 	tfs := tt.FS()
-	if _, err := xfs.SaveUploadedFile(tfs, fid, mfh); err != nil {
+	if _, err := xfs.SaveUploadedFile(tfs, fid, mfh, models.PrefixJobFile); err != nil {
 		return err
 	}
 

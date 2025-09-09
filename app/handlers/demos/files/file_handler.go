@@ -15,6 +15,7 @@ var fileListCols = []string{
 	"id",
 	"name",
 	"ext",
+	"tag",
 	"size",
 	"time",
 }

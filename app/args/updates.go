@@ -75,6 +75,40 @@ func (uua *UserUpdatesArg) AddUpdates(sqb *sqlx.Builder) {
 	sqb.Setc("updated_at", *uua.UpdatedAt)
 }
 
+type FileUpdatesArg struct {
+	IDArg
+	UpdatedAtArg
+
+	Tag *string `json:"tag,omitempty" form:"tag,strip"`
+}
+
+func (fua *FileUpdatesArg) String() string {
+	return fua.ToString(fua)
+}
+
+func (fua *FileUpdatesArg) Bind(c *xin.Context) error {
+	if err := c.Bind(fua); err != nil {
+		return err
+	}
+	if err := fua.ParseID(); err != nil {
+		return err
+	}
+	if fua.isEmpty() {
+		return xargs.ErrInvalidUpdates
+	}
+	return nil
+}
+
+func (fua *FileUpdatesArg) isEmpty() bool {
+	return fua.Tag == nil
+}
+
+func (fua *FileUpdatesArg) AddUpdates(sqb *sqlx.Builder) {
+	if fua.Tag != nil {
+		sqb.Setc("tag", *fua.Tag)
+	}
+}
+
 type PetUpdatesArg struct {
 	IDArg
 	UpdatedAtArg

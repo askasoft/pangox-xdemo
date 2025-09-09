@@ -31,6 +31,7 @@ const (
 	AL_PETS_DOG_CREATE_START  = "pets.doggen-start"
 	AL_PETS_DOG_CREATE_CANCEL = "pets.doggen-cancel"
 	AL_FILES_DELETES          = "files.deletes"
+	AL_FILES_UPDATES          = "files.updates"
 )
 
 var AL_FUNACTS = []string{
@@ -57,6 +58,8 @@ var AL_FUNACTS = []string{
 	AL_PETS_CAT_CREATE_CANCEL,
 	AL_PETS_DOG_CREATE_START,
 	AL_PETS_DOG_CREATE_CANCEL,
+	AL_FILES_DELETES,
+	AL_FILES_UPDATES,
 }
 
 type AuditLogEx struct {

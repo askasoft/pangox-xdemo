@@ -111,6 +111,44 @@
 
 
 	//----------------------------------------------------
+	// updates (selected / all)
+	//
+	function files_updates() {
+		var $p = $('#files_bulkedit_popup').popup('update', { keyboard: false });
+		var ids = $p.find('[name=id]').val();
+
+		$.ajax({
+			url: './updates',
+			method: 'POST',
+			data: $p.find('form').serialize(),
+			dataType: 'json',
+			beforeSend: main.form_ajax_start($p),
+			success: function(data) {
+				$p.popup('hide');
+
+				$.toast({
+					icon: 'success',
+					text: data.success
+				});
+
+				var $trs = (ids == '*' ? $('#files_table > tbody > tr') : main.get_table_trs('#file_', ids.split(',')));
+
+				var us = data.updates;
+				if (us.tag) {
+					$trs.find('td.tag').text(us.tag);
+				}
+				main.blink($trs);
+			},
+			error: main.form_ajax_error($p),
+			complete:  function() {
+				$p.unloadmask().popup('update', { keyboard: true });
+			}
+		});
+		return false;
+	}
+
+
+	//----------------------------------------------------
 	// init
 	//
 	function files_init() {
@@ -128,6 +166,14 @@
 		$('#files_deletebat_popup')
 			.on('submit', 'form', files_deletebat)
 			.on('click', '.ui-popup-footer button[type=submit]', files_deletebat);
+
+		$('#files_editsel').on('click', main.bulkedit_editsel_popup.callback('files'));
+		$('#files_editall').on('click', main.bulkedit_editall_popup.callback('files'));
+
+		$('#files_bulkedit_popup')
+			.on('change', '.col-form-label > input', main.bulkedit_label_click)
+			.on('submit', 'form', files_updates)
+			.on('click', '.ui-popup-footer button[type=submit]', files_updates);
 	}
 
 	$(window).on('load', files_init);

@@ -121,6 +121,7 @@ type FileQueryArg struct {
 	ID       string    `json:"id,omitempty" form:"id,strip,ascii" validate:"uintegers"`
 	Name     string    `json:"name,omitempty" form:"name,strip"`
 	Ext      string    `json:"ext,omitempty" form:"ext,strip"`
+	Tag      string    `json:"tag,omitempty" form:"tag,strip"`
 	Size     string    `json:"size,omitempty" form:"size,strip,ascii" validate:"uintegers"`
 	TimeFrom time.Time `json:"time_from,omitempty" form:"time_from,strip"`
 	TimeTo   time.Time `json:"time_to,omitempty" form:"time_to,strip" validate:"omitempty,gtefield=TimeFrom"`
@@ -134,6 +135,7 @@ func (fqa *FileQueryArg) HasFilters() bool {
 	return fqa.ID != "" ||
 		fqa.Name != "" ||
 		fqa.Ext != "" ||
+		fqa.Tag != "" ||
 		fqa.Size != "" ||
 		!fqa.TimeFrom.IsZero() ||
 		!fqa.TimeTo.IsZero()
@@ -143,6 +145,7 @@ func (fqa *FileQueryArg) AddFilters(sqb *sqlx.Builder) {
 	fqa.AddKeywords(sqb, "id", fqa.ID)
 	fqa.AddKeywords(sqb, "name", fqa.Name)
 	fqa.AddKeywords(sqb, "ext", fqa.Ext)
+	fqa.AddKeywords(sqb, "tag", fqa.Tag)
 	fqa.AddUintegers(sqb, "size", fqa.Size)
 	fqa.AddTimeRange(sqb, "time", fqa.TimeFrom, fqa.TimeTo)
 }
