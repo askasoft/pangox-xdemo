@@ -27,7 +27,7 @@
 			success: function(data) {
 				var fr = new FileReader();
 				fr.onload = function(evt) {
-					var wb = XLSX.read(evt.target.result);
+					var wb = XLSX.read(evt.target.result, { cellDates: true });
 					var cnt = wb.SheetNames.length;
 					if (page > cnt) {
 						page = 1;
@@ -48,7 +48,7 @@
 						if (i == (page - 1)) {
 							$d.addClass('active');
 						}
-						$d.html(XLSX.utils.sheet_to_html(wb.Sheets[n]));
+						$d.html(XLSX.utils.sheet_to_html(wb.Sheets[n], { cellDates: true }));
 						$d.children('table').addClass('table table-bordered table-striped');
 						$tc.append($d);
 					});

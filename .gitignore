@@ -4,6 +4,7 @@
 /conf/env.ini
 /data
 /logs
+/z
 /xdemo*
 /*.exe
 resource.syso

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
@@ -41,7 +40,7 @@ func PetUpdates(c *xin.Context) {
 			return
 		}
 		if cnt > 0 {
-			err = tt.AddAuditLog(tx, c, models.AL_PETS_UPDATES, num.Ltoa(cnt), pua.String())
+			err = tt.AddAuditLog(tx, c, models.AL_PETS_UPDATES, cnt, pua.String())
 		}
 		return
 	})
@@ -88,7 +87,7 @@ func PetDeletes(c *xin.Context) {
 		}
 
 		if cnt > 0 {
-			if err = tt.AddAuditLog(tx, c, models.AL_PETS_DELETES, num.Ltoa(cnt), ida.String()); err != nil {
+			if err = tt.AddAuditLog(tx, c, models.AL_PETS_DELETES, cnt, ida.String()); err != nil {
 				return
 			}
 			err = tt.ResetPetsAutoIncrement(tx)
@@ -130,7 +129,7 @@ func PetDeleteBatch(c *xin.Context) {
 		}
 
 		if cnt > 0 {
-			if err = tt.AddAuditLog(tx, c, models.AL_PETS_DELETES, num.Ltoa(cnt), pqa.String()); err != nil {
+			if err = tt.AddAuditLog(tx, c, models.AL_PETS_DELETES, cnt, pqa.String()); err != nil {
 				return
 			}
 			err = tt.ResetPetsAutoIncrement(tx)

@@ -150,7 +150,7 @@ func UserCreate(c *xin.Context) {
 			return err
 		}
 
-		return tt.AddAuditLog(tx, c, models.AL_USERS_CREATE, num.Ltoa(user.ID), user.Email)
+		return tt.AddAuditLog(tx, c, models.AL_USERS_CREATE, user.ID, user.Email)
 	})
 	if err != nil {
 		if sqlutil.IsUniqueViolationError(err) {
@@ -209,7 +209,7 @@ func UserUpdate(c *xin.Context) {
 		}
 
 		if cnt > 0 {
-			err = tt.AddAuditLog(tx, c, models.AL_USERS_UPDATE, num.Ltoa(user.ID), user.Email)
+			err = tt.AddAuditLog(tx, c, models.AL_USERS_UPDATE, user.ID, user.Email)
 		}
 		return
 	})

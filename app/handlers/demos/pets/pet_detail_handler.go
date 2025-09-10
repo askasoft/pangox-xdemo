@@ -143,7 +143,7 @@ func PetCreate(c *xin.Context) {
 			}
 		}
 
-		return tt.AddAuditLog(tx, c, models.AL_PETS_CREATE, num.Ltoa(pet.ID), pet.Name)
+		return tt.AddAuditLog(tx, c, models.AL_PETS_CREATE, pet.ID, pet.Name)
 	})
 	if err != nil {
 		c.AddError(err)
@@ -189,7 +189,7 @@ func PetUpdate(c *xin.Context) {
 					return
 				}
 			}
-			err = tt.AddAuditLog(tx, c, models.AL_PETS_UPDATE, num.Ltoa(pet.ID), pet.Name)
+			err = tt.AddAuditLog(tx, c, models.AL_PETS_UPDATE, pet.ID, pet.Name)
 		}
 		return
 	})

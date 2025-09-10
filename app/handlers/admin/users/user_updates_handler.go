@@ -3,7 +3,6 @@ package users
 import (
 	"net/http"
 
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
@@ -40,7 +39,7 @@ func UserUpdates(c *xin.Context) {
 			return
 		}
 		if cnt > 0 {
-			err = tt.AddAuditLog(tx, c, models.AL_USERS_UPDATES, num.Ltoa(cnt), uua.String())
+			err = tt.AddAuditLog(tx, c, models.AL_USERS_UPDATES, cnt, uua.String())
 		}
 		return
 	})
@@ -75,7 +74,7 @@ func UserDeletes(c *xin.Context) {
 		}
 
 		if cnt > 0 {
-			if err = tt.AddAuditLog(tx, c, models.AL_USERS_DELETES, num.Ltoa(cnt), ida.String()); err != nil {
+			if err = tt.AddAuditLog(tx, c, models.AL_USERS_DELETES, cnt, ida.String()); err != nil {
 				return
 			}
 			err = tt.ResetUsersAutoIncrement(tx)
@@ -118,7 +117,7 @@ func UserDeleteBatch(c *xin.Context) {
 		}
 
 		if cnt > 0 {
-			if err = tt.AddAuditLog(tx, c, models.AL_USERS_DELETES, num.Ltoa(cnt), uqa.String()); err != nil {
+			if err = tt.AddAuditLog(tx, c, models.AL_USERS_DELETES, cnt, uqa.String()); err != nil {
 				return
 			}
 			err = tt.ResetUsersAutoIncrement(tx)

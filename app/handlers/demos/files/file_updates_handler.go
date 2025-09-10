@@ -3,7 +3,6 @@ package files
 import (
 	"net/http"
 
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
@@ -33,7 +32,7 @@ func FileUpdates(c *xin.Context) {
 			return
 		}
 		if cnt > 0 {
-			err = tt.AddAuditLog(tx, c, models.AL_FILES_UPDATES, num.Ltoa(cnt), fua.String())
+			err = tt.AddAuditLog(tx, c, models.AL_FILES_UPDATES, cnt, fua.String())
 		}
 		return
 	})
@@ -67,7 +66,7 @@ func FileDeletes(c *xin.Context) {
 		}
 
 		if cnt > 0 {
-			err = tt.AddAuditLog(tx, c, models.AL_FILES_DELETES, num.Ltoa(cnt), pka.String())
+			err = tt.AddAuditLog(tx, c, models.AL_FILES_DELETES, cnt, pka.String())
 		}
 		return
 	})
@@ -106,7 +105,7 @@ func FileDeleteBatch(c *xin.Context) {
 		}
 
 		if cnt > 0 {
-			err = tt.AddAuditLog(tx, c, models.AL_FILES_DELETES, num.Ltoa(cnt), pqa.String())
+			err = tt.AddAuditLog(tx, c, models.AL_FILES_DELETES, cnt, pqa.String())
 		}
 		return
 	})
