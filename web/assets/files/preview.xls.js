@@ -1,5 +1,13 @@
 (function($) {
-	$(window).on('load', function() {
+	var page = 1;
+	if (location.hash) {
+		var ps = $.queryParams(location.hash.substring(1));
+		if (ps['page'] && parseInt(ps['page']) > 0) {
+			page = parseInt(ps['page']);
+		}
+	}
+
+	function xlx_preview() {
 		$.ajax({
 			url: $('#xls_dnload').attr('href'),
 			xhr: function() {
@@ -17,14 +25,18 @@
 			},
 			beforeSend: main.loadmask,
 			success: function(data) {
-				var fr = reader = new FileReader();
+				var fr = new FileReader();
 				fr.onload = function(evt) {
 					var wb = XLSX.read(evt.target.result);
+					var cnt = wb.SheetNames.length;
+					if (page > cnt) {
+						page = 1;
+					}
 
 					var $ul = $('<ul class="nav nav-tabs">');
 					$.each(wb.SheetNames, function(i, n) {
 						var $a = $('<a class="nav-link" data-bs-toggle="tab">').attr('href', '#sh_'+n).text(n);
-						if (i == 0) {
+						if (i == (page - 1)) {
 							$a.addClass('active');
 						}
 						$ul.append($('<li class="nav-item">').append($a));
@@ -33,7 +45,7 @@
 					var $tc = $('<div class="tab-content table-responsive my-4">');
 					$.each(wb.SheetNames, function(i, n) {
 						var $d = $('<div class="tab-pane">').attr('id', 'sh_'+n);
-						if (i == 0) {
+						if (i == (page - 1)) {
 							$d.addClass('active');
 						}
 						$d.html(XLSX.utils.sheet_to_html(wb.Sheets[n]));
@@ -48,5 +60,7 @@
 			error: main.ajax_error,
 			complete: main.unloadmask
 		});
-	});
+	}
+
+	$(window).on('load', xlx_preview);
 })(jQuery);

@@ -1,5 +1,6 @@
 {{$f := .File}}
 {{MapSet .Ctx.Attrs "title" $f.Name}}
+{{MapSet .Ctx.Attrs "ascripts" (Array "files/preview.xlsx.js")}}
 
 {{template "main_header" .}}
 
@@ -10,7 +11,7 @@
 		<p>{{T .Loc "file.time"}} {{TIME $f.Time}}</p>
 		<a id="xlsx_dnload" class="btn btn-sm btn-outline-primary ms-4" href="{{$.Base}}/files/dnload{{$f.ID}}">{{I "dnload"}}</a>
 	</div>
-	<div class="s-section-body">
+	<div class="s-section-body" id="xlsx_preview">
 		{{if .Sheets}}
 		<ul class="nav nav-tabs">
 			{{range $i, $s := .Sheets.Keys}}

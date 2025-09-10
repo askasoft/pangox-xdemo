@@ -1,6 +1,6 @@
 module github.com/askasoft/pangox-xdemo
 
-go 1.23.0
+go 1.24.0
 
 require (
 	github.com/askasoft/gogormx v1.0.1
@@ -10,7 +10,7 @@ require (
 	github.com/crewjam/saml v0.5.1
 	github.com/go-ldap/ldap/v3 v3.4.11
 	github.com/go-sql-driver/mysql v1.9.3
-	github.com/jackc/pgx/v5 v5.7.5
+	github.com/jackc/pgx/v5 v5.7.6
 	github.com/liuzl/gocc v0.0.0-20231231122217-0372e1059ca5
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/xlzd/gotp v0.1.0
@@ -18,7 +18,7 @@ require (
 	golang.org/x/net v0.43.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.30.1
+	gorm.io/gorm v1.30.2
 )
 
 require (
@@ -30,7 +30,7 @@ require (
 	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/jackc/pgerrcode v0.0.0-20240316143900-6e2875d9b438 // indirect
+	github.com/jackc/pgerrcode v0.0.0-20250907135507-afb5586c32a6 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
@@ -46,15 +46,15 @@ require (
 	github.com/tiendc/go-deepcopy v1.6.0 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
-	golang.org/x/crypto v0.41.0 // indirect
-	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/text v0.28.0 // indirect
+	golang.org/x/crypto v0.42.0 // indirect
+	golang.org/x/sync v0.17.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/text v0.29.0 // indirect
 )
 
-// replace (
-// 	github.com/askasoft/gogormx => ../gogormx
-// 	github.com/askasoft/pango => ../pango
-// 	github.com/askasoft/pangox => ../pangox
-// 	github.com/askasoft/pangox-assets => ../pangox-assets
-// )
+replace (
+	github.com/askasoft/gogormx => ../gogormx
+	github.com/askasoft/pango => ../pango
+	github.com/askasoft/pangox => ../pangox
+	github.com/askasoft/pangox-assets => ../pangox-assets
+)

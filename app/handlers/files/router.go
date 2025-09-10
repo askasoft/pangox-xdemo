@@ -10,6 +10,9 @@ import (
 )
 
 func Router(rg *xin.RouterGroup) {
+	rg.Use(xmwas.XAC.Handle) // access control
+	rg.OPTIONS("/*path", xin.Next)
+
 	rg.POST("/upload", Upload)
 	rg.POST("/uploads", Uploads)
 
