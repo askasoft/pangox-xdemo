@@ -1,74 +1,29 @@
 package server
 
 import (
-	"database/sql"
-	"errors"
-	"time"
-
 	"github.com/askasoft/pango/fsu"
-	"github.com/askasoft/pango/gog"
-	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/log"
-	"github.com/askasoft/pango/log/sqlog/sqlxlog"
-	"github.com/askasoft/pango/mag"
-	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/schema"
 	"github.com/askasoft/pangox-xdemo/app/utils/sqlutil"
+	"github.com/askasoft/pangox/xwa/xsqls"
 )
 
-var (
-	// DBS database settings
-	DBS map[string]string
-)
+func init() {
+	xsqls.RegisterGetErrLogLevel("mysql", sqlutil.GetMysqlErrLogLevel)
+	xsqls.RegisterGetErrLogLevel("pgx", sqlutil.GetPgxErrLogLevel)
+}
 
 func initDatabase() {
-	if err := openDatabase(); err != nil {
+	if err := xsqls.OpenDatabase(); err != nil {
 		log.Fatal(app.ExitErrDB, err)
 	}
 }
 
 func reloadDatabase() {
-	if err := openDatabase(); err != nil {
+	if err := xsqls.OpenDatabase(); err != nil {
 		log.Error(err)
 	}
-}
-
-func openDatabase() error {
-	sec := ini.GetSection("database")
-	if sec == nil {
-		return errors.New("missing [database] settings")
-	}
-
-	dbs := sec.StringMap()
-	if mag.Equal(DBS, dbs) {
-		return nil
-	}
-
-	typ := sec.GetString("type")
-	dsn := sec.GetString(typ)
-	log.Infof("Connect Database (%s): %s", typ, dsn)
-
-	db, err := sql.Open(gog.If(typ == "postgres", "pgx", typ), dsn)
-	if err != nil {
-		return err
-	}
-
-	db.SetMaxIdleConns(sec.GetInt("maxIdleConns", 5))
-	db.SetConnMaxIdleTime(sec.GetDuration("connMaxIdleTime", time.Minute*5))
-	db.SetMaxOpenConns(sec.GetInt("maxOpenConns", 10))
-	db.SetConnMaxLifetime(sec.GetDuration("connMaxLifetime", time.Hour))
-
-	slg := sqlxlog.NewSqlxLogger(
-		log.GetLogger("SQL"),
-		sec.GetDuration("slowSql", time.Second),
-	)
-	slg.GetErrLogLevel = sqlutil.GetErrLogLevel
-
-	DBS = dbs
-	app.SDB = sqlx.NewDB(db, typ, slg.Trace)
-
-	return nil
 }
 
 func dbIterateSchemas(fn func(sm schema.Schema) error, schemas ...string) error {
@@ -122,7 +77,7 @@ func dbSchemaInit(schemas ...string) error {
 
 func dbSchemaCheck(schemas ...string) error {
 	return dbIterateSchemas(func(sm schema.Schema) error {
-		sm.CheckSchema(app.SDB)
+		sm.CheckSchema(app.SDB())
 		return nil
 	}, schemas...)
 }

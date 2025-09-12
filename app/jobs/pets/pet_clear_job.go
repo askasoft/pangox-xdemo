@@ -55,7 +55,7 @@ func (pc *PetClearJob) Run() {
 
 func (pc *PetClearJob) clear() error {
 	tt := pc.Tenant
-	db := app.SDB
+	db := app.SDB()
 
 	pc.Logger.Infof("Delete Pet Files: /%s ...", models.PrefixPetFile)
 

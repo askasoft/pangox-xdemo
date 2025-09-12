@@ -98,7 +98,7 @@ func loginFailed(c *xin.Context, reason string) {
 
 func loginPassed(c *xin.Context, au *models.User) {
 	tt := tenant.FromCtx(c)
-	if err := tt.Schema.AddAuditLog(app.SDB, au.ID, c.ClientIP(), au.Role, models.AL_LOGIN_LOGIN, au.Email); err != nil {
+	if err := tt.Schema.AddAuditLog(app.SDB(), au.ID, c.ClientIP(), au.Role, models.AL_LOGIN_LOGIN, au.Email); err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 	}
@@ -196,7 +196,7 @@ func LoginMFAEnroll(c *xin.Context) {
 
 	tt := tenant.FromCtx(c)
 
-	_, err := tt.UpdateUserSecret(app.SDB, au.ID, au.Secret)
+	_, err := tt.UpdateUserSecret(app.SDB(), au.ID, au.Secret)
 	if err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))

@@ -36,7 +36,7 @@ func UserCsvExport(c *xin.Context) {
 	defer cw.Flush()
 
 	var cols []string
-	err = tt.IterUsers(app.SDB, au.Role, uqa, func(user *models.User) error {
+	err = tt.IterUsers(app.SDB(), au.Role, uqa, func(user *models.User) error {
 		if len(cols) == 0 {
 			c.SetAttachmentHeader("users.csv")
 			_, _ = c.Writer.WriteString(string(iox.BOM))

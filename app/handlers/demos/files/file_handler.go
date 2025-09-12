@@ -53,7 +53,7 @@ func FileList(c *xin.Context) {
 
 	tt := tenant.FromCtx(c)
 
-	fqa.Total, err = tt.CountFiles(app.SDB, fqa)
+	fqa.Total, err = tt.CountFiles(app.SDB(), fqa)
 	if err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
@@ -65,7 +65,7 @@ func FileList(c *xin.Context) {
 	fqa.Pager.Normalize(tbsutil.GetPagerLimits(c.Locale)...)
 
 	if fqa.Total > 0 {
-		results, err := tt.FindFiles(app.SDB, fqa, fileListCols...)
+		results, err := tt.FindFiles(app.SDB(), fqa, fileListCols...)
 		if err != nil {
 			c.AddError(err)
 			c.JSON(http.StatusInternalServerError, middles.E(c))

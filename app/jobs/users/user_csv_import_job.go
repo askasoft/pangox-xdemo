@@ -264,7 +264,7 @@ func (ucij *UserCsvImportJob) importRecord(rec *csvUserRecord) error {
 	user.UpdatedAt = user.CreatedAt
 
 	tt := ucij.Tenant
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		uid := user.ID
 		if user.ID != 0 {
 			eu, err := tt.GetUser(tx, user.ID)

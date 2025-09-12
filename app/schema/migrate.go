@@ -67,7 +67,7 @@ func (sm Schema) MigrateConfig(configs []*models.Config) error {
 
 	log.Infof("Migrate Config %q", tb)
 
-	db := app.SDB
+	db := app.SDB()
 
 	sqb := db.Builder()
 	sqb.Select().From(tb)
@@ -148,7 +148,7 @@ func (sm Schema) MigrateSuper() error {
 
 	log.Infof("Migrate Super %q", tb)
 
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		var uid int64
 
 		sqb := tx.Builder()

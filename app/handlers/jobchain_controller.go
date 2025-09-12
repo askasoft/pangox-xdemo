@@ -197,7 +197,7 @@ func (jcc *JobChainController) StartJob(c *xin.Context) {
 	if fa == "" {
 		fa = jcc.ChainName + ".start"
 	}
-	_ = tt.AddAuditLog(app.SDB, c, fa)
+	_ = tt.AddAuditLog(app.SDB(), c, fa)
 
 	c.JSON(http.StatusOK, xin.H{
 		"cid":     cid,
@@ -241,7 +241,7 @@ func (jcc *JobChainController) Cancel(c *xin.Context) {
 	if fa == "" {
 		fa = jcc.ChainName + ".cancel"
 	}
-	_ = tt.AddAuditLog(app.SDB, c, fa)
+	_ = tt.AddAuditLog(app.SDB(), c, fa)
 
 	c.JSON(http.StatusOK, xin.H{"warning": tbs.GetText(c.Locale, "job.message.canceled")})
 }

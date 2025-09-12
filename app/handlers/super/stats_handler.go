@@ -49,7 +49,7 @@ func StatsJobs(c *xin.Context) {
 }
 
 func StatsDB(c *xin.Context) {
-	c.JSON(http.StatusOK, app.SDB.Stats())
+	c.JSON(http.StatusOK, app.SDB().Stats())
 }
 
 func statsServer() any {

@@ -37,7 +37,7 @@ func PetCsvExport(c *xin.Context) {
 	defer cw.Flush()
 
 	var cols []string
-	err = tt.IterPets(app.SDB, pqa, func(pet *models.Pet) error {
+	err = tt.IterPets(app.SDB(), pqa, func(pet *models.Pet) error {
 		if len(cols) == 0 {
 			c.SetAttachmentHeader("pets.csv")
 			_, _ = c.Writer.WriteString(string(iox.BOM))

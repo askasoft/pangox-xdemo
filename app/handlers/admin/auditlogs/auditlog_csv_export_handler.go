@@ -35,7 +35,7 @@ func AuditLogCsvExport(c *xin.Context) {
 	cnt := 0
 
 	var cols []string
-	err = tt.IterAuditLogs(app.SDB, alqa, c.Locale, func(al *models.AuditLogEx) error {
+	err = tt.IterAuditLogs(app.SDB(), alqa, c.Locale, func(al *models.AuditLogEx) error {
 		if len(cols) == 0 {
 			c.SetAttachmentHeader("auditlogs.csv")
 			_, _ = c.Writer.WriteString(string(iox.BOM))

@@ -46,15 +46,15 @@ func (sm Schema) SFS(db sqlx.Sqlx) xfs.XFS {
 }
 
 func (sm Schema) JC() xjm.JobChainer {
-	return sm.SJC(app.SDB)
+	return sm.SJC(app.SDB())
 }
 
 func (sm Schema) JM() xjm.JobManager {
-	return sm.SJM(app.SDB)
+	return sm.SJM(app.SDB())
 }
 
 func (sm Schema) FS() xfs.XFS {
-	return sm.SFS(app.SDB)
+	return sm.SFS(app.SDB())
 }
 
 func IsMultiTenant() bool {
@@ -75,7 +75,7 @@ func SSM(db *sqlx.DB) xsm.SchemaManager {
 }
 
 func SM() xsm.SchemaManager {
-	return SSM(app.SDB)
+	return SSM(app.SDB())
 }
 
 func GetSchema(s string) (*xsm.SchemaInfo, error) {

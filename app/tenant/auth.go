@@ -46,7 +46,7 @@ func (tt *Tenant) FindAuthUser(username string) (*models.User, error) {
 		return u, nil
 	}
 
-	u, err := tt.GetActiveUserByEmail(app.SDB, username)
+	u, err := tt.GetActiveUserByEmail(app.SDB(), username)
 	if err != nil {
 		if errors.Is(err, sqlx.ErrNoRows) {
 			app.USERS.Set(k, noUser)
@@ -83,7 +83,7 @@ func (tt *Tenant) CreateAuthUser(email, name, role string) (*models.User, error)
 	mu.SetPassword(app.RandomPassword())
 	mu.UpdatedAt = mu.CreatedAt
 
-	err := tt.CreateUser(app.SDB, mu)
+	err := tt.CreateUser(app.SDB(), mu)
 	return mu, err
 }
 

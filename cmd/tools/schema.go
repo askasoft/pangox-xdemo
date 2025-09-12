@@ -49,7 +49,7 @@ func GenerateSchema(dbt, outfile string) error {
 	initConfigs()
 
 	if dbt == "" {
-		dbt = ini.GetString("database", "type")
+		dbt = ini.GetString("database", "driver")
 	}
 	if outfile == "" {
 		outfile = "conf/" + dbt + ".sql"
@@ -117,7 +117,7 @@ func MigrateSchemas(schemas ...string) error {
 }
 
 func dialector(dbt string) gorm.Dialector {
-	dsn := ini.GetString("database", dbt)
+	dsn := ini.GetString("database", "source")
 
 	log.Infof("Connect Database (%s): %s", dbt, dsn)
 
@@ -144,7 +144,7 @@ func listSchemas() ([]string, error) {
 		return nil, err
 	}
 
-	dbt := ini.GetString("database", "type", "postgres")
+	dbt := ini.GetString("database", "driver")
 	switch dbt {
 	case "mysql":
 		sm := mygormsm.SM(gdb)
@@ -157,7 +157,7 @@ func listSchemas() ([]string, error) {
 }
 
 func openDatabase() (*gorm.DB, error) {
-	dbt := ini.GetString("database", "type", "postgres")
+	dbt := ini.GetString("database", "driver")
 
 	gdd := dialector(dbt)
 
@@ -183,7 +183,7 @@ func migrateSchema(schema string) error {
 		),
 	}
 
-	dbt := ini.GetString("database", "type", "postgresql")
+	dbt := ini.GetString("database", "driver")
 	gdd := dialector(dbt)
 
 	gdb, err := gorm.Open(gdd, dbc)

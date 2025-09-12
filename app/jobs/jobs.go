@@ -275,7 +275,7 @@ func CleanOutdatedJobs() {
 	before := time.Now().Add(-1 * ini.GetDuration("job", "outdatedBefore", time.Hour*24*10))
 
 	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
-		return app.SDB.Transaction(func(tx *sqlx.Tx) error {
+		return app.SDB().Transaction(func(tx *sqlx.Tx) error {
 			logger := tt.Logger("JOB")
 
 			sfs := tt.SFS(tx)

@@ -172,7 +172,7 @@ func PasswordResetExecute(c *xin.Context) {
 
 	user.SetPassword(arg.Newpwd)
 
-	err = app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err = app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		cnt, err := tt.UpdateUserPassword(tx, user.ID, user.Password)
 		if err != nil {
 			return err

@@ -50,7 +50,7 @@ func userDetail(c *xin.Context, action string) {
 
 	tt := tenant.FromCtx(c)
 
-	user, err := tt.GetUser(app.SDB, uid)
+	user, err := tt.GetUser(app.SDB(), uid)
 	if errors.Is(err, sqlx.ErrNoRows) {
 		c.AddError(tbs.Errorf(c.Locale, "user.error.notfound", uid))
 		c.JSON(http.StatusNotFound, middles.E(c))
@@ -145,7 +145,7 @@ func UserCreate(c *xin.Context) {
 	user.CreatedAt = time.Now()
 	user.UpdatedAt = user.CreatedAt
 
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		if err := tt.CreateUser(tx, user); err != nil {
 			return err
 		}
@@ -188,7 +188,7 @@ func UserUpdate(c *xin.Context) {
 	au := tenant.AuthUser(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		if user.Password == "" {
 			eu, err := tt.GetUser(tx, user.ID)
 			if err != nil {

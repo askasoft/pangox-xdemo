@@ -12,7 +12,7 @@ func CleanOutdatedAuditLogs() {
 	before := time.Now().Add(-1 * ini.GetDuration("auditlog", "outdatedBefore", time.Hour*8760))
 
 	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
-		cnt, err := tt.DeleteAuditLogsBefore(app.SDB, before)
+		cnt, err := tt.DeleteAuditLogsBefore(app.SDB(), before)
 		if err != nil {
 			return err
 		}

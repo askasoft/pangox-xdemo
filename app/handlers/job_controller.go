@@ -162,7 +162,7 @@ func (jc *JobController) Start(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var jid int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		sjm := tt.SJM(tx)
 
 		if !jc.Multi {
@@ -224,7 +224,7 @@ func (jc *JobController) Cancel(c *xin.Context) {
 	reason := tbs.GetText(c.Locale, "job.error.usercancel", "User canceled.")
 
 	var job *xjm.Job
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		sjm := tt.SJM(tx)
 
 		job, err = sjm.GetJob(jid)

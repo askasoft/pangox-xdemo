@@ -100,7 +100,7 @@ func (pgj *PetGenerateJob) run(ctx context.Context) error {
 				return xjm.ErrJobComplete
 			}
 
-			if err := pgj.gen.Create(pgj.Logger, app.SDB, &pgj.JobState); err != nil {
+			if err := pgj.gen.Create(pgj.Logger, app.SDB(), &pgj.JobState); err != nil {
 				return err
 			}
 

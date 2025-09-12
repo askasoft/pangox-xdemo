@@ -64,7 +64,7 @@ func PetList(c *xin.Context) {
 
 	tt := tenant.FromCtx(c)
 
-	pqa.Total, err = tt.CountPets(app.SDB, pqa)
+	pqa.Total, err = tt.CountPets(app.SDB(), pqa)
 	if err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
@@ -76,7 +76,7 @@ func PetList(c *xin.Context) {
 	pqa.Pager.Normalize(tbsutil.GetPagerLimits(c.Locale)...)
 
 	if pqa.Total > 0 {
-		results, err := tt.FindPets(app.SDB, pqa)
+		results, err := tt.FindPets(app.SDB(), pqa)
 		if err != nil {
 			c.AddError(err)
 			c.JSON(http.StatusInternalServerError, middles.E(c))

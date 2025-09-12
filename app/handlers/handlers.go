@@ -13,7 +13,7 @@ func Index(c *xin.Context) {
 }
 
 func HealthCheck(c *xin.Context) {
-	if err := app.SDB.Ping(); err != nil {
+	if err := app.SDB().Ping(); err != nil {
 		c.Logger.Errorf("Healthcheck: %v", err)
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return

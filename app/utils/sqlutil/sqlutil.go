@@ -20,8 +20,15 @@ func IsUniqueViolationError(err error) bool {
 	}
 }
 
-func GetErrLogLevel(err error) log.Level {
-	if IsUniqueViolationError(err) {
+func GetMysqlErrLogLevel(err error) log.Level {
+	if myx.IsUniqueViolationError(err) {
+		return log.LevelWarn
+	}
+	return log.LevelError
+}
+
+func GetPgxErrLogLevel(err error) log.Level {
+	if pgxv5.IsUniqueViolationError(err) {
 		return log.LevelWarn
 	}
 	return log.LevelError

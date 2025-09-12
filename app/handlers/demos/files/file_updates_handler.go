@@ -26,7 +26,7 @@ func FileUpdates(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.UpdateFiles(tx, fua)
 		if err != nil {
 			return
@@ -59,7 +59,7 @@ func FileDeletes(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.DeleteFiles(tx, pka.PKs()...)
 		if err != nil {
 			return
@@ -98,7 +98,7 @@ func FileDeleteBatch(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err = app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err = app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.DeleteFilesQuery(tx, pqa)
 		if err != nil {
 			return

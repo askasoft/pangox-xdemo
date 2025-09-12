@@ -59,7 +59,7 @@ func UserList(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 	au := tenant.AuthUser(c)
 
-	uqa.Total, err = tt.CountUsers(app.SDB, au.Role, uqa)
+	uqa.Total, err = tt.CountUsers(app.SDB(), au.Role, uqa)
 	if err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
@@ -71,7 +71,7 @@ func UserList(c *xin.Context) {
 	uqa.Pager.Normalize(tbsutil.GetPagerLimits(c.Locale)...)
 
 	if uqa.Total > 0 {
-		results, err := tt.FindUsers(app.SDB, au.Role, uqa)
+		results, err := tt.FindUsers(app.SDB(), au.Role, uqa)
 		if err != nil {
 			c.AddError(err)
 			c.JSON(http.StatusInternalServerError, middles.E(c))

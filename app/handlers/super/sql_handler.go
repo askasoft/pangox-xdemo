@@ -51,7 +51,7 @@ func SqlExec(c *xin.Context) {
 
 	sqr := sqx.NewSqlReader(strings.NewReader(arg.Sql))
 
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		for {
 			sqs, err := sqr.ReadSql()
 			if errors.Is(err, io.EOF) {

@@ -55,7 +55,7 @@ func AuditLogList(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 	au := tenant.AuthUser(c)
 
-	alqa.Total, err = tt.CountAuditLogs(app.SDB, alqa, au.Role, c.Locale)
+	alqa.Total, err = tt.CountAuditLogs(app.SDB(), alqa, au.Role, c.Locale)
 	if err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
@@ -67,7 +67,7 @@ func AuditLogList(c *xin.Context) {
 	alqa.Pager.Normalize(tbsutil.GetPagerLimits(c.Locale)...)
 
 	if alqa.Total > 0 {
-		results, err := tt.FindAuditLogs(app.SDB, alqa, au.Role, c.Locale)
+		results, err := tt.FindAuditLogs(app.SDB(), alqa, au.Role, c.Locale)
 		if err != nil {
 			c.AddError(err)
 			c.JSON(http.StatusInternalServerError, middles.E(c))

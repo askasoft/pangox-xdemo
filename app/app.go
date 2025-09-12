@@ -7,8 +7,8 @@ import (
 	"github.com/askasoft/pango/gwp"
 	"github.com/askasoft/pango/ids/snowflake"
 	"github.com/askasoft/pango/imc"
-	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/sqx/sqlx"
+	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pango/vad"
 	"github.com/askasoft/pango/xin"
@@ -16,6 +16,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox/xwa"
 	"github.com/askasoft/pangox/xwa/xpwds"
+	"github.com/askasoft/pangox/xwa/xsqls"
 )
 
 const (
@@ -58,9 +59,6 @@ var (
 
 	// XCN global cookie auth middleware (no failure)
 	XCN *middleware.CookieAuth
-
-	// SDB database instance
-	SDB *sqlx.DB
 
 	// Certificate X509 KeyPair
 	Certificate *tls.Certificate
@@ -129,12 +127,17 @@ func Locales() []string {
 	return xwa.Locales
 }
 
+func SDB() *sqlx.DB {
+	return xsqls.SDB
+}
+
 func DBType() string {
-	return ini.GetString("database", "type", "postgres")
+	d := xsqls.Driver()
+	return str.If(d == "pgx", "postgres", d)
 }
 
 func SchemaSQLFile() string {
-	return "conf/" + ini.GetString("database", "type") + ".sql"
+	return "conf/" + DBType() + ".sql"
 }
 
 func FormatDate(a any) string {

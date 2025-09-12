@@ -33,7 +33,7 @@ func UserUpdates(c *xin.Context) {
 	au := tenant.AuthUser(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.UpdateUsers(tx, au, uua)
 		if err != nil {
 			return
@@ -67,7 +67,7 @@ func UserDeletes(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.DeleteUsers(tx, au, ida.IDs()...)
 		if err != nil {
 			return
@@ -110,7 +110,7 @@ func UserDeleteBatch(c *xin.Context) {
 	au := tenant.AuthUser(c)
 
 	var cnt int64
-	err = app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err = app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.DeleteUsersQuery(tx, au, uqa)
 		if err != nil {
 			return

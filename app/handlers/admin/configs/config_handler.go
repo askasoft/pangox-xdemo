@@ -45,7 +45,7 @@ func loadConfigList(c *xin.Context, actor string) []*models.Config {
 	tt := tenant.FromCtx(c)
 	au := tenant.AuthUser(c)
 
-	configs, err := tt.ListConfigsByRole(app.SDB, actor, au.Role)
+	configs, err := tt.ListConfigsByRole(app.SDB(), actor, au.Role)
 	if err != nil {
 		panic(err)
 	}
@@ -313,7 +313,7 @@ func saveConfigs(c *xin.Context, configs []*models.Config, action string, detail
 	tt := tenant.FromCtx(c)
 	au := tenant.AuthUser(c)
 
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		if err := tt.SaveConfigsByRole(tx, au, configs, c.Locale); err != nil {
 			return err
 		}

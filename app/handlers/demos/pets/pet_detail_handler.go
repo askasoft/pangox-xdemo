@@ -49,7 +49,7 @@ func petDetail(c *xin.Context, action string) {
 
 	tt := tenant.FromCtx(c)
 
-	pet, err := tt.GetPet(app.SDB, pid)
+	pet, err := tt.GetPet(app.SDB(), pid)
 	if err != nil {
 		if errors.Is(err, sqlx.ErrNoRows) {
 			c.AddError(tbs.Errorf(c.Locale, "error.detail.notfound", pid))
@@ -126,7 +126,7 @@ func PetCreate(c *xin.Context) {
 
 	tt := tenant.FromCtx(c)
 
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		err := tt.CreatePet(tx, &pet.Pet)
 		if err != nil {
 			return err
@@ -172,7 +172,7 @@ func PetUpdate(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.UpdatePet(tx, &pet.Pet)
 		if err != nil {
 			return

@@ -80,7 +80,7 @@ func JobChainInitStates(jns ...string) []*JobRunState {
 func JobChainStart(tt *tenant.Tenant, chainName string, states []*JobRunState, jobName, jobLocale string, jobParam IChainArg) (cid int64, err error) {
 	state := JobChainEncodeStates(states)
 
-	err = app.SDB.Transaction(func(tx *sqlx.Tx) error {
+	err = app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		sjc := tt.SJC(tx)
 		cid, err = sjc.CreateJobChain(chainName, state)
 		if err != nil {

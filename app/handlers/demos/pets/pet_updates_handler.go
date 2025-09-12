@@ -34,7 +34,7 @@ func PetUpdates(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.UpdatePets(tx, pua)
 		if err != nil {
 			return
@@ -67,7 +67,7 @@ func PetDeletes(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err := app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		sfs := tt.SFS(tx)
 		if len(ida.IDs()) > 0 {
 			for _, id := range ida.IDs() {
@@ -122,7 +122,7 @@ func PetDeleteBatch(c *xin.Context) {
 	tt := tenant.FromCtx(c)
 
 	var cnt int64
-	err = app.SDB.Transaction(func(tx *sqlx.Tx) (err error) {
+	err = app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
 		cnt, err = tt.DeletePetsQuery(tx, pqa)
 		if err != nil {
 			return
