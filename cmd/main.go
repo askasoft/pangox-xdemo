@@ -11,7 +11,8 @@ import (
 	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
-	"github.com/askasoft/pangox-xdemo/cmd/tools"
+	"github.com/askasoft/pangox-xdemo/cmd/schema"
+	"github.com/askasoft/pangox/xwa"
 )
 
 func usage() {
@@ -32,6 +33,21 @@ Usage: %s <command> [options]
     -debug              print the debug log.
 `
 	fmt.Printf(help, filepath.Base(os.Args[0]))
+}
+
+func chdir(workdir string) {
+	if workdir != "" {
+		if err := os.Chdir(workdir); err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to change directory: %v\n", err)
+			os.Exit(app.ExitErrCMD)
+		}
+	}
+}
+
+func initConfigs() {
+	if err := xwa.InitConfigs(); err != nil {
+		log.Fatal(app.ExitErrCFG, err)
+	}
 }
 
 func main() {
@@ -73,25 +89,19 @@ func main() {
 				dbtype = a
 			}
 		}
-		if err := tools.GenerateSchema(dbtype, outfile); err != nil {
+
+		initConfigs()
+		if err := schema.GenerateDDL(dbtype, outfile); err != nil {
 			log.Fatal(app.ExitErrCMD, err)
 		}
 	case "migrate":
-		if err := tools.MigrateSchemas(flag.Args()[1:]...); err != nil {
+		initConfigs()
+		if err := schema.MigrateSchemas(flag.Args()[1:]...); err != nil {
 			log.Fatal(app.ExitErrCMD, err)
 		}
 	default:
 		fmt.Fprintf(os.Stderr, "Invalid command %q\n\n", arg)
 		usage()
 		os.Exit(app.ExitErrCMD)
-	}
-}
-
-func chdir(workdir string) {
-	if workdir != "" {
-		if err := os.Chdir(workdir); err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to change directory: %v\n", err)
-			os.Exit(app.ExitErrCMD)
-		}
 	}
 }
