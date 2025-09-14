@@ -25,8 +25,8 @@ const (
 )
 
 const (
-	ExitErrCFG int = iota + 10
-	ExitErrCMD
+	ExitErrARG int = iota + 10
+	ExitErrCFG
 	ExitErrDB
 	ExitErrFSW
 	ExitErrLOG

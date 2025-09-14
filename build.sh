@@ -12,6 +12,5 @@ PKG=github.com/askasoft/pangox/xwa
 LDF="-X ${PKG}.Version=${VERSION} -X ${PKG}.Revision=${REVISION} -X ${PKG}.Buildtime=${BUILDTIME}"
 
 go build -ldflags "${LDF}" -o xdemo
-go build -ldflags "${LDF}" -o xdemodb ./cmd
 
 go test ./...

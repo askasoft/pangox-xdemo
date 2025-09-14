@@ -13,6 +13,7 @@ import (
 	"github.com/askasoft/pango/srv"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
+	"github.com/askasoft/pangox-xdemo/app/server/gormdb"
 	"github.com/askasoft/pangox-xdemo/tpls"
 	"github.com/askasoft/pangox-xdemo/txts"
 	"github.com/askasoft/pangox-xdemo/web"
@@ -30,17 +31,20 @@ func (s *service) Flag() {
 
 // Usage print command line usage
 func (s *service) Usage() {
-	fmt.Println("Usage: " + s.Name() + ".exe <command> [options]")
+	fmt.Println("Usage: " + s.Name() + " <command> [options]")
 	fmt.Println("  <command>:")
 	srv.PrintDefaultCommand(os.Stdout)
 	fmt.Println("    migrate <target> [schema]...")
 	fmt.Println("      target=config     migrate tenant configurations.")
 	fmt.Println("      target=super      migrate tenant super user.")
+	fmt.Println("      target=schema     migrate database schema.")
 	fmt.Println("      [schema]...       specify schemas to migrate.")
 	fmt.Println("    schema <command> [schema]...")
 	fmt.Println("      command=init      initialize the schema.")
 	fmt.Println("      command=check     check schema tables.")
 	fmt.Println("      [schema]...       specify schemas to execute.")
+	fmt.Println("    generate [output]   generate database schema DDL.")
+	fmt.Println("      [output]          specify the output DDL file.")
 	fmt.Println("    execsql <file> [schema]...")
 	fmt.Println("      <file>            execute sql file.")
 	fmt.Println("      [schema]...       specify schemas to execute sql.")
@@ -68,6 +72,8 @@ func (s *service) Exec(cmd string) {
 		doMigrate()
 	case "schema":
 		doSchemas()
+	case "generate":
+		doGenerate()
 	case "execsql":
 		doExecSQL()
 	case "exectask":
@@ -82,7 +88,7 @@ func (s *service) Exec(cmd string) {
 		flag.CommandLine.SetOutput(os.Stdout)
 		fmt.Fprintf(os.Stderr, "Invalid command %q\n\n", cmd)
 		s.Usage()
-		os.Exit(app.ExitErrCMD)
+		os.Exit(app.ExitErrARG)
 	}
 }
 
@@ -90,7 +96,7 @@ func doMigrate() {
 	sub := flag.Arg(1)
 	if sub == "" {
 		fmt.Fprintln(os.Stderr, "Missing migrate <target>.")
-		os.Exit(app.ExitErrCMD)
+		os.Exit(app.ExitErrARG)
 	}
 	args := flag.Args()[2:]
 
@@ -109,9 +115,14 @@ func doMigrate() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
 		}
+	case "schema":
+		initConfigs()
+		if err := gormdb.MigrateSchemas(args...); err != nil {
+			log.Fatal(app.ExitErrDB, err)
+		}
 	default:
 		fmt.Fprintf(os.Stderr, "Invalid migrate <target>: %q", sub)
-		os.Exit(app.ExitErrCMD)
+		os.Exit(app.ExitErrARG)
 	}
 
 	log.Info("DONE.")
@@ -121,7 +132,7 @@ func doSchemas() {
 	sub := flag.Arg(1)
 	if sub == "" {
 		fmt.Fprintln(os.Stderr, "Missing schema <command>.")
-		os.Exit(app.ExitErrCMD)
+		os.Exit(app.ExitErrARG)
 	}
 	args := flag.Args()[2:]
 
@@ -142,17 +153,27 @@ func doSchemas() {
 		}
 	default:
 		fmt.Fprintf(os.Stderr, "Invalid schema <command>: %q", sub)
-		os.Exit(app.ExitErrCMD)
+		os.Exit(app.ExitErrARG)
 	}
 
 	log.Info("DONE.")
+}
+
+func doGenerate() {
+	outfile := flag.Arg(1)
+
+	initConfigs()
+
+	if err := gormdb.GenerateDDL(outfile); err != nil {
+		log.Fatal(app.ExitErrDB, err)
+	}
 }
 
 func doExecSQL() {
 	file := flag.Arg(1)
 	if file == "" {
 		fmt.Fprintln(os.Stderr, "Missing SQL file.")
-		os.Exit(app.ExitErrCMD)
+		os.Exit(app.ExitErrARG)
 	}
 	args := flag.Args()[2:]
 
@@ -172,7 +193,7 @@ func doExecTask() {
 	tf, ok := xschs.Schedules.Get(tn)
 	if !ok {
 		fmt.Fprintf(os.Stderr, "Invalid Task %q\n", tn)
-		os.Exit(app.ExitErrCMD)
+		os.Exit(app.ExitErrARG)
 	}
 
 	initConfigs()
@@ -214,7 +235,7 @@ func cryptFlags() (k, v string) {
 func doExportAssets() {
 	if err := exportAssets(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
-		os.Exit(app.ExitErrCMD)
+		os.Exit(1)
 	}
 	fmt.Println("DONE.")
 }

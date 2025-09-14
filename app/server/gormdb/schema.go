@@ -1,10 +1,10 @@
-package schema
+package gormdb
 
 import (
 	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pangox-xdemo/app/models"
-	"github.com/askasoft/pangox-xdemo/cmd/schema/mymodels"
+	"github.com/askasoft/pangox-xdemo/app/server/gormdb/mymodels"
 	"github.com/askasoft/pangox/xfs"
 	"github.com/askasoft/pangox/xjm"
 	"gorm.io/driver/mysql"

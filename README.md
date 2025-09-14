@@ -161,10 +161,10 @@ deploy.bat
 ```
 
 ### install as windows service
-Run As Administrator
+Run cmd.exe As Administrator
 
 ```bat
-xdemo.exe install
+xdemo.exe service install
 ```
 
 
@@ -314,6 +314,26 @@ httpsRedirect = false
 			"program": "${workspaceRoot}/main.go",
 			"env": {},
 			"args": [ "migrate", "config" ]
+		},
+		{
+			"name": "migrate schema",
+			"type": "go",
+			"request": "launch",
+			"mode": "debug",
+			"program": "${workspaceRoot}/main.go",
+			"cwd": "${workspaceRoot}",
+			"env": {},
+			"args": [ "migrate", "schema" ]
+		},
+		{
+			"name": "generate schema",
+			"type": "go",
+			"request": "launch",
+			"mode": "debug",
+			"program": "${workspaceRoot}/main.go",
+			"cwd": "${workspaceRoot}",
+			"env": {},
+			"args": [ "generate" ]
 		},
 		{
 			"name": "execsql",

@@ -1,4 +1,4 @@
-package schema
+package gormdb
 
 import (
 	"github.com/askasoft/gogormx/gormx"
@@ -12,12 +12,10 @@ import (
 )
 
 // Generate DDL sql
-func GenerateDDL(dbt, outfile string) error {
-	if dbt == "" {
-		dbt = ini.GetString("database", "driver")
-	}
+func GenerateDDL(outfile string) error {
+	driver := ini.GetString("database", "driver")
 	if outfile == "" {
-		outfile = "conf/" + dbt + ".sql"
+		outfile = "conf/" + str.If(driver == "pgx", "postgres", driver) + ".sql"
 	}
 
 	log.Infof("Generate schema DDL: %q", outfile)
@@ -30,8 +28,8 @@ func GenerateDDL(dbt, outfile string) error {
 		Logger:         gsp,
 	}
 
-	gdd := dialector(dbt)
-	dms := dbmodels(dbt)
+	gdd := dialector(driver)
+	dms := dbmodels(driver)
 
 	gdb, err := gorm.Open(gdd, dbc)
 	if err != nil {
@@ -46,7 +44,7 @@ func GenerateDDL(dbt, outfile string) error {
 		}
 	}
 
-	qte := sqx.GetQuoter(dbt)
+	qte := sqx.GetQuoter(driver)
 
 	sql := gsp.SQL()
 	sql = str.ReplaceAll(sql, "idx_build_", "idx_")

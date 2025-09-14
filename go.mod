@@ -15,10 +15,10 @@ require (
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/xlzd/gotp v0.1.0
 	github.com/xuri/excelize/v2 v2.9.1
-	golang.org/x/net v0.43.0
+	golang.org/x/net v0.44.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.30.2
+	gorm.io/gorm v1.31.0
 )
 
 require (
@@ -43,7 +43,7 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.4 // indirect
 	github.com/russellhaering/goxmldsig v1.5.0 // indirect
-	github.com/tiendc/go-deepcopy v1.6.0 // indirect
+	github.com/tiendc/go-deepcopy v1.6.1 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.1 // indirect
 	golang.org/x/crypto v0.42.0 // indirect

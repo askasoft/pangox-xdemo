@@ -5,7 +5,7 @@ SET GOOS=windows
 SET GO111MODULE=on
 
 SET COMPANY=Askasoft LLC.
-SET PRODUCT=Pango Xdemo
+SET PRODUCT=Pangox Xdemo
 SET VER_MAJOR=1
 SET VER_MINOR=2
 SET VER_PATCH=0
@@ -24,8 +24,6 @@ SET /A VER_BUILD=0x%REVISION%
 SET VER_BUILD=%VER_BUILD:~0,4%
 
 call :build .     xdemo    web/favicon.ico
-call :build .\cmd xdemodb  ../web/favicon.ico
-move .\cmd\*.exe  .\
 
 go test ./...
 
