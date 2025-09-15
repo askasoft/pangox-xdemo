@@ -15,7 +15,7 @@ func CleanTemporaryFiles() {
 	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
 		tfs := tt.FS()
 
-		xfs.CleanOutdatedTaggedFiles(tfs, models.PrefixTmpFile, before, tt.Logger("XFS"))
+		xfs.CleanOutdatedTaggedFiles(tfs, models.TagTmpFile, before, tt.Logger("XFS"))
 
 		return nil
 	})

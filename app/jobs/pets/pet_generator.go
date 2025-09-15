@@ -94,7 +94,7 @@ func (pg *PetGenerator) Create(logger log.Logger, db *sqlx.DB, js *jobs.JobState
 
 	if len(pg.imgs) > 0 {
 		img := pg.imgs[rand.Intn(len(pg.imgs))] //nolint: gosec
-		if _, err := xfs.SaveLocalFile(sfs, pet.PhotoPath(), img, models.PrefixPetFile); err != nil {
+		if _, err := xfs.SaveLocalFile(sfs, pet.PhotoPath(), img, models.TagPetFile); err != nil {
 			return err
 		}
 	}

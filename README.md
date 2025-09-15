@@ -168,6 +168,22 @@ xdemo.exe service install
 ```
 
 
+## init database
+```sh
+cd /app/xdemo
+./xdemo schema init
+```
+
+
+## Certificate
+```sh
+openssl genrsa -out xdemo.key 2048
+openssl req -new -x509 -sha256 -key xdemo.key -out xdemo.cer -days 3650
+
+openssl req -x509 -newkey rsa:2048 -keyout xdemo.key -out xdemo.cer -days 3650 -nodes -subj "/CN=*.xdemo.local"
+```
+
+
 ## apache proxy setting (optional)
 
 ### Virtual Host
@@ -253,22 +269,6 @@ server {
 	}
 }
 ```
-
-## init database
-```sh
-cd /app/xdemo
-./xdemo schema init
-```
-
-
-## SSL
-```sh
-openssl genrsa -out xdemo.key 2048
-openssl req -new -x509 -sha256 -key xdemo.key -out xdemo.cer -days 3650
-
-openssl req -x509 -newkey rsa:2048 -keyout xdemo.key -out xdemo.cer -days 3650 -nodes -subj "/CN=*.xdemo.local"
-```
-
 
 ## Local develop instructions
 

@@ -12,11 +12,11 @@ import (
 )
 
 func SaveUploadedFile(c *xin.Context, mfh *multipart.FileHeader) (*xfs.File, error) {
-	fid := app.MakeFileID(models.PrefixTmpFile, mfh.Filename)
+	fid := app.MakeFileID(models.TagTmpFile, mfh.Filename)
 
 	tt := tenant.FromCtx(c)
 	tfs := tt.FS()
-	return xfs.SaveUploadedFile(tfs, fid, mfh, models.PrefixTmpFile)
+	return xfs.SaveUploadedFile(tfs, fid, mfh, models.TagTmpFile)
 }
 
 func Upload(c *xin.Context) {

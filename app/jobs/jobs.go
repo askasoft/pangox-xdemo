@@ -271,7 +271,6 @@ func ReappendJobs() {
 // ------------------------------------
 // CleanOutdatedJobs iterate schemas to clean outdated jobs
 func CleanOutdatedJobs() {
-	prefix := "/" + models.PrefixJobFile + "/"
 	before := time.Now().Add(-1 * ini.GetDuration("job", "outdatedBefore", time.Hour*24*10))
 
 	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
@@ -279,7 +278,7 @@ func CleanOutdatedJobs() {
 			logger := tt.Logger("JOB")
 
 			sfs := tt.SFS(tx)
-			cnt, err := sfs.DeletePrefixBefore(prefix, before)
+			cnt, err := sfs.DeleteTaggedBefore(models.TagJobFile, before)
 			if err != nil {
 				logger.Errorf("Failed to delete outdated job files (%q): %v", before.Format(time.RFC3339), err)
 				return err

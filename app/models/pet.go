@@ -29,9 +29,9 @@ func (p *Pet) String() string {
 }
 
 func (p *Pet) PhotoPath() string {
-	return fmt.Sprintf("/%s/%d/a", PrefixPetFile, p.ID)
+	return fmt.Sprintf("/%s/%d/a", TagPetFile, p.ID)
 }
 
 func (p *Pet) PhotoURI() string {
-	return fmt.Sprintf("/%s/%d/a?%d", PrefixPetFile, p.ID, p.UpdatedAt.UnixMilli())
+	return fmt.Sprintf("/%s/%d/a?%d", TagPetFile, p.ID, p.UpdatedAt.UnixMilli())
 }

@@ -6,6 +6,14 @@ github.com/adamzy/cedar-go v0.0.0-20170805034717-80a9c64b256d h1:ir/IFJU5xbja5Ua
 github.com/adamzy/cedar-go v0.0.0-20170805034717-80a9c64b256d/go.mod h1:PRWNwWq0yifz6XDPZu48aSld8BWwBfr2JKB2bGWiEd4=
 github.com/alexbrainman/sspi v0.0.0-20231016080023-1a75b4708caa h1:LHTHcTQiSGT7VVbI0o4wBRNQIgn917usHWOd6VAffYI=
 github.com/alexbrainman/sspi v0.0.0-20231016080023-1a75b4708caa/go.mod h1:cEWa1LVoE5KvSD9ONXsZrj0z6KqySlCCNKHlLzbqAt4=
+github.com/askasoft/gogormx v1.0.2 h1:DMPZHx1LSElldAN+1VM5I1NCeo4boBbi4mpXssYElcE=
+github.com/askasoft/gogormx v1.0.2/go.mod h1:GFY0pBKoIe8rwMzNgB5Z6KgNnUyoVlkoN61OlbD4b54=
+github.com/askasoft/pango v1.2.4 h1:rfxymY5K7DV8wZnUu7WlZgiNvvT3QN8mnBTRCp1tA7U=
+github.com/askasoft/pango v1.2.4/go.mod h1:7b7KrvlzFp9tr205sdCCN08mWFhQJscNfoN3Hq4o7zQ=
+github.com/askasoft/pangox v1.2.4 h1:Dmd5L56AfR9V25dRZykCMxhSfaRbBiylTi7mpIWB4Og=
+github.com/askasoft/pangox v1.2.4/go.mod h1:NqM0yAjBm7nhEGy06A9IlFl36gxRAlubHBPHcIPnLfU=
+github.com/askasoft/pangox-assets v1.1.2 h1:9YYIzu68sqhXkBXo2alANNYbp850Dicc7iA1uugG5JE=
+github.com/askasoft/pangox-assets v1.1.2/go.mod h1:NDxCfJj6ZPn1NL00W97swdtJSkja/zng6TcxSRW5I5w=
 github.com/beevik/etree v1.6.0 h1:u8Kwy8pp9D9XeITj2Z0XtA5qqZEmtJtuXZRQi+j03eE=
 github.com/beevik/etree v1.6.0/go.mod h1:bh4zJxiIr62SOf9pRzN7UUYaEDa9HEKafK25+sLc0Gc=
 github.com/crewjam/saml v0.5.1 h1:g+mfp0CrLuLRZCK793PgJcZeg5dS/0CDwoeAX2zcwNI=

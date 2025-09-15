@@ -57,10 +57,10 @@ func (pc *PetClearJob) clear() error {
 	tt := pc.Tenant
 	db := app.SDB()
 
-	pc.Logger.Infof("Delete Pet Files: /%s ...", models.PrefixPetFile)
+	pc.Logger.Infof("Delete Pet Files ...")
 
 	sfs := tt.SFS(db)
-	cnt, err := sfs.DeleteTag(models.PrefixPetFile)
+	cnt, err := sfs.DeleteTagged(models.TagPetFile)
 	if err != nil {
 		return err
 	}

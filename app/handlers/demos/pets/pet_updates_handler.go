@@ -71,12 +71,12 @@ func PetDeletes(c *xin.Context) {
 		sfs := tt.SFS(tx)
 		if len(ida.IDs()) > 0 {
 			for _, id := range ida.IDs() {
-				if _, err = sfs.DeleteTag(fmt.Sprintf("/%s/%d/", models.PrefixPetFile, id)); err != nil {
+				if _, err = sfs.DeleteTagged(fmt.Sprintf("/%s/%d/", models.TagPetFile, id)); err != nil {
 					return
 				}
 			}
 		} else {
-			if _, err = sfs.DeleteTag(models.PrefixPetFile); err != nil {
+			if _, err = sfs.DeleteTagged(models.TagPetFile); err != nil {
 				return
 			}
 		}

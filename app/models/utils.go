@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	PrefixTmpFile = "t"
-	PrefixJobFile = "j"
-	PrefixPetFile = "p"
+	TagTmpFile = "t"
+	TagJobFile = "j"
+	TagPetFile = "p"
 )
 
 type Strings = sqx.JSONStringArray
