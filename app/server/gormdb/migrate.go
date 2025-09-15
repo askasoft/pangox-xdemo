@@ -1,15 +1,10 @@
 package gormdb
 
 import (
-	"time"
-
-	"github.com/askasoft/gogormx/log/sqlog/gormlog"
 	"github.com/askasoft/gogormx/xsm/mysm/mygormsm"
 	"github.com/askasoft/gogormx/xsm/pgsm/pggormsm"
 	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/log"
-	"gorm.io/gorm"
-	gormschema "gorm.io/gorm/schema"
 )
 
 // Migrate Schemas
@@ -36,18 +31,9 @@ func MigrateSchemas(schemas ...string) (err error) {
 func migrateSchema(schema string) error {
 	log.Infof("Migrate schema %q", schema)
 
-	dbc := &gorm.Config{
-		NamingStrategy: gormschema.NamingStrategy{TablePrefix: schema + "."},
-		Logger: gormlog.NewGormLogger(
-			log.GetLogger("SQL"),
-			time.Second,
-		),
-	}
-
 	dbt := ini.GetString("database", "driver")
-	gdd := dialector(dbt)
 
-	gdb, err := gorm.Open(gdd, dbc)
+	gdb, err := OpenDatabase(schema)
 	if err != nil {
 		return err
 	}
@@ -61,7 +47,7 @@ func migrateSchema(schema string) error {
 }
 
 func listSchemas() ([]string, error) {
-	gdb, err := openDatabase()
+	gdb, err := OpenDatabase()
 	if err != nil {
 		return nil, err
 	}
@@ -73,20 +59,4 @@ func listSchemas() ([]string, error) {
 	default:
 		return pggormsm.SM(gdb).ListSchemas()
 	}
-}
-
-func openDatabase() (*gorm.DB, error) {
-	dbt := ini.GetString("database", "driver")
-
-	gdd := dialector(dbt)
-
-	gdc := &gorm.Config{
-		Logger: gormlog.NewGormLogger(
-			log.GetLogger("SQL"),
-			time.Second,
-		),
-		SkipDefaultTransaction: true,
-	}
-
-	return gorm.Open(gdd, gdc)
 }

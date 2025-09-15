@@ -3,12 +3,13 @@ CREATE TABLE "SCHEMA"."files" (
 	"id" varchar(255) NOT NULL,
 	"name" text NOT NULL,
 	"ext" text NOT NULL,
-	"tag" text NOT NULL,
+	"tag" text NOT NULL DEFAULT '',
 	"time" timestamptz NOT NULL,
 	"size" bigint NOT NULL,
 	"data" bytea NOT NULL,
 	PRIMARY KEY ("id")
 );
+CREATE INDEX IF NOT EXISTS "idx_files_tag" ON "SCHEMA"."files" ("tag");
 ---------------------------------;
 CREATE TABLE "SCHEMA"."jobs" (
 	"id" bigserial NOT NULL,

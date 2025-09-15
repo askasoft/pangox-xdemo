@@ -3,11 +3,12 @@ CREATE TABLE `SCHEMA`.`files` (
 	`id` varchar(255) NOT NULL,
 	`name` longtext NOT NULL,
 	`ext` longtext NOT NULL,
-	`tag` longtext NOT NULL,
+	`tag` varchar(191) NOT NULL DEFAULT '',
 	`time` datetime(3) NOT NULL,
 	`size` bigint NOT NULL,
 	`data` longblob NOT NULL,
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+	INDEX `idx_files_tag` (`tag`)
 );
 ---------------------------------;
 CREATE TABLE `SCHEMA`.`jobs` (
