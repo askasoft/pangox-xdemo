@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"github.com/askasoft/pango/sqx/myx"
-	"github.com/askasoft/pango/sqx/pqx"
+	"github.com/askasoft/pango/sqx/mysqlx"
+	"github.com/askasoft/pango/sqx/pgsqlx"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pangox-xdemo/app"
 )
@@ -10,10 +10,10 @@ import (
 func ResetAutoIncrement(tx sqlx.Sqlx, table string, starts ...int64) error {
 	switch app.DBType() {
 	case "mysql":
-		_, err := tx.Exec(myx.ResetAutoIncrementSQL(table, starts...))
+		_, err := tx.Exec(mysqlx.ResetAutoIncrementSQL(table, starts...))
 		return err
 	default:
-		_, err := tx.Exec(pqx.ResetSequenceSQL(table, "id", starts...))
+		_, err := tx.Exec(pgsqlx.ResetSequenceSQL(table, "id", starts...))
 		return err
 	}
 }

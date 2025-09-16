@@ -2,8 +2,8 @@ package sqlutil
 
 import (
 	"github.com/askasoft/pango/log"
-	"github.com/askasoft/pango/sqx/myx"
-	"github.com/askasoft/pango/sqx/pqx/pgxv5"
+	"github.com/askasoft/pango/sqx/mysqlx"
+	"github.com/askasoft/pango/sqx/pgsqlx/pgxv5"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox/xwa/xsqbs"
@@ -14,14 +14,14 @@ import (
 func IsUniqueViolationError(err error) bool {
 	switch app.DBType() {
 	case "mysql":
-		return myx.IsUniqueViolationError(err)
+		return mysqlx.IsUniqueViolationError(err)
 	default:
 		return pgxv5.IsUniqueViolationError(err)
 	}
 }
 
 func GetMysqlErrLogLevel(err error) log.Level {
-	if myx.IsUniqueViolationError(err) {
+	if mysqlx.IsUniqueViolationError(err) {
 		return log.LevelWarn
 	}
 	return log.LevelError
