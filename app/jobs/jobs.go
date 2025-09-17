@@ -134,36 +134,40 @@ func (tws *tenantWorkers) Stats() string {
 	defer tws.mu.Unlock()
 
 	total := 0
-	detail := ""
-	stats := fmt.Sprintf("INSTANCE ID: 0x%x, JOB RUNNING: ", app.InstanceID())
-
-	if tws.ws.Len() > 0 {
-		sb := &str.Builder{}
-		for it := tws.ws.Iterator(); it.Next(); {
-			cnt := it.Value().Runnings()
-			if cnt == 0 {
-				continue
-			}
-
-			total += cnt
-
-			fmt.Fprintf(sb, "%30s: [%d]", str.IfEmpty(it.Key(), "_"), cnt)
-			for _, job := range it.Value().RunningJobs {
-				fmt.Fprintf(sb, " %s#%d", job.Name, job.ID)
-			}
-			sb.WriteByte('\n')
-		}
-		detail = sb.String()
+	for it := tws.ws.Iterator(); it.Next(); {
+		total += it.Value().Runnings()
 	}
 
+	sb := &str.Builder{}
+	fmt.Fprintf(sb, "INSTANCE ID: 0x%04x, JOB RUNNING: %d", app.InstanceID(), total)
 	if total == 0 {
-		stats += "0"
-	} else {
-		sep := str.RepeatByte('-', 80)
-		stats += num.Itoa(total) + "\n" + sep + "\n" + detail + sep
+		return sb.String()
 	}
 
-	return stats
+	sep := str.RepeatByte('-', 80)
+
+	sb.WriteByte('\n')
+	sb.WriteString(sep)
+	sb.WriteByte('\n')
+
+	for it := tws.ws.Iterator(); it.Next(); {
+		cnt := it.Value().Runnings()
+		if cnt == 0 {
+			continue
+		}
+
+		scnt := num.Itoa(cnt)
+		fmt.Fprintf(sb, "%32s: [%s] ", str.IfEmpty(it.Key(), "_"), scnt)
+		for i, job := range it.Value().RunningJobs {
+			if i > 0 {
+				fmt.Fprintf(sb, "%*s", 37+len(scnt), " ")
+			}
+			fmt.Fprintf(sb, "%s#%d\n", job.Name, job.ID)
+		}
+	}
+	sb.WriteString(sep)
+
+	return sb.String()
 }
 
 // -----------------------------
