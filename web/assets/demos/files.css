@@ -11,3 +11,6 @@
 	width: 1%;
 }
 
+#files_table td.size {
+	text-align: right;
+}
