@@ -9,7 +9,6 @@ import (
 
 	"github.com/askasoft/gogormx/xfs/gormfs"
 	"github.com/askasoft/pango/num"
-	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/test/require"
 	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pangox-xdemo/app/schema"
@@ -61,7 +60,7 @@ func TestXFS_Gorm(t *testing.T) {
 	gdb, err := gormdb.OpenDatabase(string(sm))
 	require.NoError(t, err)
 
-	xfs := gormfs.FS(gdb, "files")
+	xfs := gormfs.FS(gdb, sm.TableFiles())
 
 	testXFS(t, xfs)
 }
@@ -98,7 +97,7 @@ func testXFS(t *testing.T, xfs xfs.XFS) {
 		require.Equal(t, data, fd)
 
 		// copy file with new tag
-		cTag := str.ToUpper(tag)
+		cTag := tag + tag
 		cFID := "/" + cTag + "/" + n
 		require.NoError(t, xfs.CopyFile(fid, cFID, cTag))
 
@@ -152,7 +151,7 @@ func testXFS(t *testing.T, xfs xfs.XFS) {
 	require.NoError(t, err)
 	require.Equal(t, int64(1), cnt)
 
-	cnt, err = xfs.DeletePrefix("/b")
+	cnt, err = xfs.DeletePrefix("/b/")
 	require.NoError(t, err)
 	require.Equal(t, int64(1), cnt)
 
@@ -160,7 +159,7 @@ func testXFS(t *testing.T, xfs xfs.XFS) {
 	require.NoError(t, err)
 	require.Equal(t, int64(1), cnt)
 
-	cnt, err = xfs.DeletePrefixBefore("/d", time.Now())
+	cnt, err = xfs.DeletePrefixBefore("/d/", time.Now())
 	require.NoError(t, err)
 	require.Equal(t, int64(1), cnt)
 
