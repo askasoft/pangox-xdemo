@@ -8,6 +8,7 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/askasoft/gogormx/xfs/gormfs"
+	"github.com/askasoft/pango/bol"
 	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/test/require"
 	"github.com/askasoft/pango/tmu"
@@ -21,7 +22,7 @@ import (
 var sm schema.Schema
 
 func testInit(t *testing.T) {
-	if os.Getenv("XTEST") == "false" {
+	if !bol.Atob(os.Getenv("XTEST"), true) {
 		t.Skip()
 	}
 

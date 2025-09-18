@@ -41,6 +41,7 @@ jobs:
     env:
       GO111MODULE: on
       GOPROXY: https://proxy.golang.org
+      XTEST: FALSE
     steps:
       - name: Set up Go ${{ matrix.go }}
         uses: actions/setup-go@v6

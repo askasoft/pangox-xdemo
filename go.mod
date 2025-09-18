@@ -3,9 +3,9 @@ module github.com/askasoft/pangox-xdemo
 go 1.24.0
 
 require (
-	github.com/askasoft/gogormx v1.0.3
+	github.com/askasoft/gogormx v1.0.4
 	github.com/askasoft/pango v1.2.5
-	github.com/askasoft/pangox v1.2.5
+	github.com/askasoft/pangox v1.2.6
 	github.com/askasoft/pangox-assets v1.1.2
 	github.com/crewjam/saml v0.5.1
 	github.com/go-ldap/ldap/v3 v3.4.11
@@ -50,11 +50,4 @@ require (
 	golang.org/x/sync v0.17.0 // indirect
 	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
-)
-
-replace (
-	github.com/askasoft/gogormx => ../gogormx
-	github.com/askasoft/pango => ../pango
-	github.com/askasoft/pangox => ../pangox
-	github.com/askasoft/pangox-assets => ../pangox-assets
 )
