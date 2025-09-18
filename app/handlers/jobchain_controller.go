@@ -111,7 +111,7 @@ func (jcc *JobChainController) Status(c *xin.Context) {
 	jc, err := tjc.GetJobChain(cid)
 	if err != nil {
 		if errors.Is(err, xjm.ErrJobChainMissing) {
-			c.Logger.Errorf("Missing jobchain %s#%d", jcc.ChainName, cid)
+			c.Logger.Warnf("Missing jobchain %s#%d", jcc.ChainName, cid)
 			c.AddError(tbs.Error(c.Locale, "job.error.notfound"))
 			c.JSON(http.StatusBadRequest, middles.E(c))
 		} else {
