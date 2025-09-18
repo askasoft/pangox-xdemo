@@ -1,14 +1,13 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
 	"github.com/askasoft/pango/asg"
 	"github.com/askasoft/pango/ini"
-	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/num"
-	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
@@ -47,7 +46,7 @@ func NewJobChainInfo(locale string, jc *xjm.JobChain) *JobChainInfo {
 	jci := &JobChainInfo{
 		ID:        jc.ID,
 		Status:    jc.Status,
-		Caption:   tbs.GetText(locale, "job.status."+jobs.JobStatusText(jc.Status)),
+		Caption:   tbs.GetText(locale, "job.status."+xjm.JobStatusText(jc.Status)),
 		States:    jobs.JobChainDecodeStates(jc.States),
 		CreatedAt: jc.CreatedAt,
 		UpdatedAt: jc.UpdatedAt,
@@ -84,7 +83,6 @@ func (jcc *JobChainController) List(c *xin.Context) {
 
 	jcs, err := tjc.FindJobChains(jcc.ChainName, skip, limit, false)
 	if err != nil {
-		c.Logger.Errorf("Failed to find job chains for '%s': %v", jcc.ChainName, err)
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
@@ -112,9 +110,14 @@ func (jcc *JobChainController) Status(c *xin.Context) {
 
 	jc, err := tjc.GetJobChain(cid)
 	if err != nil {
-		c.Logger.Errorf("Failed to get job chain for %s#%d: %v", jcc.ChainName, cid, err)
-		c.AddError(err)
-		c.JSON(http.StatusInternalServerError, middles.E(c))
+		if errors.Is(err, xjm.ErrJobChainMissing) {
+			c.Logger.Errorf("Missing jobchain %s#%d", jcc.ChainName, cid)
+			c.AddError(tbs.Error(c.Locale, "job.error.notfound"))
+			c.JSON(http.StatusBadRequest, middles.E(c))
+		} else {
+			c.AddError(err)
+			c.JSON(http.StatusInternalServerError, middles.E(c))
+		}
 		return
 	}
 
@@ -187,7 +190,6 @@ func (jcc *JobChainController) StartJob(c *xin.Context) {
 	css := jobs.JobChainInitStates(jcc.ChainJobs...)
 	cid, err := jobs.JobChainStart(tt, jcc.ChainName, css, jcc.FirstJobName(), c.Locale, jcc.JobParam)
 	if err != nil {
-		log.Errorf("Failed to CreateJobChain(%q, %q): %v", jcc.ChainName, str.Join(jcc.ChainJobs, "|"), err)
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
@@ -219,19 +221,23 @@ func (jcc *JobChainController) Cancel(c *xin.Context) {
 
 	jc, err := tjc.GetJobChain(cid)
 	if err != nil {
-		c.AddError(err)
-		c.JSON(http.StatusBadRequest, middles.E(c))
+		if errors.Is(err, xjm.ErrJobChainMissing) {
+			c.AddError(tbs.Error(c.Locale, "job.error.notfound"))
+			c.JSON(http.StatusBadRequest, middles.E(c))
+		} else {
+			c.AddError(err)
+			c.JSON(http.StatusInternalServerError, middles.E(c))
+		}
 		return
 	}
 
 	if asg.Contains(xjm.JobDoneStatus, jc.Status) {
-		c.JSON(http.StatusOK, xin.H{"warning": tbs.GetText(c.Locale, "job.status."+jobs.JobStatusText(jc.Status))})
+		c.JSON(http.StatusOK, xin.H{"warning": tbs.GetText(c.Locale, "job.status."+xjm.JobStatusText(jc.Status))})
 		return
 	}
 
 	reason := tbs.GetText(c.Locale, "job.error.usercancel", "User canceled.")
 	if err := jobs.JobChainCancel(tjc, tjm, jc, reason); err != nil {
-		c.Logger.Errorf("Failed to cancel job chain #%d: %v", cid, err)
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return

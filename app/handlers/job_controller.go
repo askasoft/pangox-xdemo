@@ -59,7 +59,6 @@ func (jc *JobController) List(c *xin.Context) {
 
 	jobs, err := tjm.FindJobs(jc.Name, skip, limit, false)
 	if err != nil {
-		c.Logger.Errorf("Failed to find jobs for '%s': %v", jc.Name, err)
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
@@ -81,7 +80,6 @@ func (jc *JobController) Logs(c *xin.Context) {
 
 	logs, err := jc.logs(c, tjm)
 	if err != nil {
-		log.Errorf("Failed to get job logs %s#%d: %v", jc.Name, jid, err)
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
@@ -133,20 +131,19 @@ func (jc *JobController) Status(c *xin.Context) {
 
 	job, err := tjm.GetJob(jid)
 	if err != nil {
-		c.Logger.Errorf("Failed to get job %s#%d: %v", jc.Name, jid, err)
-		c.AddError(err)
-		c.JSON(http.StatusInternalServerError, middles.E(c))
-		return
-	}
-	if job == nil {
-		c.AddError(tbs.Error(c.Locale, "job.error.notfound"))
-		c.JSON(http.StatusBadRequest, middles.E(c))
+		if errors.Is(err, xjm.ErrJobMissing) {
+			c.Logger.Errorf("Missing jobchain %s job #%d", jc.Name, jid)
+			c.AddError(tbs.Error(c.Locale, "job.error.notfound"))
+			c.JSON(http.StatusBadRequest, middles.E(c))
+		} else {
+			c.AddError(err)
+			c.JSON(http.StatusInternalServerError, middles.E(c))
+		}
 		return
 	}
 
 	logs, err := jc.logs(c, tjm)
 	if err != nil {
-		log.Errorf("Failed to get job logs #%d: %v", jid, err)
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
@@ -168,7 +165,6 @@ func (jc *JobController) Start(c *xin.Context) {
 		if !jc.Multi {
 			job, err := sjm.FindJob(jc.Name, false, xjm.JobStatusPending, xjm.JobStatusRunning)
 			if err != nil {
-				log.Errorf("Failed to find job %s: %v", jc.Name, err)
 				return err
 			}
 
@@ -179,7 +175,6 @@ func (jc *JobController) Start(c *xin.Context) {
 
 		id, err := sjm.AppendJob(0, jc.Name, c.Locale, jc.Param)
 		if err != nil {
-			log.Errorf("Failed to pending job %s: %v", jc.Name, err)
 			return err
 		}
 
@@ -229,18 +224,13 @@ func (jc *JobController) Cancel(c *xin.Context) {
 
 		job, err = sjm.GetJob(jid)
 		if err != nil {
-			c.Logger.Errorf("Failed to get job #%d: %v", jid, err)
 			return
-		}
-		if job == nil {
-			return xjm.ErrJobMissing
 		}
 		if job.IsDone() {
 			return xjm.ErrJobComplete
 		}
 
 		if err = sjm.CancelJob(jid, reason); err != nil {
-			c.Logger.Errorf("Failed to cancel job #%d: %v", jid, err)
 			return
 		}
 
@@ -258,8 +248,8 @@ func (jc *JobController) Cancel(c *xin.Context) {
 
 		if job.CID != 0 {
 			sjc := tt.SJC(tx)
-			if err = jobs.JobFindAndCancelChain(sjc, job.CID, jid, reason); err != nil {
-				c.Logger.Errorf("Failed to cancel job chain for job #%d: %v", jid, err)
+			if err = jobs.JobFindAndCancelChain(sjc, job.CID, jid, "", reason); err != nil {
+				c.Logger.Error(err)
 				return
 			}
 		}
@@ -273,7 +263,7 @@ func (jc *JobController) Cancel(c *xin.Context) {
 			return
 		}
 		if errors.Is(err, xjm.ErrJobComplete) {
-			c.JSON(http.StatusOK, xin.H{"warning": tbs.GetText(c.Locale, "job.status."+jobs.JobStatusText(job.Status))})
+			c.JSON(http.StatusOK, xin.H{"warning": tbs.GetText(c.Locale, "job.status."+xjm.JobStatusText(job.Status))})
 			return
 		}
 

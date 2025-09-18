@@ -1,23 +1,19 @@
 package jobs
 
 import (
-	"cmp"
 	"errors"
 	"fmt"
 	"sync"
 	"time"
 
-	"github.com/askasoft/pango/asg"
-	"github.com/askasoft/pango/cog/treemap"
 	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/log"
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/sqx/sqlx"
-	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox/xjm"
+	"github.com/askasoft/pangox/xwa/xjobs"
 )
 
 const (
@@ -43,172 +39,46 @@ var (
 	}
 )
 
-//------------------------------------
+var (
+	ErrJobOverflow = errors.New("job overflow")
+)
 
-type tenantWorker struct {
-	RunningJobs []*xjm.Job
-}
-
-func (tw *tenantWorker) Runnings() int {
-	return len(tw.RunningJobs)
-}
-
-func (tw *tenantWorker) AddRunningJob(job *xjm.Job) {
-	tw.RunningJobs = append(tw.RunningJobs, job)
-}
-
-func (tw *tenantWorker) DelRunningJob(job *xjm.Job) {
-	tw.RunningJobs = asg.DeleteFunc(tw.RunningJobs, func(j *xjm.Job) bool { return j.ID == job.ID })
-}
-
-//------------------------------------
-
-type tenantWorkers struct {
-	mu sync.Mutex
-	ws *treemap.TreeMap[string, *tenantWorker]
-}
-
-func newTenantWorkers() *tenantWorkers {
-	return &tenantWorkers{ws: treemap.NewTreeMap[string, *tenantWorker](cmp.Compare[string])}
-}
-
-func (tws *tenantWorkers) Total() int {
-	tws.mu.Lock()
-	defer tws.mu.Unlock()
-
-	total := 0
-	for it := tws.ws.Iterator(); it.Next(); {
-		total += it.Value().Runnings()
-	}
-	return total
-}
-
-func (tws *tenantWorkers) Count(tt *tenant.Tenant) int {
-	tws.mu.Lock()
-	defer tws.mu.Unlock()
-
-	if tw, ok := tws.ws.Get(string(tt.Schema)); ok {
-		return tw.Runnings()
-	}
-	return 0
-}
-
-func (tws *tenantWorkers) Add(tt *tenant.Tenant, job *xjm.Job) {
-	tws.mu.Lock()
-	defer tws.mu.Unlock()
-
-	tw, ok := tws.ws.Get(string(tt.Schema))
-	if !ok {
-		tw = &tenantWorker{}
-		tws.ws.Set(string(tt.Schema), tw)
-	}
-
-	tw.AddRunningJob(job)
-}
-
-func (tws *tenantWorkers) Del(tt *tenant.Tenant, job *xjm.Job) {
-	tws.mu.Lock()
-	defer tws.mu.Unlock()
-
-	if tw, ok := tws.ws.Get(string(tt.Schema)); ok {
-		tw.DelRunningJob(job)
-	}
-}
-
-func (tws *tenantWorkers) Clean() {
-	tws.mu.Lock()
-	defer tws.mu.Unlock()
-
-	if tws.ws.Len() > 0 {
-		for it := tws.ws.Iterator(); it.Next(); {
-			cnt := it.Value().Runnings()
-			if cnt == 0 {
-				it.Remove() // remove no job running tenant worker
-			}
-		}
-	}
-}
-
-func (tws *tenantWorkers) Stats() string {
-	tws.mu.Lock()
-	defer tws.mu.Unlock()
-
-	total := 0
-	for it := tws.ws.Iterator(); it.Next(); {
-		total += it.Value().Runnings()
-	}
-
-	sb := &str.Builder{}
-	fmt.Fprintf(sb, "INSTANCE ID: 0x%04x, JOB RUNNING: %d", app.InstanceID(), total)
-	if total == 0 {
-		return sb.String()
-	}
-
-	sep := str.RepeatByte('-', 80)
-
-	sb.WriteByte('\n')
-	sb.WriteString(sep)
-	sb.WriteByte('\n')
-
-	for it := tws.ws.Iterator(); it.Next(); {
-		cnt := it.Value().Runnings()
-		if cnt == 0 {
-			continue
-		}
-
-		scnt := num.Itoa(cnt)
-		fmt.Fprintf(sb, "%32s: [%s] ", str.IfEmpty(it.Key(), "_"), scnt)
-		for i, job := range it.Value().RunningJobs {
-			if i > 0 {
-				fmt.Fprintf(sb, "%*s", 37+len(scnt), " ")
-			}
-			fmt.Fprintf(sb, "%s#%d\n", job.Name, job.ID)
-		}
-	}
-	sb.WriteString(sep)
-
-	return sb.String()
-}
-
-// -----------------------------
-var ErrJobOverflow = errors.New("job overflow")
-
-var ttWorkers = newTenantWorkers()
-
-var mu sync.Mutex
+var (
+	ttJobRuns = xjobs.NewJobsMap()
+	ttJobLock sync.Mutex
+)
 
 // Starts iterate tenants to start jobs
 func Starts() {
 	mar := ini.GetInt("job", "maxTotalRunnings", 10)
 
-	if mar-ttWorkers.Total() > 0 {
+	if mar-ttJobRuns.Total() > 0 {
 		err := tenant.Iterate(StartJobs)
 		if err != nil && !errors.Is(err, ErrJobOverflow) {
 			log.Errorf("jobs.Starts(): %v", err)
 		}
 
 		// sleep 1s to let all job go-routine start
-		time.AfterFunc(time.Second, ttWorkers.Clean)
+		time.AfterFunc(time.Second, ttJobRuns.Clean)
 	}
 
-	// print job stats and clean no job run items
-	log.Info(ttWorkers.Stats())
+	log.Info(Stats())
 }
 
 // StartJobs start tenant jobs
 func StartJobs(tt *tenant.Tenant) error {
-	mu.Lock()
-	defer mu.Unlock()
+	ttJobLock.Lock()
+	defer ttJobLock.Unlock()
 
 	mar := ini.GetInt("job", "maxTotalRunnings", 10)
 	mtr := ini.GetInt("job", "maxTenantRunnings", 10)
 
-	a := mar - ttWorkers.Total()
+	a := mar - ttJobRuns.Total()
 	if a <= 0 {
 		return ErrJobOverflow
 	}
 
-	c := mtr - ttWorkers.Count(tt)
+	c := mtr - ttJobRuns.Count(string(tt.Schema))
 	if c <= 0 {
 		return nil
 	}
@@ -217,8 +87,7 @@ func StartJobs(tt *tenant.Tenant) error {
 		c = a
 	}
 
-	tjm := tt.JM()
-	return tjm.StartJobs(c, func(job *xjm.Job) {
+	return tt.JM().StartJobs(c, func(job *xjm.Job) {
 		go runJob(tt, job)
 	})
 }
@@ -237,30 +106,30 @@ func runJob(tt *tenant.Tenant, job *xjm.Job) {
 			logger.Errorf("Job %s#%d panic: %v", job.Name, job.ID, err)
 		}
 
-		log.Info(ttWorkers.Stats())
+		log.Info(Stats())
 	}()
 
 	logger.Debugf("Start job %s#%d", job.Name, job.ID)
 
 	run := jrc(tt, job)
 
-	ttWorkers.Add(tt, job)
+	ttJobRuns.AddJob(string(tt.Schema), job)
 
-	defer ttWorkers.Del(tt, job)
+	defer ttJobRuns.DelJob(string(tt.Schema), job)
 
 	run.Run()
 }
 
 func Stats() string {
-	return ttWorkers.Stats()
+	total, stats := ttJobRuns.Stats()
+	return fmt.Sprintf("INSTANCE ID: 0x%04x, JOB RUNNING: %d\n%s", app.InstanceID(), total, stats)
 }
 
 // ------------------------------------
 func ReappendJobs() {
-	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
-		d := ini.GetDuration("job", "reappendBefore", time.Minute*30)
-		before := time.Now().Add(-d)
+	before := time.Now().Add(-1 * ini.GetDuration("job", "reappendBefore", time.Minute*30))
 
+	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
 		tjm := tt.JM()
 		cnt, err := tjm.ReappendJobs(before)
 		if err != nil {

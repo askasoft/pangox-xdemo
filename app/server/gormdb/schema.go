@@ -51,7 +51,7 @@ func dbmodels(dbt string) []any {
 func dialector(dbt string) gorm.Dialector {
 	dsn := ini.GetString("database", "source")
 
-	log.Infof("Connect Database (%s): %s", dbt, dsn)
+	log.Debugf("Connect Database (%s): %s", dbt, dsn)
 
 	switch dbt {
 	case "mysql":
