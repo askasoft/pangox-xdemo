@@ -1,4 +1,4 @@
-package main
+package tests
 
 import (
 	"os"
@@ -29,6 +29,8 @@ func testInit(t *testing.T) {
 	if sm != "" {
 		return
 	}
+
+	xwa.SetDirConfig("../../conf/")
 
 	require.NoError(t, xwa.InitConfigs())
 

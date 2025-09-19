@@ -2,6 +2,7 @@ package app
 
 import (
 	"crypto/tls"
+	"path/filepath"
 	"time"
 
 	"github.com/askasoft/pango/gwp"
@@ -17,11 +18,6 @@ import (
 	"github.com/askasoft/pangox/xwa"
 	"github.com/askasoft/pangox/xwa/xpwds"
 	"github.com/askasoft/pangox/xwa/xsqls"
-)
-
-const (
-	// Database Config table init file
-	DBConfigFile = "conf/config.csv"
 )
 
 const (
@@ -136,20 +132,24 @@ func DBType() string {
 	return str.If(d == "pgx", "postgres", d)
 }
 
+func ConfigCsvFile() string {
+	return filepath.Join(xwa.DirConfig, "config.csv")
+}
+
 func SchemaSQLFile() string {
-	return "conf/" + DBType() + ".sql"
+	return filepath.Join(xwa.DirConfig, DBType()+".sql")
 }
 
 func FormatDate(a any) string {
 	return tmu.LocalFormatDate(a)
 }
 
-func ParseDate(s string) (time.Time, error) {
-	return time.ParseInLocation(time.DateOnly, s, time.Local)
-}
-
 func FormatTime(a any) string {
 	return tmu.LocalFormatDateTime(a)
+}
+
+func ParseDate(s string) (time.Time, error) {
+	return time.ParseInLocation(time.DateOnly, s, time.Local)
 }
 
 func ParseTime(s string) (time.Time, error) {

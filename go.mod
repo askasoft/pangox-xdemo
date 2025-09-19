@@ -51,3 +51,13 @@ require (
 	golang.org/x/sys v0.36.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
 )
+
+replace (
+	github.com/askasoft/goawsx => ../goawsx
+	github.com/askasoft/gofresh => ../gofresh
+	github.com/askasoft/gogormx => ../gogormx
+	github.com/askasoft/goopenai => ../goopenai
+	github.com/askasoft/pango => ../pango
+	github.com/askasoft/pangox => ../pangox
+	github.com/askasoft/pangox-assets => ../pangox-assets
+)

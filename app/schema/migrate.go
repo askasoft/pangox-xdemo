@@ -16,10 +16,12 @@ import (
 )
 
 func ReadConfigFile() ([]*models.Config, error) {
-	log.Infof("Read config file '%s'", app.DBConfigFile)
+	file := app.ConfigCsvFile()
+
+	log.Infof("Read config file '%s'", file)
 
 	configs := []*models.Config{}
-	if err := csvx.ScanFile(app.DBConfigFile, &configs); err != nil {
+	if err := csvx.ScanFile(file, &configs); err != nil {
 		return nil, err
 	}
 
