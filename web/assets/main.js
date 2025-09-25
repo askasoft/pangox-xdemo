@@ -404,12 +404,17 @@ var main = {
 	set_table_tr_values: function($tr, vs, px) {
 		px ||= '';
 		for (var k in vs) {
+			var v = vs[k];
+			if (typeof(v) == 'object') {
+				continue;
+			}
+
 			var $td = $tr.find('td.' + px + k);
 			if ($td.length == 0 || $td.hasClass('ro')) {
 				continue;
 			}
 
-			var $c = $td.children('a, pre, button'), v = vs[k];
+			var $c = $td.children('a, pre, button');
 			if (typeof(v) == 'undefined') {
 				v = '';
 			}
