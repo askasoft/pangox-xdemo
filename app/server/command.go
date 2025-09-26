@@ -61,7 +61,7 @@ func (s *service) Usage() {
 // Basic: 'help' 'usage' 'version'
 // Windows only: 'install' 'remove' 'start' 'stop' 'debug'
 func (s *service) Exec(cmd string) {
-	cw := log.NewConsoleWriter()
+	cw := log.NewConsoleWriter(true)
 	cw.SetFormat("%t [%p] - %m%n%T")
 
 	log.SetWriter(cw)
