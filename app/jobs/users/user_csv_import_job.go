@@ -47,7 +47,6 @@ type UserCsvImportJob struct {
 
 	jobs.JobState
 
-	data []byte
 	head csvUserHeader
 
 	roleRevMap     *hashmap.HashMap[string, string]
@@ -57,7 +56,7 @@ type UserCsvImportJob struct {
 	pwdPolicy *tenant.PasswordPolicy
 }
 
-func NewUserCsvImportJob(tt *tenant.Tenant, job *xjm.Job) jobs.IRun {
+func NewUserCsvImportJob(tt *tenant.Tenant, job *xjm.Job) jobs.IJobRunner {
 	ucij := &UserCsvImportJob{}
 
 	ucij.JobRunner = jobs.NewJobRunner[UserCsvImportArg](tt, job)
@@ -67,18 +66,11 @@ func NewUserCsvImportJob(tt *tenant.Tenant, job *xjm.Job) jobs.IRun {
 	return ucij
 }
 
-func (ucij *UserCsvImportJob) Run() {
-	err := ucij.Checkout()
-	if err != nil {
-		ucij.Done(err)
-		return
-	}
-
+func (ucij *UserCsvImportJob) Run() error {
 	tfs := ucij.Tenant.FS()
-	ucij.data, err = tfs.ReadFile(ucij.Arg.File)
+	data, err := tfs.ReadFile(ucij.Arg.File)
 	if err != nil {
-		ucij.Done(err)
-		return
+		return err
 	}
 
 	ucij.roleRevMap = tbsutil.GetUserRoleReverseMap()
@@ -86,11 +78,9 @@ func (ucij *UserCsvImportJob) Run() {
 	ucij.loginMFARevMap = tbsutil.GetUserLoginMFAReverseMap()
 	ucij.pwdPolicy = ucij.Tenant.GetPasswordPolicy(ucij.Locale())
 
-	total, err := ucij.doCheckCsv()
+	total, err := ucij.doCheckCsv(data)
 	if err != nil {
-		err = xerrs.NewClientError(err)
-		ucij.Done(err)
-		return
+		return xerrs.NewClientError(err)
 	}
 
 	ucij.Step = 0
@@ -101,11 +91,9 @@ func (ucij *UserCsvImportJob) Run() {
 	ctx, cancel := ucij.Running()
 	defer cancel(nil)
 
-	err = ucij.doReadCsv(ctx, ucij.importRecord)
+	err = ucij.doReadCsv(ctx, data, ucij.importRecord)
 
-	err = xerrs.ContextCause(ctx, err)
-
-	ucij.Done(err)
+	return xerrs.ContextCause(ctx, err)
 }
 
 type csvUserHeader struct {
@@ -146,8 +134,8 @@ type csvUserRecord struct {
 	Others   map[string]string
 }
 
-func (ucij *UserCsvImportJob) doReadCsv(ctx context.Context, callback func(rec *csvUserRecord) error) error {
-	fp := bytes.NewReader(ucij.data)
+func (ucij *UserCsvImportJob) doReadCsv(ctx context.Context, data []byte, callback func(rec *csvUserRecord) error) error {
+	fp := bytes.NewReader(data)
 
 	bp, err := iox.SkipBOM(fp)
 	if err != nil {
@@ -189,11 +177,11 @@ func (ucij *UserCsvImportJob) doReadCsv(ctx context.Context, callback func(rec *
 	}
 }
 
-func (ucij *UserCsvImportJob) doCheckCsv() (cnt int, err error) {
+func (ucij *UserCsvImportJob) doCheckCsv(data []byte) (cnt int, err error) {
 	ucij.Logger.Info(tbs.GetText(ucij.Locale(), "csv.info.checking"))
 
 	valid := true
-	err = ucij.doReadCsv(context.TODO(), func(rec *csvUserRecord) error {
+	err = ucij.doReadCsv(context.TODO(), data, func(rec *csvUserRecord) error {
 		cnt++
 		err := ucij.checkRecord(rec)
 		if err != nil {

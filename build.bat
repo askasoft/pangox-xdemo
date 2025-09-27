@@ -20,8 +20,7 @@ FOR /F "tokens=* USEBACKQ" %%i IN (`git rev-parse --short HEAD`) DO (
 	SET REVISION=%%i
 )
 
-SET /A VER_BUILD=0x%REVISION%
-SET VER_BUILD=%VER_BUILD:~0,4%
+SET /A VER_BUILD=0x%REVISION:~0,4%
 
 call :build .     xdemo    web/favicon.ico
 

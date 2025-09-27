@@ -45,13 +45,13 @@ type PetGenerateJob struct {
 	gen *PetGenerator
 }
 
-func NewPetCatGenJob(tt *tenant.Tenant, job *xjm.Job) jobs.IRun {
+func NewPetCatGenJob(tt *tenant.Tenant, job *xjm.Job) jobs.IJobRunner {
 	pgj := newPetGenerateJob(tt, job)
 	pgj.gen = NewPetGenerator(pgj.Tenant, "cat")
 	return pgj
 }
 
-func NewPetDogGenJob(tt *tenant.Tenant, job *xjm.Job) jobs.IRun {
+func NewPetDogGenJob(tt *tenant.Tenant, job *xjm.Job) jobs.IJobRunner {
 	pgj := newPetGenerateJob(tt, job)
 	pgj.gen = NewPetGenerator(pgj.Tenant, "dog")
 	return pgj
@@ -67,12 +67,7 @@ func newPetGenerateJob(tt *tenant.Tenant, job *xjm.Job) *PetGenerateJob {
 	return pgj
 }
 
-func (pgj *PetGenerateJob) Run() {
-	if err := pgj.Checkout(); err != nil {
-		pgj.Done(err)
-		return
-	}
-
+func (pgj *PetGenerateJob) Run() error {
 	if pgj.Step == 0 {
 		pgj.Total = pgj.Arg.Items
 	}
@@ -83,8 +78,7 @@ func (pgj *PetGenerateJob) Run() {
 	err := pgj.run(ctx)
 	cancel(err)
 
-	err = xerrs.ContextCause(ctx, err)
-	pgj.Done(err)
+	return xerrs.ContextCause(ctx, err)
 }
 
 func (pgj *PetGenerateJob) run(ctx context.Context) error {

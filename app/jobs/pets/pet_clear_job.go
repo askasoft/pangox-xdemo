@@ -36,7 +36,7 @@ type PetClearJob struct {
 	jobs.JobState
 }
 
-func NewPetClearJob(tt *tenant.Tenant, job *xjm.Job) jobs.IRun {
+func NewPetClearJob(tt *tenant.Tenant, job *xjm.Job) jobs.IJobRunner {
 	pc := &PetClearJob{}
 
 	pc.JobRunner = jobs.NewJobRunner[PetClearArg](tt, job)
@@ -45,15 +45,7 @@ func NewPetClearJob(tt *tenant.Tenant, job *xjm.Job) jobs.IRun {
 	return pc
 }
 
-func (pc *PetClearJob) Run() {
-	err := pc.Checkout()
-	if err == nil {
-		err = pc.clear()
-	}
-	pc.Done(err)
-}
-
-func (pc *PetClearJob) clear() error {
+func (pc *PetClearJob) Run() error {
 	tt := pc.Tenant
 	db := app.SDB()
 
@@ -67,12 +59,10 @@ func (pc *PetClearJob) clear() error {
 	pc.Logger.Infof("%d Pet Files Deleted.", cnt)
 
 	pc.Logger.Info("Delete Pets ...")
-	r, err := db.Exec("DELETE FROM " + tt.TablePets())
+	cnt, err = tt.DeletePets(db)
 	if err != nil {
 		return err
 	}
-
-	cnt, _ = r.RowsAffected()
 	pc.Logger.Infof("%d Pets Deleted.", cnt)
 
 	pc.Success = int(cnt)
@@ -81,7 +71,7 @@ func (pc *PetClearJob) clear() error {
 	}
 
 	if pc.Arg.ResetSequence {
-		pc.Logger.Info("Reset Pets Sequence")
+		pc.Logger.Info("Pets Sequence Resetted.")
 		err = tt.ResetPetsAutoIncrement(db)
 		if err != nil {
 			return err

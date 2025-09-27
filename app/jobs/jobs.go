@@ -101,6 +101,8 @@ func runJob(tt *tenant.Tenant, job *xjm.Job) {
 		return
 	}
 
+	run := jrc(tt, job)
+
 	defer func() {
 		if err := recover(); err != nil {
 			logger.Errorf("Job %s#%d panic: %v", job.Name, job.ID, err)
@@ -111,13 +113,34 @@ func runJob(tt *tenant.Tenant, job *xjm.Job) {
 
 	logger.Debugf("Start job %s#%d", job.Name, job.ID)
 
-	run := jrc(tt, job)
-
 	ttJobRuns.AddJob(string(tt.Schema), job)
 
 	defer ttJobRuns.DelJob(string(tt.Schema), job)
 
-	run.Run()
+	err := safeRun(run, job, logger)
+	run.Done(err)
+}
+
+func safeRun(run IJobRunner, job *xjm.Job, logger log.Logger) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Errorf("Job %s#%d panic: %v", job.Name, job.ID, r)
+
+			if e, ok := r.(error); ok {
+				err = e
+			} else {
+				err = fmt.Errorf("%v", r)
+			}
+		}
+	}()
+
+	err = run.Checkout()
+	if err != nil {
+		return
+	}
+
+	err = run.Run()
+	return
 }
 
 func Stats() string {

@@ -73,11 +73,13 @@ func ArgBind(c *xin.Context, a any) error {
 	return err
 }
 
-type IRun interface {
-	Run()
+type IJobRunner interface {
+	Checkout() error
+	Run() error
+	Done(error)
 }
 
-type JobRunCreator func(*tenant.Tenant, *xjm.Job) IRun
+type JobRunCreator func(*tenant.Tenant, *xjm.Job) IJobRunner
 
 var jobRunCreators = map[string]JobRunCreator{}
 
