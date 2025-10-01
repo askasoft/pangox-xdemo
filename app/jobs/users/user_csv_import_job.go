@@ -186,7 +186,7 @@ func (ucij *UserCsvImportJob) doCheckCsv(data []byte) (cnt int, err error) {
 		err := ucij.checkRecord(rec)
 		if err != nil {
 			valid = false
-			ucij.Logger.Warn(err.Error())
+			ucij.Logger.Warn(err)
 		}
 		return nil
 	})
