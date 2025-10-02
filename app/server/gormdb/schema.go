@@ -69,7 +69,7 @@ func OpenDatabase(schema ...string) (*gorm.DB, error) {
 	gdc := &gorm.Config{
 		Logger: gormlog.NewGormLogger(
 			log.GetLogger("SQL"),
-			ini.GetDuration("database", "slowSql", time.Second),
+			ini.GetDuration("database", "slowSQL", time.Second),
 		),
 		SkipDefaultTransaction: true,
 	}

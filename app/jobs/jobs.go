@@ -129,7 +129,7 @@ func safeRun(run IJobRunner, job *xjm.Job, logger log.Logger) (err error) {
 			if e, ok := r.(error); ok {
 				err = e
 			} else {
-				err = fmt.Errorf("%v", r)
+				err = fmt.Errorf("panic: %v", r)
 			}
 		}
 	}()
