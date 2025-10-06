@@ -73,7 +73,7 @@
 								{{else if eq $c.Style "MS"}}
 									{{Select "Name=" $c.Name "List=" (MapGet $.Lists $c.Name) "Multiple=" true "Values=" $c.Values "Disabled=" $ro "data-spy=" "niceSelect" "class=" "wide"}}
 								{{else if eq $c.Style "T"}}
-									<textarea name="{{$c.Name}}" class="form-control" rows="2" textclear enterfire{{if $ro}} disabled{{end}}>
+									<textarea name="{{$c.Name}}" class="form-control" rows="2" placeholder="{{T $.Loc (print "config.placeholder." $c.Name)}}" textclear enterfire{{if $ro}} disabled{{end}}>
 {{$c.DisplayValue}}</textarea>
 								{{else if eq $c.Style "N"}}
 									<input name="{{$c.Name}}" type="text" size="20" class="form-control" textclear value="{{$c.DisplayValue}}"{{if $ro}} disabled{{end}}/>
@@ -86,7 +86,7 @@
 								{{else if eq $c.Style "TM"}}
 									<input name="{{$c.Name}}" type="month" class="form-control" textclear value="{{$c.DisplayValue}}"{{if $ro}} disabled{{end}}/>
 								{{else}}
-									<input name="{{$c.Name}}" type="text" class="form-control" textclear value="{{$c.DisplayValue}}"{{if $ro}} disabled{{end}}/>
+									<input name="{{$c.Name}}" type="text" class="form-control" textclear value="{{$c.DisplayValue}}" placeholder="{{T $.Loc (print "config.placeholder." $c.Name)}}"{{if $ro}} disabled{{end}}/>
 								{{end}}
 								{{$desc := (T $.Loc (print "config.desc." $c.Name))}}
 								{{if $desc}}
