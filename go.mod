@@ -8,7 +8,7 @@ require (
 	github.com/askasoft/pangox v1.2.7
 	github.com/askasoft/pangox-assets v1.1.2
 	github.com/crewjam/saml v0.5.1
-	github.com/go-ldap/ldap/v3 v3.4.11
+	github.com/go-ldap/ldap/v3 v3.4.12
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/jackc/pgx/v5 v5.7.6
 	github.com/liuzl/gocc v0.0.0-20231231122217-0372e1059ca5
