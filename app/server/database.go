@@ -81,3 +81,9 @@ func dbSchemaCheck(schemas ...string) error {
 		return nil
 	}, schemas...)
 }
+
+func dbSchemaVacuum(schemas ...string) error {
+	return dbIterateSchemas(func(sm schema.Schema) error {
+		return sm.VacuumSchema(app.SDB())
+	}, schemas...)
+}

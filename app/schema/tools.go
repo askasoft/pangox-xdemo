@@ -10,6 +10,10 @@ import (
 	"github.com/askasoft/pangox/xwa/xsqls"
 )
 
+func (sm Schema) ExecSQL(sqls string) error {
+	return xsqls.ExecSQL(app.SDB(), string(sm), sqls)
+}
+
 func (sm Schema) CheckSchema(tx sqlx.Sqlx) {
 	logger := log.GetLogger("SQL")
 	logger.Info(str.Repeat("=", 40))
@@ -33,6 +37,17 @@ func (sm Schema) CheckSchema(tx sqlx.Sqlx) {
 	}
 }
 
-func (sm Schema) ExecSQL(sqls string) error {
-	return xsqls.ExecSQL(app.SDB(), string(sm), sqls)
+func (sm Schema) VacuumSchema(tx sqlx.Sqlx) error {
+	logger := log.GetLogger("SQL")
+	logger.Info(str.Repeat("=", 40))
+
+	for it := tables.Iterator(); it.Next(); {
+		tb := sm.Table(it.Key())
+
+		_, err := tx.Exec("VACUUM FULL " + tb)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

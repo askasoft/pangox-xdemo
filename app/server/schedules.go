@@ -15,6 +15,7 @@ func init() {
 	xschs.Register("jobClean", jobs.CleanOutdatedJobs)
 	xschs.Register("tmpClean", tasks.CleanTemporaryFiles)
 	xschs.Register("auditlogClean", tasks.CleanOutdatedAuditLogs)
+	xschs.Register("dbVacuum", tasks.VacuumSchemas)
 }
 
 func initScheduler() {

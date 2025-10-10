@@ -42,6 +42,7 @@ func (s *service) Usage() {
 	fmt.Println("    schema <command> [schema]...")
 	fmt.Println("      command=init      initialize the schema.")
 	fmt.Println("      command=check     check schema tables.")
+	fmt.Println("      command=vacuum    vacuum schema tables (postgresql only).")
 	fmt.Println("      [schema]...       specify schemas to execute.")
 	fmt.Println("    generate [output]   generate database schema DDL.")
 	fmt.Println("      [output]          specify the output DDL file.")
@@ -148,6 +149,17 @@ func doSchemas() {
 		initConfigs()
 		initDatabase()
 		if err := dbSchemaCheck(args...); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(app.ExitErrDB)
+		}
+	case "vacuum":
+		initConfigs()
+		initDatabase()
+		if app.DBType() != "postgres" {
+			fmt.Printf("Database %s does not support vacuum", app.DBType())
+			os.Exit(app.ExitErrDB)
+		}
+		if err := dbSchemaVacuum(args...); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
 		}
