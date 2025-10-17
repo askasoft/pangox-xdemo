@@ -17,8 +17,8 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox-xdemo/app/utils/otputil"
-	"github.com/askasoft/pangox-xdemo/app/utils/smtputil"
 	"github.com/askasoft/pangox/xwa/xcpts"
+	"github.com/askasoft/pangox/xwa/xmail"
 	"github.com/skip2/go-qrcode"
 	"github.com/xlzd/gotp"
 )
@@ -173,7 +173,7 @@ func loginSendEmailPasscode(c *xin.Context, email, passcode string, expire time.
 	h["Passcode"] = passcode
 	h["Expires"] = int(expire.Minutes())
 
-	if err := smtputil.SendTemplateEmail(c.Locale, "email/login/passcode_send", email, h); err != nil {
+	if err := xmail.SendTemplateHTMLEmail(c.Locale, "email/login/passcode_send", email, h); err != nil {
 		c.Logger.Error(err)
 		c.AddError(tbs.Error(c.Locale, "login.error.sendmail"))
 		c.JSON(http.StatusInternalServerError, middles.E(c))
@@ -223,7 +223,7 @@ func loginSendEmailQrcode(c *xin.Context, email string, totp *gotp.TOTP) {
 	h["Email"] = email
 	h["QRCode"] = base64.StdEncoding.EncodeToString(png)
 
-	if err := smtputil.SendTemplateEmail(c.Locale, "email/login/mbenroll_send", email, h); err != nil {
+	if err := xmail.SendTemplateHTMLEmail(c.Locale, "email/login/mbenroll_send", email, h); err != nil {
 		c.Logger.Error(err)
 		c.AddError(tbs.Error(c.Locale, "login.error.sendmail"))
 		c.JSON(http.StatusInternalServerError, middles.E(c))

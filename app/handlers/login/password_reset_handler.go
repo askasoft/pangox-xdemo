@@ -18,8 +18,8 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
-	"github.com/askasoft/pangox-xdemo/app/utils/smtputil"
 	"github.com/askasoft/pangox/xwa/xcpts"
+	"github.com/askasoft/pangox/xwa/xmail"
 )
 
 type PwdRstToken struct {
@@ -82,7 +82,7 @@ func PasswordResetSend(c *xin.Context) {
 	h["Expires"] = tkexp
 	h["ResetURL"] = rsurl
 
-	if err := smtputil.SendTemplateEmail(c.Locale, "email/login/pwdrst_send", user.Email, h); err != nil {
+	if err := xmail.SendTemplateHTMLEmail(c.Locale, "email/login/pwdrst_send", user.Email, h); err != nil {
 		c.Logger.Error(err)
 		c.AddError(tbs.Error(c.Locale, "pwdrst.error.sendmail"))
 		c.JSON(http.StatusInternalServerError, middles.E(c))
@@ -192,7 +192,7 @@ func PasswordResetExecute(c *xin.Context) {
 	h := middles.H(c)
 	h["User"] = user
 
-	if err := smtputil.SendTemplateEmail(c.Locale, "email/login/pwdrst_reset", user.Email, h); err != nil {
+	if err := xmail.SendTemplateHTMLEmail(c.Locale, "email/login/pwdrst_reset", user.Email, h); err != nil {
 		c.Logger.Error(err)
 	}
 
