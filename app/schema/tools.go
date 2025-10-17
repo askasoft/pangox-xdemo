@@ -11,7 +11,12 @@ import (
 )
 
 func (sm Schema) ExecSQL(sqls string) error {
-	return xsqls.ExecSQL(app.SDB(), string(sm), sqls)
+	logger := log.GetLogger("SQL")
+	logger.Info(str.PadCenter(" "+string(sm)+" ", 78, "="))
+
+	sqls = str.ReplaceAll(sqls, "SCHEMA", string(sm))
+
+	return xsqls.ExecSQL(app.SDB(), string(sm), sqls, logger)
 }
 
 func (sm Schema) CheckSchema(tx sqlx.Sqlx) {
