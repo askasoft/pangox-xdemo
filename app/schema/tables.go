@@ -5,6 +5,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox/xfs"
 	"github.com/askasoft/pangox/xjm"
+	"github.com/askasoft/pangox/xwa/xsqls"
 )
 
 var tables = linkedhashmap.NewLinkedHashMap[string, any]()
@@ -18,6 +19,7 @@ func init() {
 	tables.Set("configs", &models.Config{})
 	tables.Set("audit_logs", &models.AuditLog{})
 	tables.Set("pets", &models.Pet{})
+	tables.Set("schema_changes", &xsqls.SchemaChange{})
 }
 
 func (sm Schema) Prefix() string {

@@ -111,3 +111,9 @@ CREATE TABLE `SCHEMA`.`pets` (
 	`updated_at` datetime(3) NOT NULL,
 	PRIMARY KEY (`id`)
 );
+---------------------------------;
+CREATE TABLE `SCHEMA`.`schema_changes` (
+	`script` varchar(255) NOT NULL,
+	`applied_at` datetime(3) NOT NULL,
+	PRIMARY KEY (`script`)
+);

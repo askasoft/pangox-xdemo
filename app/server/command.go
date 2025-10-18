@@ -14,6 +14,7 @@ import (
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/server/gormdb"
+	"github.com/askasoft/pangox-xdemo/sqls"
 	"github.com/askasoft/pangox-xdemo/tpls"
 	"github.com/askasoft/pangox-xdemo/txts"
 	"github.com/askasoft/pangox-xdemo/web"
@@ -42,6 +43,7 @@ func (s *service) Usage() {
 	fmt.Println("    schema <command> [schema]...")
 	fmt.Println("      command=init      initialize the schema.")
 	fmt.Println("      command=check     check schema tables.")
+	fmt.Println("      command=update    apply schema update scripts.")
 	fmt.Println("      command=vacuum    vacuum schema tables (postgresql only).")
 	fmt.Println("      [schema]...       specify schemas to execute.")
 	fmt.Println("    generate [output]   generate database schema DDL.")
@@ -52,7 +54,7 @@ func (s *service) Usage() {
 	fmt.Println("    exectask <task>     execute task [ " + str.Join(xschs.Schedules.Keys(), ", ") + " ]")
 	fmt.Println("    encrypt [key] <str> encrypt string.")
 	fmt.Println("    decrypt [key] <str> decrypt string.")
-	fmt.Println("    assets  [dir]       export assets to directory.")
+	fmt.Println("    assets  <pwd> [dir] export embed assets to directory.")
 	fmt.Println("  <options>:")
 	srv.PrintDefaultOptions(os.Stdout)
 	fmt.Println("    -debug              print the debug log.")
@@ -63,7 +65,7 @@ func (s *service) Usage() {
 // Windows only: 'install' 'remove' 'start' 'stop' 'debug'
 func (s *service) Exec(cmd string) {
 	cw := log.NewConsoleWriter(true)
-	cw.SetFormat("%t [%p] - %m%n%T")
+	cw.SetFormat("%t{15:04:05} [%p] - %m%n%T")
 
 	log.SetWriter(cw)
 	log.SetLevel(gog.If(s.debug, log.LevelDebug, log.LevelInfo))
@@ -149,6 +151,13 @@ func doSchemas() {
 		initConfigs()
 		initDatabase()
 		if err := dbSchemaCheck(args...); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(app.ExitErrDB)
+		}
+	case "update":
+		initConfigs()
+		initDatabase()
+		if err := dbSchemaUpdate(args...); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
 		}
@@ -245,16 +254,25 @@ func cryptFlags() (k, v string) {
 }
 
 func doExportAssets() {
-	if err := exportAssets(); err != nil {
+	pwd := flag.Arg(1)
+	if pwd != "askadevelop" {
+		fmt.Fprintln(os.Stderr, "invalid develop password!")
+		os.Exit(app.ExitErrARG)
+	}
+
+	dir := str.IfEmpty(flag.Arg(2), ".")
+
+	if err := exportAssets(dir); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	fmt.Println("DONE.")
 }
 
-func exportAssets() error {
-	dir := str.IfEmpty(flag.Arg(1), ".")
-
+func exportAssets(dir string) error {
+	if err := copyFS(filepath.Join(dir, "sqls"), sqls.FS); err != nil {
+		return err
+	}
 	if err := copyFS(filepath.Join(dir, "txts"), txts.FS); err != nil {
 		return err
 	}

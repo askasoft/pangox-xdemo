@@ -11,6 +11,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/server/gormdb/mymodels"
 	"github.com/askasoft/pangox/xfs"
 	"github.com/askasoft/pangox/xjm"
+	"github.com/askasoft/pangox/xwa/xsqls"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -26,6 +27,7 @@ var pgModels = []any{
 	&models.Config{},
 	&models.AuditLog{},
 	&models.Pet{},
+	&xsqls.SchemaChange{},
 }
 
 var myModels = []any{
@@ -37,6 +39,7 @@ var myModels = []any{
 	&models.Config{},
 	&mymodels.AuditLog{},
 	&mymodels.Pet{},
+	&xsqls.SchemaChange{},
 }
 
 func dbmodels(dbt string) []any {
