@@ -1,7 +1,6 @@
 package super
 
 import (
-	"cmp"
 	"fmt"
 	"net"
 	"net/http"
@@ -199,7 +198,7 @@ func statsCacheStats[K comparable, T any](c *xin.Context, ic *imc.Cache[K, T], f
 	limit := num.Atoi(c.Query("limit"), 1000)
 
 	now := time.Now()
-	cis := treemap.NewTreeMap[string, CacheItem](cmp.Compare[string])
+	cis := treemap.NewTreeMap[string, CacheItem](strings.Compare)
 
 	var ci CacheItem
 	ic.Each(func(k K, i imc.Item[T]) bool {
