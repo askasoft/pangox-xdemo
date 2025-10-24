@@ -68,8 +68,7 @@ func (sm Schema) UpdateFiles(tx sqlx.Sqlx, fua *args.FileUpdatesArg) (int64, err
 
 	sqb.Update(sm.TableFiles())
 	fua.AddUpdates(sqb)
-
-	xsqbs.AddIn(sqb, "id", fua.IDs())
+	xsqbs.AddIn(sqb, "id", fua.PKs())
 
 	sql, args := sqb.Build()
 

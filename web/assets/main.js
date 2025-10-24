@@ -401,15 +401,16 @@ var main = {
 		});
 		return ids;
 	},
-	set_table_tr_values: function($tr, vs, px) {
-		px ||= '';
+	set_table_tr_values: function($tr, vs, labels, prefix) {
+		labels ||= {};
+		prefix ||= '';
 		for (var k in vs) {
 			var v = vs[k];
 			if (typeof(v) == 'object') {
 				continue;
 			}
 
-			var $td = $tr.find('td.' + px + k);
+			var name = prefix + k, $td = $tr.find('td.' + name);
 			if ($td.length == 0 || $td.hasClass('ro')) {
 				continue;
 			}
@@ -417,6 +418,11 @@ var main = {
 			var $c = $td.children('a, p, pre, button');
 			if (typeof(v) == 'undefined') {
 				v = '';
+			}
+
+			var lbls = labels[name];
+			if (lbls) {
+				v = lbls[v] || v;
 			}
 			if (v && k.endsWith("_at")) {
 				v = main[$td.hasClass('date') ? 'format_date' : 'format_time'](v);

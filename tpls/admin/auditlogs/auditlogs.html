@@ -52,17 +52,17 @@
 					</div>
 					<label class="col-md-2 col-xxl-1 col-form-label">{{T .Loc "auditlog.action"}}</label>
 					<div class="col-md-4 col-xxl-5">
-						<input name="action" type="text" class="form-control" textclear value="{{.Q.Action}}"/>
+						<input name="action" type="text" class="form-control" textclear value="{{.Q.Action}}" placeholder="{{T .Loc "filter.keywords"}}"/>
 					</div>
 				</div>
 				<div class="row">
 					<label class="col-md-2 col-xxl-1 col-form-label">{{T .Loc "auditlog.user"}}</label>
 					<div class="col-md-4 col-xxl-5">
-						<input name="user" type="text" class="form-control" textclear value="{{.Q.User}}"/>
+						<input name="user" type="text" class="form-control" textclear value="{{.Q.User}}" placeholder="{{T .Loc "filter.keywords"}}"/>
 					</div>
 					<label class="col-md-2 col-xxl-1 col-form-label">{{T .Loc "auditlog.cip"}}</label>
 					<div class="col-md-4 col-xxl-5">
-						<input name="cip" type="text" class="form-control" textclear value="{{.Q.CIP}}"/>
+						<input name="cip" type="text" class="form-control" textclear value="{{.Q.CIP}}" placeholder="{{T .Loc "filter.keywords"}}"/>
 					</div>
 				</div>
 				<div class="row pt-3 pb-2">
@@ -126,19 +126,19 @@
 			<div class="row">
 				<label class="col-md-2 col-form-label">{{T .Loc "auditlog.action"}}</label>
 				<div class="col">
-					<input name="action" type="text" class="form-control" textclear value="{{.Q.Action}}"/>
+					<input name="action" type="text" class="form-control" textclear value="{{.Q.Action}}" placeholder="{{T .Loc "filter.keywords"}}"/>
 				</div>
 			</div>
 			<div class="row">
 				<label class="col-md-2 col-form-label">{{T .Loc "auditlog.user"}}</label>
 				<div class="col">
-					<input name="user" type="text" class="form-control" textclear value="{{.Q.User}}"/>
+					<input name="user" type="text" class="form-control" textclear value="{{.Q.User}}" placeholder="{{T .Loc "filter.keywords"}}"/>
 				</div>
 			</div>
 			<div class="row">
 				<label class="col-md-2 col-form-label">{{T .Loc "auditlog.cip"}}</label>
 				<div class="col">
-					<input name="cip" type="text" class="form-control" textclear value="{{.Q.CIP}}"/>
+					<input name="cip" type="text" class="form-control" textclear value="{{.Q.CIP}}" placeholder="{{T .Loc "filter.keywords"}}"/>
 				</div>
 			</div>
 			<button type="submit" class="hidden"></button>

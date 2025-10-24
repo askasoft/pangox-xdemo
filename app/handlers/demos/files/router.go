@@ -5,6 +5,7 @@ import "github.com/askasoft/pango/xin"
 func Router(rg *xin.RouterGroup) {
 	rg.GET("/", FileIndex)
 	rg.POST("/list", FileList)
+	rg.POST("/updates", FileUpdates)
 	rg.POST("/deletes", FileDeletes)
 	rg.POST("/deleteb", FileDeleteBatch)
 

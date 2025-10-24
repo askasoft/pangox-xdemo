@@ -150,26 +150,20 @@
 	//----------------------------------------------------
 	// update
 	//
-	var PGM = $('#pet_maps').data('gender');
-	var POM = $('#pet_maps').data('origin');
-	var PTM = $('#pet_maps').data('temper');
-	var PHM = $('#pet_maps').data('habits');
+	var LABELS = $('#pet_labels').data();
 
 	function pet_set_tr_values($tr, pet) {
-		main.set_table_tr_values($tr, pet);
-		$tr.find('td.gender').text(PGM[pet.gender]);
-		$tr.find('td.origin').text(POM[pet.origin]);
-		$tr.find('td.temper').text(PTM[pet.temper]);
-		var hs = [];
-		if (pet.habits) {
-			for (var k in pet.habits) {
-				if (pet.habits[k]) {
-					hs.push($('<b>').text(PHM[k]));
+		main.set_table_tr_values($tr, pet, LABELS);
+
+		if ('habits' in pet) {
+			var hs = [], lbls = LABELS['habits'];
+			$.each(pet.habits, function(i, v) {
+				if (v) {
+					hs.push($('<b>').text(lbls[v] || v));
 				}
-			}
+			});
+			$tr.find('td.habits').empty().append(hs);
 		}
-		$tr.find('td.habits').empty().append(hs);
-		main.blink($tr);
 	}
 
 	function pet_update() {
@@ -192,6 +186,7 @@
 				var pet = data.pet, $tr = $('#pet_' + pet.id);
 
 				pet_set_tr_values($tr, pet);
+				main.blink($tr);
 			},
 			error: main.form_ajax_error($p),
 			complete: main.form_ajax_end($p)
@@ -229,6 +224,7 @@
 
 				pet_set_tr_values($tr, pet);
 				$tr.find('td.id, td.created_at').addClass('ro');
+				main.blink($tr);
 			},
 			error: main.form_ajax_error($p),
 			complete: main.form_ajax_end($p)
@@ -326,29 +322,7 @@
 
 				var $trs = (ids == '*' ? $('#pets_table > tbody > tr') : main.get_table_trs('#pet_', ids.split(',')));
 
-				var us = data.updates;
-				if (us.gender) {
-					$trs.find('td.gender').text(PGM[us.gender]);
-				}
-				if (us.born_at) {
-					$trs.find('td.born_at').text(main.format_date(us.born_at));
-				}
-				if (us.origin) {
-					$trs.find('td.origin').text(POM[us.origin]);
-				}
-				if (us.temper) {
-					$trs.find('td.temper').text(PTM[us.temper]);
-				}
-				if (us.habits) {
-					var hs = [];
-					$.each(us.habits, function(i, h) {
-						hs.push($('<b>').text(PHM[h]));
-					})
-					$trs.find('td.habits').empty().append(hs);
-				}
-				if (us.updated_at) {
-					$trs.find('td.updated_at').text(main.format_time(us.updated_at));
-				}
+				pet_set_tr_values($trs, data.updates);
 				main.blink($trs);
 			},
 			error: main.form_ajax_error($p),

@@ -150,15 +150,14 @@
 	//----------------------------------------------------
 	// update
 	//
-	var USM = $('#user_maps').data('status');
-	var URM = $('#user_maps').data('role');
+	var LABELS = $('#user_labels').data();
 
 	function user_set_tr_values($tr, user) {
-		main.set_table_tr_values($tr, user);
-		$tr.attr('class', '').addClass(user.status);
-		$tr.find('td.status').text(USM[user.status]);
-		$tr.find('td.role').text(URM[user.role]);
-		main.blink($tr);
+		main.set_table_tr_values($tr, user, LABELS);
+
+		if ('status' in user) {
+			$tr.attr('class', user.status);
+		}
 	}
 
 	function user_update() {
@@ -181,6 +180,7 @@
 				var user = data.user, $tr = $('#user_' + user.id);
 
 				user_set_tr_values($tr, user);
+				main.blink($tr);
 			},
 			error: main.form_ajax_error($p),
 			complete: main.form_ajax_end($p)
@@ -218,6 +218,7 @@
 
 				user_set_tr_values($tr, user);
 				$tr.find('td.id, td.created_at').addClass('ro');
+				main.blink($tr);
 			},
 			error: main.form_ajax_error($p),
 			complete: main.form_ajax_end($p)
@@ -315,20 +316,7 @@
 
 				var $trs = (ids == '*' ? $('#users_table > tbody > tr') : main.get_table_trs('#user_', ids.split(',')));
 
-				var us = data.updates;
-				if (us.status) {
-					$trs.attr('class', '').addClass(us.status);
-					$trs.find('td.status').text(USM[us.status]);
-				}
-				if (us.role) {
-					$trs.find('td.role').text(URM[us.role]);
-				}
-				if ('cidr' in us) {
-					$trs.find('td.cidr > p').text(us.cidr);
-				}
-				if (us.updated_at) {
-					$trs.find('td.updated_at').text(main.format_time(us.updated_at));
-				}
+				user_set_tr_values($trs, data.updates);
 				main.blink($trs);
 			},
 			error: main.form_ajax_error($p),

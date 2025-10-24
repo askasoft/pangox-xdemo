@@ -30,14 +30,18 @@ type UserUpdatesArg struct {
 	IDArg
 	UpdatedAtArg
 
-	Role     string  `json:"role,omitempty" form:"role,strip"`
-	Status   string  `json:"status,omitempty" form:"status,strip"`
+	Role     *string `json:"role,omitempty" form:"role,strip"`
+	Status   *string `json:"status,omitempty" form:"status,strip"`
 	LoginMFA *string `json:"login_mfa,omitempty" form:"login_mfa,strip"`
 	CIDR     *string `json:"cidr,omitempty" form:"cidr,strip" validate:"omitempty,cidrs"`
 }
 
 func (uua *UserUpdatesArg) String() string {
 	return uua.ToString(uua)
+}
+
+func (uua *UserUpdatesArg) isEmpty() bool {
+	return uua.Role == nil && uua.Status == nil && uua.LoginMFA == nil && uua.CIDR == nil
 }
 
 func (uua *UserUpdatesArg) Bind(c *xin.Context) error {
@@ -53,16 +57,12 @@ func (uua *UserUpdatesArg) Bind(c *xin.Context) error {
 	return nil
 }
 
-func (uua *UserUpdatesArg) isEmpty() bool {
-	return uua.Role == "" && uua.Status == "" && uua.LoginMFA == nil && uua.CIDR == nil
-}
-
 func (uua *UserUpdatesArg) AddUpdates(sqb *sqlx.Builder) {
-	if uua.Role != "" {
-		sqb.Setc("role", uua.Role)
+	if uua.Role != nil {
+		sqb.Setc("role", *uua.Role)
 	}
-	if uua.Status != "" {
-		sqb.Setc("status", uua.Status)
+	if uua.Status != nil {
+		sqb.Setc("status", *uua.Status)
 	}
 	if uua.LoginMFA != nil {
 		sqb.Setc("login_mfa", *uua.LoginMFA)
@@ -76,7 +76,7 @@ func (uua *UserUpdatesArg) AddUpdates(sqb *sqlx.Builder) {
 }
 
 type FileUpdatesArg struct {
-	IDArg
+	PKArg
 	UpdatedAtArg
 
 	Tag *string `json:"tag,omitempty" form:"tag,strip"`
@@ -84,6 +84,10 @@ type FileUpdatesArg struct {
 
 func (fua *FileUpdatesArg) String() string {
 	return fua.ToString(fua)
+}
+
+func (fua *FileUpdatesArg) isEmpty() bool {
+	return fua.Tag == nil
 }
 
 func (fua *FileUpdatesArg) Bind(c *xin.Context) error {
@@ -99,10 +103,6 @@ func (fua *FileUpdatesArg) Bind(c *xin.Context) error {
 	return nil
 }
 
-func (fua *FileUpdatesArg) isEmpty() bool {
-	return fua.Tag == nil
-}
-
 func (fua *FileUpdatesArg) AddUpdates(sqb *sqlx.Builder) {
 	if fua.Tag != nil {
 		sqb.Setc("tag", *fua.Tag)
@@ -113,15 +113,19 @@ type PetUpdatesArg struct {
 	IDArg
 	UpdatedAtArg
 
-	Gender string     `json:"gender,omitempty" form:"gender,strip"`
+	Gender *string    `json:"gender,omitempty" form:"gender,strip"`
 	BornAt *time.Time `json:"born_at,omitempty" form:"born_at"`
-	Origin string     `json:"origin,omitempty" form:"origin,strip"`
-	Temper string     `json:"temper,omitempty" form:"temper,strip"`
+	Origin *string    `json:"origin,omitempty" form:"origin,strip"`
+	Temper *string    `json:"temper,omitempty" form:"temper,strip"`
 	Habits *[]string  `json:"habits,omitempty" form:"habits,strip"`
 }
 
 func (pua *PetUpdatesArg) String() string {
 	return pua.ToString(pua)
+}
+
+func (pua *PetUpdatesArg) isEmpty() bool {
+	return pua.Gender == nil && pua.BornAt == nil && pua.Origin == nil && pua.Temper == nil && pua.Habits == nil
 }
 
 func (pua *PetUpdatesArg) Bind(c *xin.Context) error {
@@ -137,22 +141,18 @@ func (pua *PetUpdatesArg) Bind(c *xin.Context) error {
 	return nil
 }
 
-func (pua *PetUpdatesArg) isEmpty() bool {
-	return pua.Gender == "" && pua.BornAt == nil && pua.Origin == "" && pua.Temper == "" && pua.Habits == nil
-}
-
 func (pua *PetUpdatesArg) AddUpdates(sqb *sqlx.Builder) {
-	if pua.Gender != "" {
-		sqb.Setc("gender", pua.Gender)
+	if pua.Gender != nil {
+		sqb.Setc("gender", *pua.Gender)
 	}
 	if pua.BornAt != nil {
 		sqb.Setc("born_at", *pua.BornAt)
 	}
-	if pua.Origin != "" {
-		sqb.Setc("origin", pua.Origin)
+	if pua.Origin != nil {
+		sqb.Setc("origin", *pua.Origin)
 	}
-	if pua.Temper != "" {
-		sqb.Setc("temper", pua.Temper)
+	if pua.Temper != nil {
+		sqb.Setc("temper", *pua.Temper)
 	}
 	if pua.Habits != nil {
 		sqb.Setc("habits", sqx.JSONStringArray(*pua.Habits))

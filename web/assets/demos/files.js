@@ -133,10 +133,7 @@
 
 				var $trs = (ids == '*' ? $('#files_table > tbody > tr') : main.get_table_trs('#file_', ids.split(',')));
 
-				var us = data.updates;
-				if (us.tag) {
-					$trs.find('td.tag').text(us.tag);
-				}
+				main.set_table_tr_values($trs, data.updates);
 				main.blink($trs);
 			},
 			error: main.form_ajax_error($p),

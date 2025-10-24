@@ -18,8 +18,12 @@ func UserUpdates(c *xin.Context) {
 	if err := uua.Bind(c); err != nil {
 		args.AddBindErrors(c, err, "user.")
 	}
-	userValidateRole(c, uua.Role)
-	userValidateStatus(c, uua.Status)
+	if uua.Role != nil {
+		userValidateRole(c, *uua.Role)
+	}
+	if uua.Status != nil {
+		userValidateStatus(c, *uua.Status)
+	}
 	if uua.LoginMFA != nil {
 		userValidateLoginMFA(c, *uua.LoginMFA)
 	}
