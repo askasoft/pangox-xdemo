@@ -1,3 +1,10 @@
+#tenants_table th.name, #tenants_table td.name {
+	white-space: nowrap;
+}
+#tenants_table th.domain {
+	width: 30%;
+	white-space: nowrap;
+}
 #tenants_table th.size, #tenants_table td.size {
 	text-align: right;
 	width: 1%;

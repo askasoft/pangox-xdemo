@@ -29,7 +29,7 @@
 			</td>
 			<td class="role">{{$.UserRoleMap.SafeGet $u.Role $u.Role}}</td>
 			<td class="status">{{$.UserStatusMap.SafeGet $u.Status $u.Status}}</td>
-			<td class="cidr"><pre>{{$u.CIDR}}</pre></td>
+			<td class="cidr"><p>{{$u.CIDR}}</p></td>
 			<td class="created_at ro">{{TIME $u.CreatedAt}}</td>
 			<td class="updated_at">{{TIME $u.UpdatedAt}}</td>
 		</tr>
@@ -49,7 +49,7 @@
 		</td>
 		<td class="role"></td>
 		<td class="status"></td>
-		<td class="cidr"><pre></pre></td>
+		<td class="cidr"><p></p></td>
 		<td class="created_at"></td>
 		<td class="updated_at"></td>
 	</tr>

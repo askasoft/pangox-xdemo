@@ -1,3 +1,12 @@
+#users_table th.name {
+	white-space: nowrap;
+	width: 10%;
+}
+#users_table th.email {
+	white-space: nowrap;
+	width: 25%;
+}
+
 #users_table th.status, #users_table td.status,
 #users_table th.role, #users_table td.role {
 	white-space: nowrap;

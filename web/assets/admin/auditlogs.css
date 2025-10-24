@@ -10,12 +10,6 @@
 	width: 320px;
 	min-width: 320px;
 }
-#auditlogs_table td.detail > pre {
+#auditlogs_table td.detail > p {
 	cursor: pointer;
-	display: -webkit-box;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3;
-	max-height: 5rem;
 }

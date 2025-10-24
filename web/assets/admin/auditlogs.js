@@ -167,7 +167,7 @@
 			.on('submit', 'form', auditlogs_deletebat)
 			.on('click', '.ui-popup-footer button[type=submit]', auditlogs_deletebat);
 
-		$('#auditlogs_list').on('click', 'td.detail > pre', on_detail_click);
+		$('#auditlogs_list').on('click', 'td.detail > p', on_detail_click);
 		$('#auditlogs_detail_popup')
 			.on('shown.popup', auditlogs_detail_popup_shown)
 	}

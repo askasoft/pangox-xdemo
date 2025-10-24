@@ -106,9 +106,14 @@ input::placeholder, textarea::placeholder {
 	padding: 0;
 }
 
-/* text-waiting */
+/* text */
 .text-waiting {
 	color: #aaa;
+}
+.text-ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* well */
@@ -473,6 +478,14 @@ div.verr {
 	margin: 0 0 5px 0;
 }
 
+.s-table td > p {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: break-all;
+}
 .s-table td > pre {
 	max-height: 3em;
 	overflow-y: auto;

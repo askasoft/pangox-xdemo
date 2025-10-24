@@ -414,7 +414,7 @@ var main = {
 				continue;
 			}
 
-			var $c = $td.children('a, pre, button');
+			var $c = $td.children('a, p, pre, button');
 			if (typeof(v) == 'undefined') {
 				v = '';
 			}

@@ -324,7 +324,7 @@
 					$trs.find('td.role').text(URM[us.role]);
 				}
 				if ('cidr' in us) {
-					$trs.find('td.cidr > pre').text(us.cidr);
+					$trs.find('td.cidr > p').text(us.cidr);
 				}
 				if (us.updated_at) {
 					$trs.find('td.updated_at').text(main.format_time(us.updated_at));
