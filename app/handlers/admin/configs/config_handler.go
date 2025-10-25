@@ -173,7 +173,8 @@ func buildConfigDetails(c *xin.Context, configs []*models.Config, uconfigs []*mo
 
 				cin := ccn + " / " + cgn + " / " + tbs.GetText(c.Locale, "config."+cfg.Name)
 
-				var civ any = cfg.Value
+				var civ any = cfg.DisplayValue()
+
 				lm := getConfigItemList(c.Locale, cfg.Name)
 				if lm != nil && !lm.IsEmpty() {
 					switch cfg.Style {
@@ -356,7 +357,7 @@ func ConfigExport(c *xin.Context) {
 			cgn := tbs.GetText(c.Locale, "config.group.label."+cg.Name)
 			for _, ci := range cg.Items {
 				disp := fmt.Sprintf("%s / %s / %s", ccn, cgn, tbs.GetText(c.Locale, "config."+ci.Name, ci.Name))
-				if err := cw.Write([]string{ci.Name, ci.Value, disp}); err != nil {
+				if err := cw.Write([]string{ci.Name, ci.DisplayValue(), disp}); err != nil {
 					c.Logger.Error(err)
 					return
 				}
