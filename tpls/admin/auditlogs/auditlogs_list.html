@@ -1,18 +1,17 @@
 {{template "head_pager" .}}
 
 <form autocomplete="off" class="table-responsive">
-<table id="auditlogs_table" class="table ui-sortable s-table"
-	data-spy="sortable" data-sorted-col="{{.Q.Sorter.Col}}" data-sorted-dir="{{.Q.Sorter.Dir}}">
+<table id="auditlogs_table" class="table ui-sortable s-table" data-spy="sortable" data-order="{{.Q.Order}}">
 	<thead>
 		<tr>
 			{{if .AU.IsSuper}}
 			<th class="check"><input type="checkbox" checkall="#auditlogs_table td.check > input"/></th>
 			{{end}}
 			<th class="no">#</th>
-			<th class="datetime sortable" data-sort-col="date">{{T .Loc "auditlog.date"}}</th>
-			<th class="user sortable" data-sort-col="user">{{T .Loc "auditlog.user"}}</th>
-			<th class="cip sortable" data-sort-col="cip">{{T .Loc "auditlog.cip"}}</th>
-			<th class="funact sortable" data-sort-col="func,action">{{T .Loc "auditlog.func"}} / {{T .Loc "auditlog.action"}} </th>
+			<th class="datetime sortable" data-order="date">{{T .Loc "auditlog.date"}}</th>
+			<th class="user sortable" data-order="user">{{T .Loc "auditlog.user"}}</th>
+			<th class="cip sortable" data-order="cip">{{T .Loc "auditlog.cip"}}</th>
+			<th class="funact sortable" data-order="funact">{{T .Loc "auditlog.func"}} / {{T .Loc "auditlog.action"}} </th>
 			<th class="detail">{{T .Loc "auditlog.detail"}}</th>
 		</tr>
 	</thead>

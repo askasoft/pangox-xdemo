@@ -14,16 +14,15 @@ import (
 
 func bindAuditLogQueryArg(c *xin.Context) (alqa *args.AuditLogQueryArg, err error) {
 	alqa = &args.AuditLogQueryArg{}
-	alqa.Col, alqa.Dir = "id", "desc"
+	alqa.Order = "-date"
 
 	err = c.Bind(alqa)
 
-	alqa.Sorter.Normalize(
-		"id",
+	alqa.Orders.Normalize(
 		"date",
 		"user",
 		"cip",
-		"func,action",
+		"funact",
 	)
 	return
 }

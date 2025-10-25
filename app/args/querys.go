@@ -9,6 +9,7 @@ import (
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
+	"github.com/askasoft/pangox/xwa/xsqbs"
 )
 
 type UserQueryArg struct {
@@ -113,6 +114,12 @@ func (alqa *AuditLogQueryArg) AddFilters(sqb *sqlx.Builder, locale string) {
 			sqb.Where(sb.String(), args...)
 		}
 	}
+}
+
+func (alqa *AuditLogQueryArg) AddOrders(sqb *sqlx.Builder, defaults string) {
+	order := str.ReplaceAll(alqa.Order, "-funact", "-func,action")
+	order = str.ReplaceAll(order, "funact", "func,action")
+	xsqbs.AddOrders(sqb, order, defaults)
 }
 
 type FileQueryArg struct {

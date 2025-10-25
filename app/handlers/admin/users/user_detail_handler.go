@@ -127,6 +127,27 @@ func userBind(c *xin.Context) *models.User {
 	return user
 }
 
+func userHandleUpdateError(c *xin.Context, user *models.User, err error) bool {
+	if err == nil {
+		return false
+	}
+
+	if sqlutil.IsUniqueViolationError(err) {
+		err = &args.ParamError{
+			Param:   "email",
+			Label:   tbs.GetText(c.Locale, "user.email", "email"),
+			Message: tbs.Format(c.Locale, "user.error.duplicated", user.Email),
+		}
+		c.AddError(err)
+		c.JSON(http.StatusBadRequest, middles.E(c))
+		return true
+	}
+
+	c.AddError(err)
+	c.JSON(http.StatusInternalServerError, middles.E(c))
+	return true
+}
+
 func UserCreate(c *xin.Context) {
 	user := userBind(c)
 	if len(c.Errors) > 0 {
@@ -152,16 +173,7 @@ func UserCreate(c *xin.Context) {
 
 		return tt.AddAuditLog(tx, c, models.AL_USERS_CREATE, user.ID, user.Email)
 	})
-	if err != nil {
-		if sqlutil.IsUniqueViolationError(err) {
-			err = &args.ParamError{
-				Param:   "email",
-				Label:   tbs.GetText(c.Locale, "user.email", "email"),
-				Message: tbs.Format(c.Locale, "user.error.duplicated", user.Email),
-			}
-		}
-		c.AddError(err)
-		c.JSON(http.StatusInternalServerError, middles.E(c))
+	if userHandleUpdateError(c, user, err) {
 		return
 	}
 
@@ -213,16 +225,7 @@ func UserUpdate(c *xin.Context) {
 		}
 		return
 	})
-	if err != nil {
-		if sqlutil.IsUniqueViolationError(err) {
-			err = &args.ParamError{
-				Param:   "email",
-				Label:   tbs.GetText(c.Locale, "user.email", "email"),
-				Message: tbs.Format(c.Locale, "user.error.duplicated", user.Email),
-			}
-		}
-		c.AddError(err)
-		c.JSON(http.StatusInternalServerError, middles.E(c))
+	if userHandleUpdateError(c, user, err) {
 		return
 	}
 

@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/askasoft/gogormx/log/sqlog/gormlog"
+	"github.com/askasoft/pango/asg"
 	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/log"
-	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/server/gormdb/mymodels"
 	"github.com/askasoft/pangox/xfs"
@@ -76,7 +76,7 @@ func OpenDatabase(schema ...string) (*gorm.DB, error) {
 		),
 		SkipDefaultTransaction: true,
 	}
-	if sm := str.NonEmpty(schema...); sm != "" {
+	if sm := asg.First(schema); sm != "" {
 		gdc.NamingStrategy = gormschema.NamingStrategy{TablePrefix: sm + "."}
 	}
 

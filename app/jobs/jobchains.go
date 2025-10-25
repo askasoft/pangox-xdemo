@@ -3,8 +3,8 @@ package jobs
 import (
 	"fmt"
 
+	"github.com/askasoft/pango/asg"
 	"github.com/askasoft/pango/sqx/sqlx"
-	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
@@ -99,7 +99,7 @@ func JobChainInitAndStart(tt *tenant.Tenant, cn string, jns ...string) error {
 		return err
 	}
 
-	cid, err := JobChainStart(tt, cn, states, jns[0], str.NonEmpty(app.Locales()...), arg.(IChainArg))
+	cid, err := JobChainStart(tt, cn, states, jns[0], asg.First(app.Locales()), arg.(IChainArg))
 	if err != nil {
 		tt.Logger("JOB").Errorf("Failed to start JobChain %q: %v", cn, err)
 		return err

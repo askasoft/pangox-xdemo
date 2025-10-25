@@ -29,7 +29,7 @@ func (sm Schema) FindPets(tx sqlx.Sqlx, pqa *args.PetQueryArg, cols ...string) (
 	sqb.Select(cols...)
 	sqb.From(sm.TablePets())
 	pqa.AddFilters(sqb)
-	pqa.AddOrder(sqb, "id")
+	pqa.AddOrders(sqb, "id")
 	pqa.AddPager(sqb)
 	sql, args := sqb.Build()
 
@@ -43,7 +43,7 @@ func (sm Schema) IterPets(tx sqlx.Sqlx, pqa *args.PetQueryArg, fit func(*models.
 	sqb.Select(cols...)
 	sqb.From(sm.TablePets())
 	pqa.AddFilters(sqb)
-	pqa.AddOrder(sqb, "id")
+	pqa.AddOrders(sqb, "id")
 	sql, args := sqb.Build()
 
 	rows, err := tx.Queryx(sql, args...)

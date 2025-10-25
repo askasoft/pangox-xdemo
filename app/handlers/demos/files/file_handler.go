@@ -22,10 +22,10 @@ var fileListCols = []string{
 
 func bindFileQueryArg(c *xin.Context) (fqa *args.FileQueryArg, err error) {
 	fqa = &args.FileQueryArg{}
-	fqa.Col, fqa.Dir = "time", "desc"
+	fqa.Order = "-time"
 
 	err = c.Bind(fqa)
-	fqa.Sorter.Normalize(fileListCols...)
+	fqa.Orders.Normalize(fileListCols...)
 	return
 }
 

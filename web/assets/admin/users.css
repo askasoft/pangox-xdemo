@@ -13,6 +13,8 @@
 	width: 1%;
 }
 
-#users_table tr.D {
-	text-decoration: line-through;
+#users_table tr.D > td {
+	/* text-decoration: line-through; */
+	color: var(--bs-secondary-color) !important;
 }
+

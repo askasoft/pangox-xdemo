@@ -38,8 +38,7 @@
 			<form id="pets_listform" class="ui-form grey padded" method="POST">
 				<input type="hidden" name="p" value="{{.Q.Page}}"/>
 				<input type="hidden" name="l" value="{{.Q.Limit}}"/>
-				<input type="hidden" name="c" value="{{.Q.Col}}"/>
-				<input type="hidden" name="d" value="{{.Q.Dir}}"/>
+				<input type="hidden" name="o" value="{{.Q.Order}}"/>
 
 				<div class="row">
 					<label class="col-md-2 col-xxl-1 col-form-label">{{T .Loc "pet.id"}}</label>

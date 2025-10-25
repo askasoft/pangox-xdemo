@@ -25,7 +25,7 @@ func (sm Schema) FindFiles(tx sqlx.Sqlx, fqa *args.FileQueryArg, cols ...string)
 	sqb.Select(cols...)
 	sqb.From(sm.TableFiles())
 	fqa.AddFilters(sqb)
-	fqa.AddOrder(sqb, "id")
+	fqa.AddOrders(sqb, "id")
 	fqa.AddPager(sqb)
 	sql, args := sqb.Build()
 

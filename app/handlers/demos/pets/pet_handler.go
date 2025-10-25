@@ -28,10 +28,10 @@ var petListColumns = []string{
 
 func bindPetQueryArg(c *xin.Context) (pqa *args.PetQueryArg, err error) {
 	pqa = &args.PetQueryArg{}
-	pqa.Col, pqa.Dir = "id", "desc"
+	pqa.Order = "-id"
 
 	err = c.Bind(pqa)
-	pqa.Sorter.Normalize(petListColumns...)
+	pqa.Orders.Normalize(petListColumns...)
 	return
 }
 

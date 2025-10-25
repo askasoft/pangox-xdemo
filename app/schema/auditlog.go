@@ -35,7 +35,7 @@ func (sm Schema) FindAuditLogs(tx sqlx.Sqlx, alqa *args.AuditLogQueryArg, role, 
 	sqb.Join("LEFT JOIN " + sm.TableUsers() + " ON users.id = audit_logs.uid")
 	sqb.Gte("audit_logs.role", role)
 	alqa.AddFilters(sqb, locale)
-	alqa.AddOrder(sqb, "id")
+	alqa.AddOrders(sqb, "-id")
 	alqa.AddPager(sqb)
 	sql, args := sqb.Build()
 
@@ -50,7 +50,7 @@ func (sm Schema) IterAuditLogs(tx sqlx.Sqlx, alqa *args.AuditLogQueryArg, locale
 	sqb.From(sm.TableAuditLogs())
 	sqb.Join("LEFT JOIN " + sm.TableUsers() + " ON users.id = audit_logs.uid")
 	alqa.AddFilters(sqb, locale)
-	alqa.AddOrder(sqb, "id")
+	alqa.AddOrders(sqb, "id")
 	sql, args := sqb.Build()
 
 	rows, err := tx.Queryx(sql, args...)
