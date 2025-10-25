@@ -1,24 +1,23 @@
 {{template "head_pager" .}}
 
 <form autocomplete="off" class="table-responsive">
-<table id="pets_table" class="table ui-sortable s-table"
-	data-spy="sortable" data-sorted-col="{{.Q.Sorter.Col}}" data-sorted-dir="{{.Q.Sorter.Dir}}">
+<table id="pets_table" class="table ui-sortable s-table" data-spy="sortable" data-order="{{.Q.Order}}">
 	<thead>
 		<tr>
 			<th class="check"><input type="checkbox" checkall="#pets_table td.check > input"/></th>
-			<th class="id sortable" data-sort-col="id">{{T .Loc "pet.id"}}</th>
-			<th class="name sortable" data-sort-col="name">{{T .Loc "pet.name"}}</th>
+			<th class="id sortable" data-order="id">{{T .Loc "pet.id"}}</th>
+			<th class="name sortable" data-order="name">{{T .Loc "pet.name"}}</th>
 			<th class="actions"><button class="btn btn-outline-primary new">{{I "new"}} {{T .Loc "button.new"}}</button></th>
-			<th class="gender sortable" data-sort-col="gender">{{T .Loc "pet.gender"}}</th>
-			<th class="born_at sortable" data-sort-col="born_at">{{T .Loc "pet.born_at"}}</th>
-			<th class="origin sortable" data-sort-col="origin">{{T .Loc "pet.origin"}}</th>
-			<th class="temper sortable" data-sort-col="temper">{{T .Loc "pet.temper"}}</th>
-			<th class="habits sortable" data-sort-col="habits">{{T .Loc "pet.habits"}}</th>
-			<th class="amount sortable" data-sort-col="amount">{{T .Loc "pet.amount"}}</th>
-			<th class="price sortable" data-sort-col="price">{{T .Loc "pet.price"}}</th>
-			<th class="shop_name sortable" data-sort-col="shop_name">{{T .Loc "pet.shop_name"}}</th>
-			<th class="created_at sortable" data-sort-col="created_at">{{T .Loc "pet.created_at"}}</th>
-			<th class="updated_at sortable" data-sort-col="updated_at">{{T .Loc "pet.updated_at"}}</th>
+			<th class="gender sortable" data-order="gender">{{T .Loc "pet.gender"}}</th>
+			<th class="born_at sortable" data-order="born_at">{{T .Loc "pet.born_at"}}</th>
+			<th class="origin sortable" data-order="origin">{{T .Loc "pet.origin"}}</th>
+			<th class="temper sortable" data-order="temper">{{T .Loc "pet.temper"}}</th>
+			<th class="habits sortable" data-order="habits">{{T .Loc "pet.habits"}}</th>
+			<th class="amount sortable" data-order="amount">{{T .Loc "pet.amount"}}</th>
+			<th class="price sortable" data-order="price">{{T .Loc "pet.price"}}</th>
+			<th class="shop_name sortable" data-order="shop_name">{{T .Loc "pet.shop_name"}}</th>
+			<th class="created_at sortable" data-order="created_at">{{T .Loc "pet.created_at"}}</th>
+			<th class="updated_at sortable" data-order="updated_at">{{T .Loc "pet.updated_at"}}</th>
 		</tr>
 	</thead>
 	<tbody>

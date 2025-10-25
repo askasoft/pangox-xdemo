@@ -24,11 +24,11 @@ type TenantQueryArg struct {
 
 func bindTenantQueryArg(c *xin.Context) (tqa *TenantQueryArg, err error) {
 	tqa = &TenantQueryArg{}
-	tqa.Col, tqa.Dir = "name", "asc"
+	tqa.Order = "name"
 
 	err = c.Bind(tqa)
 
-	tqa.Sorter.Normalize(
+	tqa.Orders.Normalize(
 		"name",
 		"size",
 		"comment",

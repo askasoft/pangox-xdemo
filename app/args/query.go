@@ -17,17 +17,17 @@ func (pa *PagerArg) AddPager(sqb *sqlx.Builder) {
 	xsqbs.AddPager(sqb, &pa.Pager)
 }
 
-type SorterArg struct {
-	args.Sorter
+type OrderArg struct {
+	args.Orders
 }
 
-func (sa *SorterArg) AddOrder(sqb *sqlx.Builder, defcol string) {
-	xsqbs.AddOrder(sqb, &sa.Sorter, defcol)
+func (oa *OrderArg) AddOrders(sqb *sqlx.Builder, defaults string) {
+	xsqbs.AddOrders(sqb, oa.String(), defaults)
 }
 
 type QueryArg struct {
-	PagerArg  `json:"-"`
-	SorterArg `json:"-"`
+	PagerArg `json:"-"`
+	OrderArg `json:"-"`
 }
 
 func (qa *QueryArg) AddEq(sqb *sqlx.Builder, col string, val string) {

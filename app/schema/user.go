@@ -33,7 +33,7 @@ func (sm Schema) FindUsers(tx sqlx.Sqlx, role string, uqa *args.UserQueryArg, co
 	sqb.From(sm.TableUsers())
 	sqb.Gte("role", role)
 	uqa.AddFilters(sqb)
-	uqa.AddOrder(sqb, "id")
+	uqa.AddOrders(sqb, "id")
 	uqa.AddPager(sqb)
 	sql, args := sqb.Build()
 
@@ -48,7 +48,7 @@ func (sm Schema) IterUsers(tx sqlx.Sqlx, role string, uqa *args.UserQueryArg, fi
 	sqb.From(sm.TableUsers())
 	sqb.Gte("role", role)
 	uqa.AddFilters(sqb)
-	uqa.AddOrder(sqb, "id")
+	uqa.AddOrders(sqb, "id")
 	sql, args := sqb.Build()
 
 	rows, err := tx.Queryx(sql, args...)

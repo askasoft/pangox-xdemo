@@ -87,8 +87,7 @@ var main = {
 
 		delete p.p; // page
 		delete p.l; // limit
-		delete p.c; // sort column
-		delete p.d; // sort direction
+		delete p.o; // order
 
 		var q = $.param(p, true);
 		history.replaceState(null, null, location.href.split('?')[0] + (q ? '?' + q : ''));
@@ -296,9 +295,8 @@ var main = {
 		$l.on('change', '.ui-pager select', function() {
 			$f.find('input[name="l"]').val($(this).val()).end().submit();
 		});
-		$l.on('sort.sortable', tb, function(evt, col, dir) {
-			$f.find('input[name="c"]').val(col);
-			$f.find('input[name="d"]').val(dir);
+		$l.on('sort.sortable', tb, function(evt, order) {
+			$f.find('input[name="o"]').val(order);
 			$f.submit();
 		});
 	},

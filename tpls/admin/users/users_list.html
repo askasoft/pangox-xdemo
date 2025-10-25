@@ -1,20 +1,19 @@
 {{template "head_pager" .}}
 
 <form autocomplete="off" class="table-responsive">
-<table id="users_table" class="table ui-sortable s-table"
-	data-spy="sortable" data-sorted-col="{{.Q.Sorter.Col}}" data-sorted-dir="{{.Q.Sorter.Dir}}">
+<table id="users_table" class="table ui-sortable s-table" data-spy="sortable" data-order="{{.Q.Order}}">
 	<thead>
 		<tr>
 			<th class="check"><input type="checkbox" checkall="#users_table td.check > input"/></th>
-			<th class="id sortable" data-sort-col="id">{{T .Loc "user.id"}}</th>
-			<th class="name sortable" data-sort-col="name">{{T .Loc "user.name"}}</th>
-			<th class="email sortable" data-sort-col="email">{{T .Loc "user.email"}}</th>
+			<th class="id sortable" data-order="id">{{T .Loc "user.id"}}</th>
+			<th class="name sortable" data-order="name">{{T .Loc "user.name"}}</th>
+			<th class="email sortable" data-order="email">{{T .Loc "user.email"}}</th>
 			<th class="actions"><button class="btn btn-outline-primary new">{{I "new"}} {{T .Loc "button.new"}}</button></th>
-			<th class="role sortable" data-sort-col="role">{{T .Loc "user.role"}}</th>
-			<th class="status sortable" data-sort-col="status">{{T .Loc "user.status"}}</th>
-			<th class="cidr" data-sort-col="cidr">{{T .Loc "user.cidr"}}</th>
-			<th class="created_at sortable" data-sort-col="created_at">{{T .Loc "user.created_at"}}</th>
-			<th class="updated_at sortable" data-sort-col="updated_at">{{T .Loc "user.updated_at"}}</th>
+			<th class="role sortable" data-order="role">{{T .Loc "user.role"}}</th>
+			<th class="status sortable" data-order="status">{{T .Loc "user.status"}}</th>
+			<th class="cidr" data-order="cidr">{{T .Loc "user.cidr"}}</th>
+			<th class="created_at sortable" data-order="created_at">{{T .Loc "user.created_at"}}</th>
+			<th class="updated_at sortable" data-order="updated_at">{{T .Loc "user.updated_at"}}</th>
 		</tr>
 	</thead>
 	<tbody>

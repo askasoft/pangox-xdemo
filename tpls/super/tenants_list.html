@@ -1,20 +1,19 @@
 {{template "head_pager" .}}
 
 <form autocomplete="off" class="table-responsive">
-<table id="tenants_table" class="table ui-sortable s-table"
-	data-spy="sortable" data-sorted-col="{{.Q.Sorter.Col}}" data-sorted-dir="{{.Q.Sorter.Dir}}">
+<table id="tenants_table" class="table ui-sortable s-table" data-spy="sortable" data-order="{{.Q.Order}}">
 	<thead>
 		<tr>
 			<th class="no">#</th>
-			<th class="name sortable" data-sort-col="name">{{T .Loc "tenant.name"}}</th>
+			<th class="name sortable" data-order="name">{{T .Loc "tenant.name"}}</th>
 			<th class="domain">{{T .Loc "tenant.domain"}}</th>
 			<th class="actions">
 				<button class="new btn btn-outline-primary">
 					{{I "new"}} {{T .Loc "button.new"}}
 				</button>
 			</th>
-			<th class="size sortable" data-sort-col="size">{{T .Loc "tenant.size"}}</th>
-			<th class="comment sortable" data-sort-col="comment">{{T .Loc "tenant.comment"}}</th>
+			<th class="size sortable" data-order="size">{{T .Loc "tenant.size"}}</th>
+			<th class="comment sortable" data-order="comment">{{T .Loc "tenant.comment"}}</th>
 		</tr>
 	</thead>
 	<tbody>

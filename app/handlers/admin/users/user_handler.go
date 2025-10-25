@@ -13,11 +13,11 @@ import (
 
 func bindUserQueryArg(c *xin.Context) (uqa *args.UserQueryArg, err error) {
 	uqa = &args.UserQueryArg{}
-	uqa.Col, uqa.Dir = "id", "asc"
+	uqa.Order = "id"
 
 	err = c.Bind(uqa)
 
-	uqa.Sorter.Normalize(
+	uqa.Orders.Normalize(
 		"id",
 		"name",
 		"email",
