@@ -39,6 +39,10 @@ func PetEdit(c *xin.Context) {
 	petDetail(c, "edit")
 }
 
+func PetCopy(c *xin.Context) {
+	petDetail(c, "copy")
+}
+
 func petDetail(c *xin.Context, action string) {
 	pid := num.Atol(c.Query("id"))
 	if pid == 0 {
@@ -59,6 +63,11 @@ func petDetail(c *xin.Context, action string) {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
+	}
+
+	if action == "copy" {
+		action = "edit"
+		pet.ID = 0
 	}
 
 	h := middles.H(c)

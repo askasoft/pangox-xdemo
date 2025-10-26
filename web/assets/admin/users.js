@@ -210,7 +210,7 @@
 				});
 
 				var user = data.user;
-				var $tb = $('#users_table > tbody'), $tr = $('#users_template tr').clone();
+				var $tb = $('#users_table > tbody'), $tr = $('#user_template tr').clone();
 
 				$tr.attr({'id': 'user_' + user.id});
 				$tr.find('td.check').append($('<input type="checkbox"/>').val(user.id));
@@ -346,7 +346,8 @@
 		$('#users_list')
 			.on('click', 'button.new', user_new)
 			.on('click', 'button.view', user_detail.callback("view"))
-			.on('click', 'button.edit', user_detail.callback("edit"));
+			.on('click', 'button.edit', user_detail.callback("edit"))
+			.on('click', 'button.copy', user_detail.callback("copy"));
 
 		$('#users_detail_popup')
 			.on('loaded.popup', user_detail_popup_loaded)

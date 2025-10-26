@@ -216,7 +216,7 @@
 				});
 
 				var pet = data.pet;
-				var $tb = $('#pets_table > tbody'), $tr = $('#pets_template tr').clone();
+				var $tb = $('#pets_table > tbody'), $tr = $('#pet_template tr').clone();
 
 				$tr.attr({'id': 'pet_' + pet.id});
 				$tr.find('td.check').append($('<input type="checkbox"/>').val(pet.id));
@@ -350,7 +350,8 @@
 		$('#pets_list')
 			.on('click', 'button.new', pet_new)
 			.on('click', 'button.view', pet_detail.callback('view'))
-			.on('click', 'button.edit', pet_detail.callback('edit'));
+			.on('click', 'button.edit', pet_detail.callback('edit'))
+			.on('click', 'button.copy', pet_detail.callback('copy'));
 
 		$('#pets_detail_popup')
 			.on('loaded.popup', pets_detail_popup_loaded)

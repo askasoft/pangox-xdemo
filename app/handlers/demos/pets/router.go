@@ -7,6 +7,7 @@ func Router(rg *xin.RouterGroup) {
 	rg.GET("/new", PetNew)
 	rg.GET("/view", PetView)
 	rg.GET("/edit", PetEdit)
+	rg.GET("/copy", PetCopy)
 	rg.POST("/list", PetList)
 	rg.POST("/create", PetCreate)
 	rg.POST("/update", PetUpdate)

@@ -64,7 +64,7 @@
 				});
 
 				var tenant = data.tenant;
-				var $tb = $('#tenants_table > tbody'), $tr = $('#tenants_template tr').clone();
+				var $tb = $('#tenants_table > tbody'), $tr = $('#tenant_template tr').clone();
 
 				$tr.attr({'id': 'tenant_' + tenant.name});
 				$tr.find('td.check').append($('<input type="checkbox"/>').val(tenant.name));

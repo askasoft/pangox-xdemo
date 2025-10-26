@@ -29,6 +29,7 @@
 			<td class="actions">
 				<button class="btn btn-outline-primary view" title="{{T $.Loc "button.view"}}">{{I "view"}}</button>
 				<button class="btn btn-outline-primary edit" title="{{T $.Loc "button.edit"}}">{{I "edit"}}</button>
+				<button class="btn btn-outline-primary copy" title="{{T $.Loc "button.copy"}}">{{I "copy"}}</button>
 			</td>
 			<td class="gender">{{$.PetGenderMap.SafeGet $p.Gender $p.Gender}}</td>
 			<td class="born_at date">{{DATE $p.BornAt}}</td>
@@ -46,14 +47,15 @@
 </table>
 </form>
 
-<table id="pets_template" class="hidden">
+<table id="pet_template" class="hidden">
 	<tr>
 		<td class="check"></td>
 		<td class="id"></td>
 		<td class="name"></td>
 		<td class="actions">
-			<button class="btn btn-outline-primary view" title="{{T .Loc "button.view"}}">{{I "view"}}</button>
-			<button class="btn btn-outline-primary edit" title="{{T .Loc "button.edit"}}">{{I "edit"}}</button>
+			<button class="btn btn-outline-primary view" title="{{T $.Loc "button.view"}}">{{I "view"}}</button>
+			<button class="btn btn-outline-primary edit" title="{{T $.Loc "button.edit"}}">{{I "edit"}}</button>
+			<button class="btn btn-outline-primary copy" title="{{T $.Loc "button.copy"}}">{{I "copy"}}</button>
 		</td>
 		<td class="gender"></td>
 		<td class="born_at date"></td>

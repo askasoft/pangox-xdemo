@@ -40,6 +40,10 @@ func UserEdit(c *xin.Context) {
 	userDetail(c, "edit")
 }
 
+func UserCopy(c *xin.Context) {
+	userDetail(c, "copy")
+}
+
 func userDetail(c *xin.Context, action string) {
 	uid := num.Atol(c.Query("id"))
 	if uid == 0 {
@@ -60,6 +64,11 @@ func userDetail(c *xin.Context, action string) {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
+	}
+
+	if action == "copy" {
+		action = "edit"
+		user.ID = 0
 	}
 
 	h := middles.H(c)

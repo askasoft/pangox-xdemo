@@ -25,6 +25,7 @@
 			<td class="email">{{$u.Email}}</td>
 			<td class="actions">
 				<button class="btn btn-outline-primary edit" title="{{T $.Loc "button.edit"}}">{{I "edit"}}</button>
+				<button class="btn btn-outline-primary copy" title="{{T $.Loc "button.copy"}}">{{I "copy"}}</button>
 			</td>
 			<td class="role">{{$.UserRoleMap.SafeGet $u.Role $u.Role}}</td>
 			<td class="status">{{$.UserStatusMap.SafeGet $u.Status $u.Status}}</td>
@@ -37,14 +38,15 @@
 </table>
 </form>
 
-<table id="users_template" class="hidden">
+<table id="user_template" class="hidden">
 	<tr>
 		<td class="check"></td>
 		<td class="id"></td>
 		<td class="name"></td>
 		<td class="email"></td>
 		<td class="actions">
-			<button class="btn btn-outline-primary edit" title="{{T .Loc "button.edit"}}">{{I "edit"}}</button>
+			<button class="btn btn-outline-primary edit" title="{{T $.Loc "button.edit"}}">{{I "edit"}}</button>
+			<button class="btn btn-outline-primary copy" title="{{T $.Loc "button.copy"}}">{{I "copy"}}</button>
 		</td>
 		<td class="role"></td>
 		<td class="status"></td>
