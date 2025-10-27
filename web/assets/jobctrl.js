@@ -257,7 +257,7 @@
 	function job_copy_param() {
 		var $cf = $(this).closest('form');
 
-		var $is = $cf.find(':input').not('button.copy').prop('disabled', false);
+		var $is = $cf.find(':input').not('button.copy, .disabled').prop('disabled', false);
 		var vs = $cf.formValues();
 		$is.prop('disabled', true);
 
