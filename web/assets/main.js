@@ -13,19 +13,17 @@ var main = {
 		return m;
 	},
 
-	fmt_date: new DateFormat("yyyy-MM-dd"),
-	fmt_time: new DateFormat("yyyy-MM-dd HH:mm:ss"),
+	to_date: function(d) {
+		return typeof(d) == 'string' ? new Date(d) : d;
+	},
 	format_date: function(d) {
-		if (typeof(d) == 'string') {
-			d = new Date(d);
-		}
-		return main.fmt_date.format(d);
+		return main.to_date(d).toLocaleDateString('sv-SE'); // yyyy-MM-dd
+	},
+	format_time_only: function(d) {
+		return main.to_date(d).toLocaleTimeString('sv-SE'); // HH:mm:ss
 	},
 	format_time: function(d) {
-		if (typeof(d) == 'string') {
-			d = new Date(d);
-		}
-		return main.fmt_time.format(d);
+		return main.to_date(d).toLocaleString('sv-SE'); // yyyy-MM-dd HH:mm:ss
 	},
 
 	isURL: function(s) {
