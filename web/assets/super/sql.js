@@ -19,7 +19,7 @@
 
 				var $t = $('#sql_result').children('li');
 
-				$.each(data, function(i, d) {
+				data.forEach(function(d) {
 					var $sr = $t.clone();
 
 					$sr.find('.sql').text(d.sql);
@@ -29,17 +29,17 @@
 					if (d.columns) {
 						var $th = $sr.find('thead'), $tr = $('<tr>');
 						$tr.append($('<th class="no">').text('##'));
-						$.each(d.columns, function(i, c) {
+						d.columns.forEach(function(c) {
 							$tr.append($('<th class="col">').text(c));
 						});
 						$th.append($tr);
 					}
 					if (d.datas) {
 						var $tb = $sr.find('tbody');
-						$.each(d.datas, function(i, r) {
+						d.datas.forEach(function(r, i) {
 							var $tr = $('<tr>');
 							$tr.append($('<td class="no">').text('#' + (i+1)));
-							$.each(r, function(i, c) {
+							r.forEach(function(c) {
 								$tr.append($('<td class="col">').text(c));
 							});
 							$tb.append($tr);

@@ -34,8 +34,8 @@
 					}
 
 					var $ul = $('<ul class="nav nav-tabs">');
-					$.each(wb.SheetNames, function(i, n) {
-						var $a = $('<a class="nav-link" data-bs-toggle="tab">').attr('href', '#sh_'+n).text(n);
+					wb.SheetNames.forEach(function(sn, i) {
+						var $a = $('<a class="nav-link" data-bs-toggle="tab">').attr('href', '#sh_'+sn).text(sn);
 						if (i == (page - 1)) {
 							$a.addClass('active');
 						}
@@ -43,12 +43,12 @@
 					});
 
 					var $tc = $('<div class="tab-content table-responsive my-4">');
-					$.each(wb.SheetNames, function(i, n) {
-						var $d = $('<div class="tab-pane">').attr('id', 'sh_'+n);
+					wb.SheetNames.forEach(function(sn, i) {
+						var $d = $('<div class="tab-pane">').attr('id', 'sh_'+sn);
 						if (i == (page - 1)) {
 							$d.addClass('active');
 						}
-						$d.html(XLSX.utils.sheet_to_html(wb.Sheets[n], { cellDates: true }));
+						$d.html(XLSX.utils.sheet_to_html(wb.Sheets[sn], { cellDates: true }));
 						$d.children('table').addClass('table table-bordered table-striped');
 						$tc.append($d);
 					});

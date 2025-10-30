@@ -181,7 +181,7 @@
 		var $jss = $('<div>', { 'class': 'jobstates'} );
 		var $tpl = $('#jobchain_template > .jrs');
 
-		$.each(jci.states, function(i, jrs) {
+		jci.states.forEach(function(jrs) {
 			var $jrs = $tpl.clone();
 			jobchain_jrs_refresh($jrs, jrs);
 			$jss.append($jrs);
@@ -234,7 +234,7 @@
 		}
 
 		var $jrss = $jc.find('.jrs');
-		$.each(jci.states, function(i, jrs) {
+		jci.states.forEach(function(jrs, i) {
 			jobchain_jrs_refresh($jrss.eq(i), jrs);
 		});
 	}
@@ -244,7 +244,7 @@
 		$d.find('label').text(jslabels[jrs.name + '.' + key] || jslabels[key] || key);
 
 		val ||= jrs.state[key];
-		$d.find('span').text(Number.comma(val));
+		$d.find('span').text(main.comma(val));
 		$d.toggle(!!val);
 	}
 

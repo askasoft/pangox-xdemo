@@ -79,8 +79,8 @@
 		var ln = langs[$('html').attr('lang')] || langs.en;
 		var ss = $i.val().split(' ');
 		var unit = ss.length ? ss[0] : '';
-		var days = ss.length > 1 ? ss[1].split(',') : '';
-		var hours = ss.length > 2 ? ss[2].split(',') : '';
+		var days = ss.length > 1 ? ss[1].split(',') : [];
+		var hours = ss.length > 2 ? ss[2].split(',') : [];
 
 		var d = !!($i.prop('disabled'));
 
@@ -98,10 +98,10 @@
 		$u.find('[value="' + unit +'"]').prop('checked', true).val($i.val());
 
 		var $dows = $('<div class="dows ui-checks hidden">');
-		$.each(ln.dows, function(i, dow) {
+		ln.dows.forEach(function(dow, i) {
 			if (dow) {
 				$dows.append($('<label>').append(
-					$('<input type="checkbox">').val(i).prop('checked', days.indexOf(i+'') >= 0).prop('disabled', d),
+					$('<input type="checkbox">').val(i).prop('checked', days.includes(i+'')).prop('disabled', d),
 					$('<span>').text(dow)
 				));
 			}
@@ -111,10 +111,10 @@
 		}
 
 		var $doms = $('<div class="doms ui-checks hidden">');
-		$.each(ln.doms, function(i, dom) {
+		ln.doms.forEach(function(dom, i) {
 			if (dom) {
 				$doms.append($('<label>').append(
-					$('<input type="checkbox">').val(i).prop('checked', days.indexOf(i+'') >= 0).prop('disabled', d),
+					$('<input type="checkbox">').val(i).prop('checked', days.includes(i+'')).prop('disabled', d),
 					$('<span>').text(dom)
 				));
 			}
@@ -124,9 +124,9 @@
 		}
 
 		var $hours = $('<div class="hours ui-checks hidden">');
-		$.each(ln.hours, function(i, hour) {
+		ln.hours.forEach(function(hour, i) {
 			$hours.append($('<label>').append(
-				$('<input type="checkbox">').val(i).prop('checked', hours.indexOf(i+'') >= 0).prop('disabled', d),
+				$('<input type="checkbox">').val(i).prop('checked', hours.includes(i+'')).prop('disabled', d),
 				$('<span>').text(hour)
 			));
 		});

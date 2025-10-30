@@ -25,6 +25,9 @@ var main = {
 	format_time: function(d) {
 		return main.to_date(d).toLocaleString('sv-SE'); // yyyy-MM-dd HH:mm:ss
 	},
+	comma: function(n) {
+		return isNaN(n) ? n : parseInt(n).toLocaleString();
+	},
 
 	isURL: function(s) {
 		return /^https?:\/\/[\w~!@#\$%&\*\(\)_\-\+=\[\]\|:;,\.\?\/']+$/i.test(s + '');
@@ -141,12 +144,12 @@ var main = {
 		}
 
 		err = main.ajax_errmsg(xhr, status, err);
-		if (!$.isArray(err)) {
+		if (!Array.isArray(err)) {
 			err = [ err ];
 		}
 
 		var msgs = [];
-		$.each(err, function(i, e) {
+		err.forEach(function(e) {
 			if (e.param) {
 				main.form_add_invalid($f, e);
 			}
@@ -252,16 +255,16 @@ var main = {
 		$('<button type="button" class="btn-close" data-bs-dismiss="alert"></button>').appendTo($a);
 
 		var $ul = $('<ul class="fa-ul"></ul>').appendTo($a);
-		var add = function(i, msg) {
+		var add = function(msg) {
 			var $li = $('<li><span class="fa-li"><i class="fas fa-fw ' + icons[type] + '"></i></span></li>');
 			var $sp = $('<span></span>').text(msg);
 			$li.append($sp).appendTo($ul);
 		};
 
-		if ($.isArray(msgs)) {
-			$.each(msgs, add);
+		if (Array.isArray(msgs)) {
+			msgs.forEach(add);
 		} else {
-			add(0, msgs);
+			add(msgs);
 		}
 	},
 
@@ -385,7 +388,7 @@ var main = {
 	// table
 	get_table_trs: function(px, ids) {
 		var trs = [];
-		$.each(ids, function(i, v) {
+		ids.forEach(function(v) {
 			trs.push(px + v);
 		});
 		return $(trs.join(','));

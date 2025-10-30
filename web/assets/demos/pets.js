@@ -157,7 +157,7 @@
 
 		if ('habits' in pet) {
 			var hs = [], lbls = LABELS['habits'];
-			$.each(pet.habits, function(i, v) {
+			(pet.habits || []).forEach(function(v) {
 				if (v) {
 					hs.push($('<b>').text(lbls[v] || v));
 				}
