@@ -14,7 +14,7 @@ func init() {
 	xschs.Register("jobReappend", jobs.ReappendJobs)
 	xschs.Register("jobClean", jobs.CleanOutdatedJobs)
 	xschs.Register("tmpClean", tasks.CleanTemporaryFiles)
-	xschs.Register("auditlogClean", tasks.CleanOutdatedAuditLogs)
+	xschs.Register("dataClean", tasks.CleanOutdatedData)
 	xschs.Register("dbVacuum", tasks.VacuumSchemas)
 }
 
