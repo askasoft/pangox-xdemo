@@ -5,6 +5,7 @@
 	<p>请使用移动设备上的身份验证应用程序扫描下面的二维码。</p>
 	<p><img src="data:image/png;base64,{{.QRCode}}"></p>
 	<br>
+	{{HTML (T .Loc "email.signature")}}
 	<p>此致,</p>
 	<p>The {{T .Loc "sitename"}} Team.</p>
 </div>

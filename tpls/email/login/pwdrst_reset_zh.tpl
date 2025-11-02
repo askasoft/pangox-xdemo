@@ -7,6 +7,5 @@
 	<p>如果是您自己重置的，则无需执行任何操作。</p>
 	<p>如果您对重置操作不确定，请立即更改您的登录密码。</p>
 	<br>
-	<p>此致,</p>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

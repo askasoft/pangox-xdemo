@@ -7,6 +7,5 @@
 	<p>If you want to reset your password, please click the following link within {{.Expires}} minutes.</p>
 	<p><a href="{{.ResetURL}}">{{.ResetURL}}</a></p>
 	<br>
-	<p>Sincerely,</p>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

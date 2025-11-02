@@ -7,5 +7,5 @@
 	<p>パスワードをリセットしたい場合は、{{.Expires}}分以内に以下のリンクをタップしてください。</p>
 	<p><a href="{{.ResetURL}}">{{.ResetURL}}</a></p>
 	<br>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

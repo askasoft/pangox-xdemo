@@ -5,6 +5,5 @@
 	<p>Use the authentication app on your mobile device to scan the QR code below.</p>
 	<p><img src="data:image/png;base64,{{.QRCode}}"></p>
 	<br>
-	<p>Sincerely,</p>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

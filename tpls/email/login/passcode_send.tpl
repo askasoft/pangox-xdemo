@@ -6,6 +6,5 @@
 	<p>Please continue the two-step authentication within {{.Expires}} minutes.</p>
 	<p>Passcode: {{.Passcode}}</p>
 	<br>
-	<p>Sincerely,</p>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

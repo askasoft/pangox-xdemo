@@ -5,5 +5,5 @@
 	<p>モバイル端末の認証アプリを利用して、下記のQRコードをスキャンしてください。</p>
 	<p><img src="data:image/png;base64,{{.QRCode}}"></p>
 	<br>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

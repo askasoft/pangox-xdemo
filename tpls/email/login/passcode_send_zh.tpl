@@ -6,6 +6,5 @@
 	<p>{{.Expires}}分钟以内，请在登录页面输入以下的验证码。</p>
 	<p>验证码: {{.Passcode}}</p>
 	<br>
-	<p>此致,</p>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

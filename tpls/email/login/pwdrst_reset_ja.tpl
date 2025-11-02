@@ -7,5 +7,5 @@
 	<p>ご自身による操作であれば、何もする必要がありません。</p>
 	<p>該当操作に心当たりがない場合は、速やかににログインパスワードを変更してください。</p>
 	<br>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

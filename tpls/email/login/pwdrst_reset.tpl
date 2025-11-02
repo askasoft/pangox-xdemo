@@ -7,6 +7,5 @@
 	<p>If you are doing it yourself, you don't need to do anything.</p>
 	<p>If you are not aware of any reset operations, please change your login password immediately.</p>
 	<br>
-	<p>Sincerely,</p>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>

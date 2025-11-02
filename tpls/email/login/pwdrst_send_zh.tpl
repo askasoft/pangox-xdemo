@@ -7,6 +7,5 @@
 	<p>如果您想重置密码，请在{{.Expires}}分钟内点击下面的链接。</p>
 	<p><a href="{{.ResetURL}}">{{.ResetURL}}</a></p>
 	<br>
-	<p>此致,</p>
-	<p>The {{T .Loc "sitename"}} Team.</p>
+	{{HTML (T .Loc "email.signature")}}
 </div>
