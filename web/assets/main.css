@@ -265,7 +265,7 @@ body {
 	width: 250px;
 }
 #sidenavi > .ui-sidenavi {
-	padding: 25px 15px 5px 15px;
+	padding: 1.5rem 1rem 0.5rem 0.5rem;
 }
 #sidenavi > .mainnavi {
 	overflow-y: auto;
@@ -276,10 +276,13 @@ body {
 	margin-bottom: 0;
 	padding-top: 0;
 }
+#sidenavi > .footnavi > .card {
+	margin-bottom: 0.5rem;
+}
 
 #content {
-	padding: 25px 25px 50px 25px;
 	margin: 0 0 0 250px;
+	padding: 1.5rem;
 }
 
 #footer {
@@ -316,7 +319,7 @@ body {
 @media (max-width: 991px) {
 	#content {
 		margin-left: 48px;
-		padding: 20px;
+		padding: 1.25rem;
 	}
 	#sidenavi {
 		width: auto;
@@ -332,7 +335,7 @@ body {
 @media (max-width: 767px) {
 	#content {
 		margin-left: 0;
-		padding: 15px;
+		padding: 1rem;
 	}
 	#sidenavi {
 		display: none;
@@ -341,9 +344,9 @@ body {
 		margin-left: 0;
 	}
 }
+
 .nosidenavi #content {
 	margin: 0;
-	padding: 1.5rem;
 }
 .nosidenavi #footer {
 	margin-left: 0;
