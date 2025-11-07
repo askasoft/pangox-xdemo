@@ -24,8 +24,8 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox-xdemo/web"
 	"github.com/askasoft/pangox/xwa/xmwas"
-	"github.com/askasoft/pangox/xwa/xtpls"
 	"github.com/askasoft/pangox/xwa/xvads"
+	"github.com/askasoft/pangox/xwa/xxins"
 )
 
 func initRouter() {
@@ -35,14 +35,26 @@ func initRouter() {
 		}
 	}()
 
-	app.XIN = xin.New()
+	xxins.InitRouter()
 
-	app.XIN.HTMLRenderer = xtpls.HTMLRenderer
-
-	app.VAD = app.XIN.Validator.Engine().(*vad.Validate)
+	app.VAD = xxins.XIN.Validator.Engine().(*vad.Validate)
 	app.VAD.RegisterValidation("samlmeta", middles.ValidateSAMLMeta)
 	xvads.RegisterValidations(app.VAD)
 
+	configRouter()
+
+	initMiddlewares()
+
+	configMiddleware()
+
+	initHandlers()
+}
+
+func configRouter() {
+	xxins.ConfigRouter()
+}
+
+func initMiddlewares() {
 	xmwas.InitMiddlewares()
 
 	app.XBA = middleware.NewBasicAuth(tenant.CheckClientAndAuthenticate)
@@ -55,10 +67,6 @@ func initRouter() {
 	app.XCN = middleware.NewCookieAuth(tenant.Authenticate, "")
 	app.XCN.AuthFailed = xin.Next
 	app.XCN.GetCookieMaxAge = tenant.AuthCookieMaxAge
-
-	configMiddleware()
-
-	initHandlers()
 }
 
 func configMiddleware() {
@@ -87,7 +95,7 @@ func configMiddleware() {
 func initHandlers() {
 	log.Infof("Context Path: %s", app.Base())
 
-	r := app.XIN
+	r := xxins.XIN
 
 	r.Use(xin.Recovery())
 	r.Use(middles.SetCtxLogProp) // Set TENANT logger prop
@@ -119,7 +127,7 @@ func initHandlers() {
 
 	web.AddWebAssetsHandlers(rg)
 
-	app.XIN.NoRoute(middles.TenantProtect, app.XCN.Handle, middles.NotFound)
+	r.NoRoute(middles.TenantProtect, app.XCN.Handle, middles.NotFound)
 }
 
 func addRootHandlers(rg *xin.RouterGroup) {

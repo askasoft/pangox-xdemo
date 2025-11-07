@@ -12,7 +12,6 @@ import (
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pango/vad"
-	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pango/xin/middleware"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox/xwa"
@@ -43,9 +42,6 @@ const (
 var (
 	// VAD global validate
 	VAD *vad.Validate
-
-	// XIN global xin engine
-	XIN *xin.Engine
 
 	// XBA global basic auth middleware
 	XBA *middleware.BasicAuth

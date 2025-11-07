@@ -117,7 +117,7 @@ func (alqa *AuditLogQueryArg) AddFilters(sqb *sqlx.Builder, locale string) {
 }
 
 func (alqa *AuditLogQueryArg) AddOrders(sqb *sqlx.Builder, defaults string) {
-	order := str.ReplaceAll(alqa.Order, "-funact", "-func,action")
+	order := str.ReplaceAll(alqa.Order, "-funact", "-func,-action")
 	order = str.ReplaceAll(order, "funact", "func,action")
 	xsqbs.AddOrders(sqb, order, defaults)
 }

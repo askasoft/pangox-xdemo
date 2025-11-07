@@ -17,6 +17,7 @@ import (
 	"github.com/askasoft/pangox/xwa"
 	"github.com/askasoft/pangox/xwa/xfsws"
 	"github.com/askasoft/pangox/xwa/xhsvs"
+	"github.com/askasoft/pangox/xwa/xxins"
 )
 
 // SRV service instance
@@ -177,7 +178,7 @@ func reloadCaches() {
 }
 
 func initServers() {
-	if err := xhsvs.InitServers(app.XIN, getCertificate); err != nil {
+	if err := xhsvs.InitServers(xxins.XIN, getCertificate); err != nil {
 		log.Fatal(app.ExitErrSRV, err)
 	}
 }
@@ -201,6 +202,8 @@ func reloadConfigs() {
 	reloadServers()
 
 	reloadDatabase()
+
+	configRouter()
 
 	configMiddleware()
 
