@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 
 	"github.com/askasoft/pango/log"
+	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
@@ -56,6 +57,23 @@ func (fa *FileArg) SetFile(tt *tenant.Tenant, mfh *multipart.FileHeader) error {
 	}
 
 	fa.File = fid
+	return nil
+}
+
+type CsvFileArg struct {
+	FileArg
+}
+
+func (cfa *CsvFileArg) BindFile(c *xin.Context) error {
+	mfh, err := c.FormFile("file")
+	if err != nil {
+		return tbs.Error(c.Locale, "csv.error.required")
+	}
+
+	tt := tenant.FromCtx(c)
+	if err = cfa.SetFile(tt, mfh); err != nil {
+		return tbs.Errorf(c.Locale, "csv.error.read", err)
+	}
 	return nil
 }
 

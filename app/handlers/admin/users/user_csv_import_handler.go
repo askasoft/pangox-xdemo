@@ -9,6 +9,7 @@ import (
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
+	"github.com/askasoft/pangox-xdemo/app/args"
 	"github.com/askasoft/pangox-xdemo/app/handlers"
 	"github.com/askasoft/pangox-xdemo/app/jobs"
 	"github.com/askasoft/pangox-xdemo/app/jobs/users"
@@ -35,22 +36,12 @@ type UserCsvImportJobController struct {
 }
 
 func (ucijc *UserCsvImportJobController) Start(c *xin.Context) {
-	mfh, err := c.FormFile("file")
-	if err != nil {
-		err = tbs.Error(c.Locale, "csv.error.required")
-		c.AddError(err)
-		c.JSON(http.StatusBadRequest, middles.E(c))
-		return
-	}
-
 	au := tenant.AuthUser(c)
 	ucia := users.NewUserCsvImportArg(au.Role)
 
-	tt := tenant.FromCtx(c)
-	if err = ucia.SetFile(tt, mfh); err != nil {
-		err = tbs.Errorf(c.Locale, "csv.error.read", err)
-		c.AddError(err)
-		c.JSON(http.StatusInternalServerError, middles.E(c))
+	if err := ucia.Bind(c); err != nil {
+		args.AddBindErrors(c, err, "user.import.csv.")
+		c.JSON(http.StatusBadRequest, middles.E(c))
 		return
 	}
 

@@ -15,6 +15,7 @@ import (
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tbs"
+	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/jobs"
 	"github.com/askasoft/pangox-xdemo/app/models"
@@ -31,7 +32,7 @@ func init() {
 }
 
 type UserCsvImportArg struct {
-	jobs.FileArg
+	jobs.CsvFileArg
 
 	Role string `json:"role,omitempty" form:"-"`
 }
@@ -40,6 +41,14 @@ func NewUserCsvImportArg(role string) *UserCsvImportArg {
 	ucij := &UserCsvImportArg{}
 	ucij.Role = role
 	return ucij
+}
+
+func (ucia *UserCsvImportArg) Bind(c *xin.Context) error {
+	if err := jobs.ArgBind(c, ucia); err != nil {
+		return err
+	}
+
+	return ucia.BindFile(c)
 }
 
 type UserCsvImportJob struct {
