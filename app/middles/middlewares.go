@@ -8,6 +8,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
+	"github.com/askasoft/pangox/xfs"
 	"github.com/askasoft/pangox/xwa/xmwas"
 )
 
@@ -126,4 +127,11 @@ func RoleCustomProtector(s string) xin.HandlerFunc {
 		role := tt.ConfigValue(s)
 		RoleProtect(c, role)
 	}
+}
+
+//----------------------------------------------------
+
+func TenantHFS(c *xin.Context) http.FileSystem {
+	tt := tenant.FromCtx(c)
+	return xfs.HFS(tt.FS())
 }
