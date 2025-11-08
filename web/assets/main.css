@@ -146,7 +146,7 @@ input::placeholder, textarea::placeholder {
 
 /* sidenavi */
 .ui-sidenavi .card-header {
-	border-bottom: solid 1px #fff;
+	border-bottom: solid 1px var(--bs-border-color);
 }
 .ui-sidenavi .card-header, .ui-sidenavi .card-body {
 	color: #fff;
