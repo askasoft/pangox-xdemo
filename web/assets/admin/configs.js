@@ -86,7 +86,7 @@
 
 		var $s = $('<div class="schedule"></div>');
 		var $u = $('<div class="units ui-radios">').append($('<label>').append(
-			$('<input type="radio" checked>').attr('name', nm).prop('disabled', d),
+			$('<input type="radio" checked value="">').attr('name', nm).prop('disabled', d),
 			$('<span>').text('ー')
 		));
 		for (var i in ln.units) {
