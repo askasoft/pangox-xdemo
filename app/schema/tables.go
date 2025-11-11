@@ -16,7 +16,7 @@ func init() {
 	tables.Set("job_logs", &xjm.JobLog{})
 	tables.Set("job_chains", &xjm.JobChain{})
 	tables.Set("users", &models.User{})
-	tables.Set("configs", &models.Config{})
+	tables.Set("settings", &models.Setting{})
 	tables.Set("audit_logs", &models.AuditLog{})
 	tables.Set("pets", &models.Pet{})
 	tables.Set("schema_changes", &xsqls.SchemaChange{})
@@ -53,8 +53,8 @@ func (sm Schema) TableUsers() string {
 	return sm.Table("users")
 }
 
-func (sm Schema) TableConfigs() string {
-	return sm.Table("configs")
+func (sm Schema) TableSettings() string {
+	return sm.Table("settings")
 }
 
 func (sm Schema) TableAuditLogs() string {

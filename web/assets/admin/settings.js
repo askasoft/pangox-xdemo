@@ -145,19 +145,19 @@
 
 	//----------------------------------------------------
 	function secure_login_method_init() {
-		$('.cfgform input[name="secure_login_method"]').on('change', function() {
+		$('.stgform input[name="secure_login_method"]').on('change', function() {
 			var $i = $('input[name="secure_login_method"]:checked'), v = $i.val();
 			var ldap = v == 'L', saml = v == 'S';
 			$('[name="secure_login_mfa"]').prop('disabled', saml).closest('.row')[saml ? 'slideUp' : 'slideDown']();
 			$('[name^="secure_ldap_"]').prop('disabled', !ldap).closest('.row')[ldap ? 'slideDown' : 'slideUp']();
 			$('[name^="secure_saml_"]').prop('disabled', !saml).closest('.row')[saml ? 'slideDown' : 'slideUp']();
-			$i.closest('.cfgform').find('textarea').autosize();
+			$i.closest('.stgform').find('textarea').autosize();
 		}).trigger('change');
 	}
 
 	//----------------------------------------------------
-	function configs_import() {
-		var $p = $('#configs_import_popup').popup('update', { keyboard: false });
+	function settings_import() {
+		var $p = $('#settings_import_popup').popup('update', { keyboard: false });
 
 		$.ajaf({
 			url: './import',
@@ -187,7 +187,7 @@
 		return false;
 	}
 
-	function configs_export() {
+	function settings_export() {
 		$.ajaf({
 			url: './export',
 			method: 'POST',
@@ -198,7 +198,7 @@
 		return false;
 	}
 
-	function configs_save() {
+	function settings_save() {
 		var $f = $(this);
 
 		$.ajax({
@@ -215,14 +215,14 @@
 		return false;
 	}
 
-	function configs_tab_show(id) {
+	function settings_tab_show(id) {
 		var $t = $('a[href="#' + id + '"]');
 		if ($t.length) {
 			new bootstrap.Tab($t.get(0)).show();
 		}
 	}
 
-	function configs_init() {
+	function settings_init() {
 		secure_login_method_init();
 		schedule_fields_init();
 
@@ -232,23 +232,23 @@
 			history.replaceState(null, null, location.href.split('#')[0] + t);
 		});
 
-		$('.cfgform').find('textarea').autosize();
-		$('.cfgform').on('submit', configs_save);
+		$('.stgform').find('textarea').autosize();
+		$('.stgform').on('submit', settings_save);
 
-		$('#configs_export').on('click', configs_export);
-		$('#configs_import_popup').on('click', 'button[type=submit]', configs_import);
+		$('#settings_export').on('click', settings_export);
+		$('#settings_import_popup').on('click', 'button[type=submit]', settings_import);
 
-		var cg = location.hash.substrAfter('#'), cc = cg;
-		if (cc.startsWith('cg_')) {
-			cc = $('#' + cc).parent().closest('.tab-pane').attr('id') || '';
+		var sg = location.hash.substrAfter('#'), sc = sg;
+		if (sc.startsWith('sg_')) {
+			sc = $('#' + sc).parent().closest('.tab-pane').attr('id') || '';
 		}
-		if (cc.startsWith('cc_')) {
-			configs_tab_show(cc);
+		if (sc.startsWith('sc_')) {
+			settings_tab_show(sc);
 		}
-		if (cg.startsWith('cg_')) {
-			configs_tab_show(cg);
+		if (sg.startsWith('sg_')) {
+			settings_tab_show(sg);
 		}
 	}
 
-	$(window).on('load', configs_init);
+	$(window).on('load', settings_init);
 })(jQuery);

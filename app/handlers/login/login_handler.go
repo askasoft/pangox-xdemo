@@ -124,7 +124,7 @@ func loginMFACheck(c *xin.Context, au *models.User, up *UserPass) bool {
 	mfa := au.LoginMFA
 	if mfa == app.LOGIN_MFA_UNSET {
 		tt := tenant.FromCtx(c)
-		mfa = tt.ConfigValue("secure_login_mfa")
+		mfa = tt.SV("secure_login_mfa")
 	}
 
 	switch mfa {

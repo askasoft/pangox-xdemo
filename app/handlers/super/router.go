@@ -14,7 +14,7 @@ func Router(rg *xin.RouterGroup) {
 	rg.GET("/", Index)
 
 	addSuperTenantHandlers(rg.Group("/tenants"))
-	addSuperSettingsHandlers(rg.Group("/settings"))
+	addSuperConfigsHandlers(rg.Group("/configs"))
 	addSuperStatsHandlers(rg.Group("/stats"))
 	addSuperRuntimeHandlers(rg.Group("/runtime"))
 	addSuperShellHandlers(rg.Group("/shell"))
@@ -29,8 +29,8 @@ func addSuperTenantHandlers(rg *xin.RouterGroup) {
 	rg.POST("/delete", TenantDelete)
 }
 
-func addSuperSettingsHandlers(rg *xin.RouterGroup) {
-	rg.GET("/", SettingsIndex)
+func addSuperConfigsHandlers(rg *xin.RouterGroup) {
+	rg.GET("/", ConfigsIndex)
 }
 
 func addSuperStatsHandlers(rg *xin.RouterGroup) {
@@ -38,8 +38,8 @@ func addSuperStatsHandlers(rg *xin.RouterGroup) {
 	rg.GET("/server", StatsServer)
 	rg.GET("/jobs", StatsJobs)
 	rg.GET("/db", StatsDB)
-	rg.GET("/cache/configs", StatsCacheConfigs)
 	rg.GET("/cache/schemas", StatsCacheSchemas)
+	rg.GET("/cache/settings", StatsCacheSettings)
 	rg.GET("/cache/workers", StatsCacheWorkers)
 	rg.GET("/cache/users", StatsCacheUsers)
 	rg.GET("/cache/afips", StatsCacheAfips)

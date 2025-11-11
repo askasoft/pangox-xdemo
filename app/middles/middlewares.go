@@ -124,7 +124,7 @@ func RoleViewerProtect(c *xin.Context) {
 func RoleCustomProtector(s string) xin.HandlerFunc {
 	return func(c *xin.Context) {
 		tt := tenant.FromCtx(c)
-		role := tt.ConfigValue(s)
+		role := tt.SV(s)
 		RoleProtect(c, role)
 	}
 }

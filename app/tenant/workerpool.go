@@ -4,7 +4,6 @@ import (
 	"sync"
 
 	"github.com/askasoft/pango/gwp"
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pangox-xdemo/app"
 )
 
@@ -30,5 +29,5 @@ func (tt *Tenant) GetWorkerPool() *gwp.WorkerPool {
 }
 
 func (tt *Tenant) MaxWorkers() int {
-	return num.Atoi(tt.ConfigValue("tenant_max_workers"))
+	return tt.SI("tenant_max_workers")
 }

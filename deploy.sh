@@ -25,9 +25,9 @@ sed -e "s;prefix =.*;prefix = ${PREFIX};g" \
 sed -e "s;DEBUG;${LOG_LEVEL};g" \
 	conf/log.ini > ${APPHOME}/conf/log.ini
 
-cp -a conf/config.csv ${APPHOME}/conf/
-cp -a conf/*.sql      ${APPHOME}/conf/
-cp -a conf/xdemo.*    ${APPHOME}/conf/
+cp -a conf/settings.csv ${APPHOME}/conf/
+cp -a conf/*.sql        ${APPHOME}/conf/
+cp -a conf/xdemo.*      ${APPHOME}/conf/
 
 if ! [ -z "${LOG_SLACK_WEBHOOK}" ]; then
 	LOG_WRITERS="${LOG_WRITERS}, slack"

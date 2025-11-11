@@ -7,5 +7,5 @@
 /z
 /xdemo*
 /*.exe
-resource.syso
-versioninfo.json
+/resource.syso
+/versioninfo.json

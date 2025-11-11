@@ -307,13 +307,13 @@ httpsRedirect = false
 			"args": []
 		},
 		{
-			"name": "migrate config",
+			"name": "migrate settings",
 			"type": "go",
 			"request": "launch",
 			"mode": "debug",
 			"program": "${workspaceRoot}/main.go",
 			"env": {},
-			"args": [ "migrate", "config" ]
+			"args": [ "migrate", "settings" ]
 		},
 		{
 			"name": "migrate schema",

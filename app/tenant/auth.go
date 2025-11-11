@@ -168,12 +168,12 @@ func findAuthUser(c *xin.Context, username, password string) (middleware.AuthUse
 func ldapAuthencate(c *xin.Context, username, password string) (*models.User, error) {
 	tt := FromCtx(c)
 
-	con, err := ldap.DialURL(tt.ConfigValue("secure_ldap_server"))
+	con, err := ldap.DialURL(tt.SV("secure_ldap_server"))
 	if err != nil {
 		return nil, err
 	}
 
-	dn := str.ReplaceAll(tt.ConfigValue("secure_ldap_binduser"), "{{USERNAME}}", username)
+	dn := str.ReplaceAll(tt.SV("secure_ldap_binduser"), "{{USERNAME}}", username)
 	if err := con.Bind(dn, password); err != nil {
 		c.Logger.Warn(err)
 		return nil, nil
@@ -185,8 +185,8 @@ func ldapAuthencate(c *xin.Context, username, password string) (*models.User, er
 	}
 
 	if au == nil {
-		if bol.Atob(tt.ConfigValue("secure_ldap_usersync")) {
-			mu, err := tt.CreateAuthUser(username, str.SubstrBeforeByte(username, '@'), tt.ConfigValue("secure_ldap_userrole"))
+		if bol.Atob(tt.SV("secure_ldap_usersync")) {
+			mu, err := tt.CreateAuthUser(username, str.SubstrBeforeByte(username, '@'), tt.SV("secure_ldap_userrole"))
 			if err != nil {
 				return nil, err
 			}
@@ -236,7 +236,7 @@ func AuthFailed(c *xin.Context) {
 
 func AuthCookieMaxAge(c *xin.Context) time.Duration {
 	tt := FromCtx(c)
-	ma := tmu.Atod(tt.ConfigValue("secure_session_timeout"))
+	ma := tmu.Atod(tt.SV("secure_session_timeout"))
 	if ma <= 0 {
 		ma = app.XCA.CookieMaxAge
 	}

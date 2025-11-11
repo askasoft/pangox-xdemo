@@ -15,17 +15,17 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/models"
 )
 
-func ReadConfigFile() ([]*models.Config, error) {
-	file := app.ConfigCsvFile()
+func ReadSettingsFile() ([]*models.Setting, error) {
+	file := app.SettingsCsvFile()
 
-	log.Infof("Read config file '%s'", file)
+	log.Infof("Read settings file '%s'", file)
 
-	configs := []*models.Config{}
-	if err := csvx.ScanFile(file, &configs); err != nil {
+	settings := []*models.Setting{}
+	if err := csvx.ScanFile(file, &settings); err != nil {
 		return nil, err
 	}
 
-	return configs, nil
+	return settings, nil
 }
 
 func (sm Schema) InitSchema() error {
@@ -39,12 +39,12 @@ func (sm Schema) InitSchema() error {
 		return err
 	}
 
-	configs, err := ReadConfigFile()
+	settings, err := ReadSettingsFile()
 	if err != nil {
 		return err
 	}
 
-	if err := sm.MigrateConfig(configs); err != nil {
+	if err := sm.MigrateSettings(settings); err != nil {
 		return err
 	}
 
@@ -64,10 +64,10 @@ func (sm Schema) ExecSchemaSQL() error {
 	return sm.ExecSQL(sqls)
 }
 
-func (sm Schema) MigrateConfig(configs []*models.Config) error {
-	tb := sm.TableConfigs()
+func (sm Schema) MigrateSettings(settings []*models.Setting) error {
+	tb := sm.TableSettings()
 
-	log.Infof("Migrate Config %q", tb)
+	log.Infof("Migrate Settings %q", tb)
 
 	db := app.SDB()
 
@@ -75,19 +75,19 @@ func (sm Schema) MigrateConfig(configs []*models.Config) error {
 	sqb.Select().From(tb)
 	sql, args := sqb.Build()
 
-	oconfigs := make(map[string]*models.Config)
+	osettings := make(map[string]*models.Setting)
 	rows, err := db.Queryx(sql, args...)
 	if err != nil {
 		return err
 	}
 
 	for rows.Next() {
-		var cfg models.Config
-		if err := rows.StructScan(&cfg); err != nil {
+		var stg models.Setting
+		if err := rows.StructScan(&stg); err != nil {
 			rows.Close()
 			return err
 		}
-		oconfigs[cfg.Name] = &cfg
+		osettings[stg.Name] = &stg
 	}
 	rows.Close()
 
@@ -97,37 +97,37 @@ func (sm Schema) MigrateConfig(configs []*models.Config) error {
 	sqbu.Where("name = :name")
 	sqlu := sqbu.SQL()
 
-	stmtu, err := db.PrepareNamed(sqlu)
+	stmu, err := db.PrepareNamed(sqlu)
 	if err != nil {
 		return err
 	}
-	defer stmtu.Close()
+	defer stmu.Close()
 
 	sqbc := db.Builder()
 	sqbc.Insert(tb)
-	sqbc.StructNames(&models.Config{})
+	sqbc.StructNames(&models.Setting{})
 	sqlc := sqbc.SQL()
-	stmtc, err := db.PrepareNamed(sqlc)
+	stmc, err := db.PrepareNamed(sqlc)
 	if err != nil {
 		return err
 	}
-	defer stmtc.Close()
+	defer stmc.Close()
 
-	for _, cfg := range configs {
-		if ocfg, ok := oconfigs[cfg.Name]; ok {
-			if ocfg.IsSameMeta(cfg) {
+	for _, stg := range settings {
+		if ostg, ok := osettings[stg.Name]; ok {
+			if ostg.IsSameMeta(stg) {
 				continue
 			}
 
-			if _, err := stmtu.Exec(cfg); err != nil {
+			if _, err := stmu.Exec(stg); err != nil {
 				return err
 			}
 			continue
 		}
 
-		cfg.CreatedAt = time.Now()
-		cfg.UpdatedAt = cfg.CreatedAt
-		if _, err := stmtc.Exec(cfg); err != nil {
+		stg.CreatedAt = time.Now()
+		stg.UpdatedAt = stg.CreatedAt
+		if _, err := stmc.Exec(stg); err != nil {
 			return err
 		}
 	}

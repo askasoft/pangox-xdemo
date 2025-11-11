@@ -34,7 +34,7 @@ func StatsIndex(c *xin.Context) {
 	h := middles.H(c)
 
 	h["Server"] = statsServer()
-	h["Caches"] = []string{"configs", "schemas", "workers", "users", "afips"}
+	h["Caches"] = []string{"schemas", "settings", "workers", "users", "afips"}
 
 	c.HTML(http.StatusOK, "super/stats", h)
 }
@@ -160,14 +160,14 @@ func statsServer() any {
 	return stm
 }
 
-func StatsCacheConfigs(c *xin.Context) {
-	statsCacheStats(c, app.CONFS, func(v map[string]string) string {
-		return num.Itoa(len(v))
-	})
-}
-
 func StatsCacheSchemas(c *xin.Context) {
 	statsCacheStats(c, app.SCMAS, bol.Btoa)
+}
+
+func StatsCacheSettings(c *xin.Context) {
+	statsCacheStats(c, app.TSETS, func(v map[string]string) string {
+		return num.Itoa(len(v))
+	})
 }
 
 func StatsCacheWorkers(c *xin.Context) {
@@ -188,7 +188,7 @@ func StatsCacheAfips(c *xin.Context) {
 	})
 }
 
-type CacheItem struct {
+type cacheItem struct {
 	Key string `json:"key,omitempty"`
 	Val string `json:"val,omitempty"`
 	TTL string `json:"ttl,omitempty"`
@@ -198,14 +198,14 @@ func statsCacheStats[K comparable, T any](c *xin.Context, ic *imc.Cache[K, T], f
 	limit := num.Atoi(c.Query("limit"), 1000)
 
 	now := time.Now()
-	cis := treemap.NewTreeMap[string, CacheItem](strings.Compare)
+	cis := treemap.NewTreeMap[string, cacheItem](strings.Compare)
 
-	var ci CacheItem
+	var ci cacheItem
 	ic.Each(func(k K, i imc.Item[T]) bool {
 		s, _ := cas.ToString(k)
 		ci.Key = s
 		ci.Val = fv(i.Val)
-		ci.TTL = tmu.HumanDuration(time.Unix(i.TTL, 0).Sub(now))
+		ci.TTL = tmu.HumanDuration(time.UnixMilli(i.TTL).Sub(now))
 		cis.Set(s, ci)
 		return cis.Len() <= limit
 	})

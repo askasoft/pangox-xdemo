@@ -112,13 +112,13 @@ func runtimeMemStats() any {
 	msm.Set("MCacheInuse", num.HumanSize(float64(ms.MCacheInuse)))
 	msm.Set("MCacheSys", num.HumanSize(float64(ms.MCacheSys)))
 	msm.Set("GCSys", num.HumanSize(ms.GCSys))
-	msm.Set("LastGC", time.Unix(0, int64(ms.LastGC)).Format(time.RFC3339Nano)) //nolint: gosec
+	msm.Set("LastGC", time.Unix(0, int64(ms.LastGC)).Format(time.RFC3339))
 	msm.Set("NextGC", num.HumanSize(ms.NextGC))
 	msm.Set("NumGC", num.Comma(ms.NumGC))
-	msm.Set("GCPauseTotal", tmu.HumanDuration(time.Duration(ms.PauseTotalNs))) //nolint: gosec
+	msm.Set("GCPauseTotal", tmu.HumanDuration(time.Duration(ms.PauseTotalNs)))
 	if sec := time.Since(app.StartupTime()).Seconds(); sec != 0 {
 		msm.Set("GCNumPerSecond", num.Comma(float64(ms.NumGC)/sec, 6))
-		msm.Set("GCPausePerSecond", tmu.HumanDuration(time.Duration(ms.PauseTotalNs/uint64(sec)))) //nolint: gosec
+		msm.Set("GCPausePerSecond", tmu.HumanDuration(time.Duration(ms.PauseTotalNs/uint64(sec))))
 	}
 	return msm
 }

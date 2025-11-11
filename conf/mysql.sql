@@ -65,7 +65,7 @@ CREATE TABLE `SCHEMA`.`users` (
 	UNIQUE INDEX `idx_users_email` (`email`)
 );
 ---------------------------------;
-CREATE TABLE `SCHEMA`.`configs` (
+CREATE TABLE `SCHEMA`.`settings` (
 	`name` varchar(64) NOT NULL,
 	`value` longtext NOT NULL,
 	`style` varchar(2) NOT NULL,

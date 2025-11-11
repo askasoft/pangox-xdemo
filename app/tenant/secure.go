@@ -5,7 +5,6 @@ import (
 
 	"github.com/askasoft/pango/cog/linkedhashmap"
 	"github.com/askasoft/pango/net/netx"
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
@@ -19,15 +18,15 @@ const (
 )
 
 func (tt *Tenant) IsLDAPLogin() bool {
-	return tt.ConfigValue("secure_login_method") == AuthMethodLDAP
+	return tt.SV("secure_login_method") == AuthMethodLDAP
 }
 
 func (tt *Tenant) IsSAMLLogin() bool {
-	return tt.ConfigValue("secure_login_method") == AuthMethodSAML && tt.ConfigValue("secure_saml_idpmeta") != ""
+	return tt.SV("secure_login_method") == AuthMethodSAML && tt.SV("secure_saml_idpmeta") != ""
 }
 
 func (tt *Tenant) SecureClientCIDRs() []*net.IPNet {
-	ipnets, _ := netx.ParseCIDRs(str.Fields(tt.ConfigValue("secure_client_cidr")))
+	ipnets, _ := netx.ParseCIDRs(str.Fields(tt.SV("secure_client_cidr")))
 	return ipnets
 }
 
@@ -49,9 +48,9 @@ func (pp *PasswordPolicy) ValidatePassword(pwd string) []string {
 
 func (tt *Tenant) GetPasswordPolicy(loc string) *PasswordPolicy {
 	pp := &PasswordPolicy{Locale: loc}
-	pp.MinLength, pp.MaxLength = num.Atoi(tt.ConfigValue("password_policy_minlen"), 8), 64
-	pp.Strengths = tt.ConfigValues("password_policy_strength")
-	pp.Strengthm = tbsutil.GetLinkedHashMap(loc, "config.list.password_policy_strength")
+	pp.MinLength, pp.MaxLength = tt.SI("password_policy_minlen", 8), 64
+	pp.Strengths = tt.SVs("password_policy_strength")
+	pp.Strengthm = tbsutil.GetLinkedHashMap(loc, "setting.list.password_policy_strength")
 	pp.Strengthm.Set(xpwds.PASSWORD_INVALID_LENGTH, tbs.Format(loc, "error.param.pwdlen", pp.MinLength, pp.MaxLength))
 	return pp
 }

@@ -26,12 +26,12 @@ func IsHostnameError(err error) bool {
 
 type Tenant struct {
 	schema.Schema
-	config map[string]string
+	settings map[string]string
 }
 
 func NewTenant(name string) *Tenant {
 	tt := &Tenant{Schema: schema.Schema(name)}
-	tt.config = tt.getConfigMap()
+	tt.settings = tt.getSettings()
 	return tt
 }
 
