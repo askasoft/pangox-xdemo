@@ -8,10 +8,10 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/middles"
 )
 
-func SettingsIndex(c *xin.Context) {
+func ConfigsIndex(c *xin.Context) {
 	h := middles.H(c)
 
 	h["Sections"] = ini.Sections()
 
-	c.HTML(http.StatusOK, "super/settings", h)
+	c.HTML(http.StatusOK, "super/configs", h)
 }

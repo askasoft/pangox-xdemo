@@ -163,7 +163,7 @@ func initConfigs() {
 
 func initCaches() {
 	app.SCMAS = imc.New[string, bool](ini.GetDuration("cache", "schemaCacheExpires", time.Minute), time.Minute)
-	app.CONFS = imc.New[string, map[string]string](ini.GetDuration("cache", "configCacheExpires", time.Minute), time.Minute)
+	app.TSETS = imc.New[string, map[string]string](ini.GetDuration("cache", "settingsCacheExpires", time.Minute), time.Minute)
 	app.WORKS = imc.New[string, *gwp.WorkerPool](ini.GetDuration("cache", "workerCacheExpires", time.Minute), time.Minute)
 	app.USERS = imc.New[string, *models.User](ini.GetDuration("cache", "userCacheExpires", time.Minute), time.Minute)
 	app.AFIPS = imc.New[string, int](ini.GetDuration("cache", "afipCacheExpires", time.Minute*30), time.Minute)
@@ -171,7 +171,7 @@ func initCaches() {
 
 func reloadCaches() {
 	app.SCMAS.SetTTL(ini.GetDuration("cache", "schemaCacheExpires", time.Minute))
-	app.CONFS.SetTTL(ini.GetDuration("cache", "configCacheExpires", time.Minute))
+	app.TSETS.SetTTL(ini.GetDuration("cache", "settingsCacheExpires", time.Minute))
 	app.WORKS.SetTTL(ini.GetDuration("cache", "workerCacheExpires", time.Minute))
 	app.USERS.SetTTL(ini.GetDuration("cache", "userCacheExpires", time.Minute))
 	app.AFIPS.SetTTL(ini.GetDuration("cache", "afipCacheExpires", time.Minute*30))

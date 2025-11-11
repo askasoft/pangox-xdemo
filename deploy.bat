@@ -18,7 +18,7 @@ powershell -command "(gc conf\app.ini -Encoding utf8) | %% { $_ -replace 'prefix
 
 powershell -command "(gc conf\log.ini -Encoding utf8).Replace('DEBUG', '%LOG_LEVEL%') | Out-File %APPHOME%\conf\log.ini -Encoding utf8"
 
-copy /Y conf\config.csv %APPHOME%\conf\
+copy /Y conf\settings.csv %APPHOME%\conf\
 copy /Y conf\*.sql      %APPHOME%\conf\
 copy /Y conf\xdemo.*    %APPHOME%\conf\
 

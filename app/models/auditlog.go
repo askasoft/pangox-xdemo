@@ -16,8 +16,8 @@ const (
 	AL_USERS_DELETES          = "users.deletes"
 	AL_USERS_IMPORT_START     = "users.import-start"
 	AL_USERS_IMPORT_CANCEL    = "users.import-cancel"
-	AL_CONFIG_UPDATE          = "config.update"
-	AL_CONFIG_IMPORT          = "config.import"
+	AL_SETTINGS_UPDATE        = "settings.update"
+	AL_SETTINGS_IMPORT        = "settings.import"
 	AL_PETS_CREATE            = "pets.create"
 	AL_PETS_UPDATE            = "pets.update"
 	AL_PETS_UPDATES           = "pets.updates"
@@ -44,8 +44,8 @@ var AL_FUNACTS = []string{
 	AL_USERS_DELETES,
 	AL_USERS_IMPORT_START,
 	AL_USERS_IMPORT_CANCEL,
-	AL_CONFIG_UPDATE,
-	AL_CONFIG_IMPORT,
+	AL_SETTINGS_UPDATE,
+	AL_SETTINGS_IMPORT,
 	AL_PETS_CREATE,
 	AL_PETS_UPDATE,
 	AL_PETS_UPDATES,

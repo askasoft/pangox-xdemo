@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/askasoft/pango/bol"
 	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/vad"
@@ -72,8 +71,8 @@ func SAMLProtect(c *xin.Context) {
 		}
 
 		if au == nil {
-			if bol.Atob(tt.ConfigValue("secure_saml_usersync")) {
-				mu, err := tt.CreateAuthUser(email, samlUserName(attrs), tt.ConfigValue("secure_saml_userrole"))
+			if tt.SB("secure_saml_usersync") {
+				mu, err := tt.CreateAuthUser(email, samlUserName(attrs), tt.SV("secure_saml_userrole"))
 				if err != nil {
 					c.Logger.Errorf("SAML Auth: %v", err)
 					c.AddError(err)
@@ -121,7 +120,7 @@ func samlUserName(attrs samlsp.Attributes) string {
 func SamlServiceProvider(c *xin.Context) *samlsp.Middleware {
 	tt := tenant.FromCtx(c)
 
-	idpMetadata, err := samlsp.ParseMetadata(str.UnsafeBytes(tt.ConfigValue("secure_saml_idpmeta")))
+	idpMetadata, err := samlsp.ParseMetadata(str.UnsafeBytes(tt.SV("secure_saml_idpmeta")))
 	if err != nil {
 		c.Logger.Error(err)
 		c.AbortWithError(http.StatusInternalServerError, err)

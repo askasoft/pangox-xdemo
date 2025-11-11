@@ -39,14 +39,14 @@ func dbIterateSchemas(fn func(sm schema.Schema) error, schemas ...string) error 
 	return nil
 }
 
-func dbMigrateConfigs(schemas ...string) error {
-	configs, err := schema.ReadConfigFile()
+func dbMigrateSettings(schemas ...string) error {
+	settings, err := schema.ReadSettingsFile()
 	if err != nil {
 		return err
 	}
 
 	return dbIterateSchemas(func(sm schema.Schema) error {
-		return sm.MigrateConfig(configs)
+		return sm.MigrateSettings(settings)
 	}, schemas...)
 }
 

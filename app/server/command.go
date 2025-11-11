@@ -36,7 +36,7 @@ func (s *service) Usage() {
 	fmt.Println("  <command>:")
 	srv.PrintDefaultCommand(os.Stdout)
 	fmt.Println("    migrate <target> [schema]...")
-	fmt.Println("      target=config     migrate tenant configurations.")
+	fmt.Println("      target=settings   migrate tenant settings.")
 	fmt.Println("      target=super      migrate tenant super user.")
 	fmt.Println("      target=schema     migrate database schema.")
 	fmt.Println("      [schema]...       specify schemas to migrate.")
@@ -104,10 +104,10 @@ func doMigrate() {
 	args := flag.Args()[2:]
 
 	switch sub {
-	case "config":
+	case "settings":
 		initConfigs()
 		initDatabase()
-		if err := dbMigrateConfigs(args...); err != nil {
+		if err := dbMigrateSettings(args...); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
 		}

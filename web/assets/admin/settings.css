@@ -1,20 +1,20 @@
-.cc-nav {
+.sc-nav {
 	background-color: var(--bs-body-bg, #fff);
 	position: sticky;
 	top: 50px;
 	z-index: 10;
 }
-.ccc > ul.nav {
+.scc > ul.nav {
 	padding: 1rem 0;
 }
-.ccc > ul.nav > li {
+.scc > ul.nav > li {
 	margin-right: 1rem;
 }
 @media (min-width: 992px) {
-	.ccc {
+	.scc {
 		display: flex;
 	}
-	.ccc > ul.nav {
+	.scc > ul.nav {
 		flex-direction: column;
 		flex-wrap: nowrap;
 		min-width: 200px;
@@ -23,7 +23,7 @@
 		overflow-y: auto;
 	}
 }
-.ccc .tab-content {
+.scc .tab-content {
 	margin-top: 1rem;
 	width: 100%;
 }

@@ -12,19 +12,19 @@ import (
 
 func JobSchedule() {
 	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
-		return startConfigScheduleJobChain(tt, "schedule_pets_reset", jobs.JobChainPetReset, pets.PetResetJobChainStart)
+		return startScheduleJobChain(tt, "schedule_pets_reset", jobs.JobChainPetReset, pets.PetResetJobChainStart)
 	})
 }
 
-func startConfigScheduleJobChain(tt *tenant.Tenant, cfgkey, jcname string, fn func(tt *tenant.Tenant) error) error {
-	expr := tt.ConfigValue(cfgkey)
+func startScheduleJobChain(tt *tenant.Tenant, key, jcname string, fn func(tt *tenant.Tenant) error) error {
+	expr := tt.SV(key)
 	if expr == "" {
 		return nil
 	}
 
 	periodic, err := sch.ParsePeriodic(expr)
 	if err != nil {
-		tt.Logger("JOB").Errorf("Invalid setting %q: %v", cfgkey, err)
+		tt.Logger("JOB").Errorf("Invalid setting %q: %v", key, err)
 		return nil
 	}
 

@@ -34,7 +34,7 @@ func StatsIndex(c *xin.Context) {
 	h := middles.H(c)
 
 	h["Server"] = statsServer()
-	h["Caches"] = []string{"configs", "schemas", "workers", "users", "afips"}
+	h["Caches"] = []string{"settings", "schemas", "workers", "users", "afips"}
 
 	c.HTML(http.StatusOK, "super/stats", h)
 }
@@ -160,8 +160,8 @@ func statsServer() any {
 	return stm
 }
 
-func StatsCacheConfigs(c *xin.Context) {
-	statsCacheStats(c, app.CONFS, func(v map[string]string) string {
+func StatsCacheSettings(c *xin.Context) {
+	statsCacheStats(c, app.TSETS, func(v map[string]string) string {
 		return num.Itoa(len(v))
 	})
 }

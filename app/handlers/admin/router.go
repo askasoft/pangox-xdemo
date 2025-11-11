@@ -3,7 +3,7 @@ package admin
 import (
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app/handlers/admin/auditlogs"
-	"github.com/askasoft/pangox-xdemo/app/handlers/admin/configs"
+	"github.com/askasoft/pangox-xdemo/app/handlers/admin/settings"
 	"github.com/askasoft/pangox-xdemo/app/handlers/admin/users"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 )
@@ -17,6 +17,6 @@ func Router(rg *xin.RouterGroup) {
 	rg.GET("/", Index)
 
 	users.Router(rg.Group("/users"))
-	configs.Router(rg.Group("/configs"))
+	settings.Router(rg.Group("/settings"))
 	auditlogs.Router(rg.Group("/auditlogs"))
 }

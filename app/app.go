@@ -58,8 +58,8 @@ var (
 	// SCMAS schema cache
 	SCMAS *imc.Cache[string, bool]
 
-	// CONFS tenant config map cache
-	CONFS *imc.Cache[string, map[string]string]
+	// TSETS tenant setting cache
+	TSETS *imc.Cache[string, map[string]string]
 
 	// WORKS tenant worker pool cache
 	WORKS *imc.Cache[string, *gwp.WorkerPool]
@@ -128,8 +128,8 @@ func DBType() string {
 	return str.If(d == "pgx", "postgres", d)
 }
 
-func ConfigCsvFile() string {
-	return filepath.Join(xwa.DirConfig, "config.csv")
+func SettingsCsvFile() string {
+	return filepath.Join(xwa.DirConfig, "settings.csv")
 }
 
 func SchemaSQLFile() string {
