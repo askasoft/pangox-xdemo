@@ -132,3 +132,7 @@ func (tt *Tenant) SI(key string, defs ...int) int {
 func (tt *Tenant) SL(key string, defs ...int64) int64 {
 	return num.Atol(tt.SV(key), defs...)
 }
+
+func (tt *Tenant) SZ(key string, defs ...int64) int64 {
+	return num.Atoz(key, defs...)
+}

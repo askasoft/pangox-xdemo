@@ -15,7 +15,7 @@
 		</button>
 	</div>
 	<div class="s-section-body">
-		{{if .Settings}}
+		{{if gt (len .Settings) 1}}
 		<ul class="nav nav-tabs sc-nav">
 			{{range $i, $sc := .Settings}}
 			<li id="sch_{{$sc.Name}}" class="nav-item">
