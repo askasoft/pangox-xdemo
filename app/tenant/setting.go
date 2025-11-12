@@ -3,12 +3,14 @@ package tenant
 import (
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/askasoft/pango/bol"
 	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
+	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
 )
@@ -117,6 +119,10 @@ func (tt *Tenant) SVs(key string) []string {
 
 func (tt *Tenant) SB(key string, defs ...bool) bool {
 	return bol.Atob(tt.SV(key), defs...)
+}
+
+func (tt *Tenant) SD(key string, defs ...time.Duration) time.Duration {
+	return tmu.Atod(tt.SV(key), defs...)
 }
 
 func (tt *Tenant) SI(key string, defs ...int) int {

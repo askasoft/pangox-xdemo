@@ -11,7 +11,6 @@ import (
 	"github.com/askasoft/pango/ran"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
-	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pango/xin/middleware"
 	"github.com/askasoft/pangox-xdemo/app"
@@ -236,7 +235,7 @@ func AuthFailed(c *xin.Context) {
 
 func AuthCookieMaxAge(c *xin.Context) time.Duration {
 	tt := FromCtx(c)
-	ma := tmu.Atod(tt.SV("secure_session_timeout"))
+	ma := tt.SD("secure_session_timeout")
 	if ma <= 0 {
 		ma = app.XCA.CookieMaxAge
 	}
