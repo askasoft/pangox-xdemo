@@ -14,6 +14,7 @@ import (
 	"github.com/askasoft/pangox-assets/html/bootswatch5/pulse"
 	"github.com/askasoft/pangox-assets/html/corejs"
 	"github.com/askasoft/pangox-assets/html/docxjs"
+	"github.com/askasoft/pangox-assets/html/flagicons"
 	"github.com/askasoft/pangox-assets/html/fontawesome7"
 	"github.com/askasoft/pangox-assets/html/jquery3"
 	"github.com/askasoft/pangox-assets/html/jszip"
@@ -32,6 +33,7 @@ var Statics = map[string]fs.FS{
 	"bootswatch5/flatly": flatly.FS,
 	"bootswatch5/pulse":  pulse.FS,
 	"corejs":             corejs.FS,
+	"flagicons":          flagicons.FS,
 	"fontawesome7":       fontawesome7.FS,
 	"jquery3":            jquery3.FS,
 	"jszip":              jszip.FS,

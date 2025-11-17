@@ -214,11 +214,11 @@ body {
 	margin: 1px 12px 1px 0;
 	vertical-align: top;
 }
+#header .langdrop > ul.dropdown-menu {
+	min-width: auto;
+}
 #header .maindrop {
 	display: none;
-}
-#header .locale {
-	font-family: var(--bs-font-monospace);
 }
 #header .username {
 	border-radius: 24px;
@@ -526,6 +526,9 @@ div.verr {
 	min-height: 150px;
 	max-height: calc(100vh - 200px);
 	overflow-y: auto;
+}
+.s-popup-detail.small {
+	max-width: 575px;
 }
 .s-popup-detail.medium {
 	max-width: 991px;

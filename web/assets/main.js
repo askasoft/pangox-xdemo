@@ -575,7 +575,7 @@ var main = {
 		});
 
 		// header locale switch
-		$('#header .locale a').on('click', function() {
+		$('#header .langdrop a').on('click', function() {
 			var $a = $(this), t = $a.attr('href').substring(1);
 
 			$.cookie('X_LOCALE', t, { path: main.base + '/' });
@@ -613,7 +613,7 @@ var main = {
 
 	// set popup defaults
 	$.extend($.popup.defaults, {
-		transition: 'zoomIn'
+		transition: 'scaleIn'
 	});
 
 	// get meta properties

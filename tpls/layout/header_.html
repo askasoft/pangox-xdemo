@@ -2,19 +2,28 @@
 <div id="header" class="fixed-top">
 	<a href="{{$.Base}}/" class="brand"><img src="{{$.Base}}/assets/{{$.REV}}/logo.png"><span>{{T .Loc "sitename"}}</span></a>
 	<div class="me-auto"></div>
-	<div class="locale">
-		<div class="btn-group btn-group-sm">
-			{{range $l := .Locales}}
-			<a class="btn btn-outline-primary{{if eq $l $.Loc}} active{{end}}" href="#{{$l}}">{{Upper $l}}</a>
-			{{end}}
-		</div>
-	</div>
 	<div class="theme">
 		<div class="btn-group btn-group-sm">
 			<a class="btn btn-outline-primary" href="#light" title="{{T .Loc "theme.light"}}"><i class="fa-fw fas fa-sun"></i></a>
 			<a class="btn btn-outline-primary active" href="#dark" title="{{T .Loc "theme.dark"}}"><i class="fa-fw fas fa-moon"></i></a>
 		</div>
 	</div>
+	{{if gt (len .Locales) 1}}
+	<div class="langdrop dropdown">
+		<button class="locale btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">{{I "language"}}</button>
+		<ul class="dropdown-menu dropdown-menu-end">
+			{{range $l := .Locales}}
+			<li>
+				{{if eq $.Loc $l}}
+				<a class="dropdown-item active"><i>{{I (print "locale." $l)}}</i> {{T $.Loc (print "locale." $l)}}</a>
+				{{else}}
+				<a class="dropdown-item" href="#{{$l}}"><i>{{I (print "locale." $l)}}</i> {{T $.Loc (print "locale." $l)}}</a>
+				{{end}}
+			</li>
+			{{end}}
+		</ul>
+	</div>
+	{{end}}
 	<div class="maindrop dropdown">
 		<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
 			<i class="fas fa-bars"></i>
