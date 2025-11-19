@@ -113,9 +113,6 @@ input::placeholder, textarea::placeholder {
 }
 
 /* text */
-.text-waiting {
-	color: #aaa;
-}
 .text-ellipsis {
 	overflow: hidden;
 	text-overflow: ellipsis;
