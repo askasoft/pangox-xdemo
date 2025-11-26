@@ -3,6 +3,7 @@ package tasks
 import (
 	"time"
 
+	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 )
@@ -15,7 +16,7 @@ func CleanOutdatedData() {
 
 func cleanOutdatedAuditLogs(tt *tenant.Tenant) error {
 	retention := tt.SI("secure_auditlog_retention", 10)
-	before := time.Now().Add(time.Duration(-8760*retention) * time.Hour)
+	before := tmu.AddYear(time.Now(), -retention)
 
 	cnt, err := tt.DeleteAuditLogsBefore(app.SDB(), before)
 	if err != nil {
