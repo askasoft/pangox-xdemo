@@ -112,13 +112,6 @@ input::placeholder, textarea::placeholder {
 	padding: 0;
 }
 
-/* text */
-.text-ellipsis {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
 /* well */
 .well {
 	margin-bottom: 1.5rem;
@@ -179,9 +172,6 @@ input::placeholder, textarea::placeholder {
 }
 body {
 	background-color: var(--bs-secondary-bg);
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
 	padding-top: 50px; /* for #header.fixed-top */
 }
 
@@ -280,6 +270,7 @@ body {
 
 #content {
 	margin: 0 0 0 250px;
+	min-height: calc(100vh - 100px);
 	padding: 1.5rem;
 }
 
