@@ -70,7 +70,7 @@ mark {
 pre {
 	background-color: transparent;
 	border: 0 none;
-	font-family: var(--bs-font-sans-serif);
+	font-family: inherit;
 	font-size: 1em;
 	margin: 0;
 	padding: 0;
