@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/askasoft/pango/asg"
 	"github.com/askasoft/pango/fsu"
 	"github.com/askasoft/pango/gog"
 	"github.com/askasoft/pango/log"
@@ -36,33 +37,38 @@ func (s *service) Usage() {
 	fmt.Println("  <command>:")
 	srv.PrintDefaultCommand(os.Stdout)
 	fmt.Println("    migrate <target> [schema]...")
-	fmt.Println("      target=settings   migrate tenant settings.")
-	fmt.Println("      target=super      migrate tenant super user.")
-	fmt.Println("      target=schema     migrate database schema.")
-	fmt.Println("      [schema]...       specify schemas to migrate.")
+	fmt.Println("      target=settings    migrate tenant settings.")
+	fmt.Println("      target=super       migrate tenant super user.")
+	fmt.Println("      target=schema      migrate database schema.")
+	fmt.Println("      [schema]...        specify schemas to migrate.")
 	fmt.Println("    schema <command> [schema]...")
-	fmt.Println("      command=init      initialize the schema.")
-	fmt.Println("      command=check     check schema tables.")
-	fmt.Println("      command=update    apply schema update scripts.")
-	fmt.Println("      command=vacuum    vacuum schema tables (postgresql only).")
-	fmt.Println("      [schema]...       specify schemas to execute.")
-	fmt.Println("    generate [output]   generate database schema DDL.")
-	fmt.Println("      [output]          specify the output DDL file.")
+	fmt.Println("      command=init       initialize the schema.")
+	fmt.Println("      command=check      check schema tables.")
+	fmt.Println("      command=update     apply schema update scripts.")
+	fmt.Println("      command=vacuum     vacuum schema tables (postgresql only).")
+	fmt.Println("      [schema]...        specify schemas to execute.")
+	fmt.Println("    generate [output]    generate database schema DDL.")
+	fmt.Println("      [output]           specify the output DDL file.")
 	fmt.Println("    execsql <file> [schema]...")
-	fmt.Println("      <file>            execute sql file.")
-	fmt.Println("      [schema]...       specify schemas to execute sql.")
-	fmt.Println("    exectask <task>     execute task [ " + str.Join(xschs.Schedules.Keys(), ", ") + " ]")
-	fmt.Println("    encrypt [key] <str> encrypt string.")
-	fmt.Println("    decrypt [key] <str> decrypt string.")
-	fmt.Println("    assets  <pwd> [dir] export embed assets to directory.")
+	fmt.Println("      <file>             execute sql file.")
+	fmt.Println("      [schema]...        specify schemas to execute sql.")
+	fmt.Println("    exectask <task>      execute task [ " + str.Join(xschs.Schedules.Keys(), ", ") + " ]")
+	fmt.Println("    export <target> ...")
+	fmt.Println("      target=settings    export settings from database.")
+	fmt.Println("        [schema]...      specify schemas to export.")
+	fmt.Println("      target=assets      export embed assets.")
+	fmt.Println("        <pwd>            specify the develop password.")
+	fmt.Println("        [dir]            specify the output directory.")
+	fmt.Println("    encrypt [key] <str>  encrypt string.")
+	fmt.Println("    decrypt [key] <str>  decrypt string.")
 	fmt.Println("  <options>:")
 	srv.PrintDefaultOptions(os.Stdout)
-	fmt.Println("    -debug              print the debug log.")
+	fmt.Println("    -debug               print the debug log.")
 }
 
 // Exec execute optional command except the internal command
 // Basic: 'help' 'usage' 'version'
-// Windows only: 'install' 'remove' 'start' 'stop' 'debug'
+// Windows only: 'service' (install | remove | start | stop | debug)
 func (s *service) Exec(cmd string) {
 	cw := log.NewConsoleWriter(true)
 	cw.SetFormat("%t{15:04:05} [%p] - %m%n%T")
@@ -85,8 +91,8 @@ func (s *service) Exec(cmd string) {
 		doEncrypt()
 	case "decrypt":
 		doDecrypt()
-	case "assets":
-		doExportAssets()
+	case "export":
+		doExport()
 	default:
 		flag.CommandLine.SetOutput(os.Stdout)
 		fmt.Fprintf(os.Stderr, "Invalid command %q\n\n", cmd)
@@ -101,6 +107,7 @@ func doMigrate() {
 		fmt.Fprintln(os.Stderr, "Missing migrate <target>.")
 		os.Exit(app.ExitErrARG)
 	}
+
 	args := flag.Args()[2:]
 
 	switch sub {
@@ -137,6 +144,7 @@ func doSchemas() {
 		fmt.Fprintln(os.Stderr, "Missing schema <command>.")
 		os.Exit(app.ExitErrARG)
 	}
+
 	args := flag.Args()[2:]
 
 	switch sub {
@@ -196,6 +204,7 @@ func doExecSQL() {
 		fmt.Fprintln(os.Stderr, "Missing SQL file.")
 		os.Exit(app.ExitErrARG)
 	}
+
 	args := flag.Args()[2:]
 
 	initConfigs()
@@ -226,47 +235,48 @@ func doExecTask() {
 	log.Info("DONE.")
 }
 
-func doEncrypt() {
-	k, v := cryptFlags()
-	if es, err := xcpts.Encrypt(k, v); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	} else {
-		fmt.Println(es)
+func doExport() {
+	sub := flag.Arg(1)
+	if sub == "" {
+		fmt.Fprintln(os.Stderr, "Missing export <target>.")
+		os.Exit(app.ExitErrARG)
 	}
-}
 
-func doDecrypt() {
-	k, v := cryptFlags()
-	if ds, err := xcpts.Decrypt(k, v); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	} else {
-		fmt.Println(ds)
-	}
-}
+	args := flag.Args()[2:]
 
-func cryptFlags() (k, v string) {
-	k, v = flag.Arg(1), flag.Arg(2)
-	if v == "" {
+	switch sub {
+	case "settings":
 		initConfigs()
-		k, v = app.Secret(), k
+		initMessages()
+		initDatabase()
+		if err := dbExportSettings(".", args...); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(app.ExitErrDB)
+		}
+	case "assets":
+		doExportAssets(args)
+	default:
+		fmt.Fprintf(os.Stderr, "Invalid export <target>: %q", sub)
+		os.Exit(app.ExitErrARG)
 	}
-	return
+
+	log.Info("DONE.")
 }
 
-func doExportAssets() {
-	pwd := flag.Arg(1)
+func doExportAssets(args []string) {
+	pwd := asg.First(args)
 	if pwd != "askadevelop" {
 		fmt.Fprintln(os.Stderr, "invalid develop password!")
 		os.Exit(app.ExitErrARG)
 	}
 
-	dir := str.IfEmpty(flag.Arg(2), ".")
+	dir, _ := asg.Get(args, 1)
+	dir = str.IfEmpty(dir, ".")
 
 	if err := exportAssets(dir); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	fmt.Println("DONE.")
 }
 
 func exportAssets(dir string) error {
@@ -331,4 +341,31 @@ func copyFS(dir string, fsys fs.FS) error {
 		}
 		return os.Chtimes(fdes, mt, mt)
 	})
+}
+
+func doEncrypt() {
+	k, v := cryptFlags()
+	if es, err := xcpts.Encrypt(k, v); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	} else {
+		fmt.Println(es)
+	}
+}
+
+func doDecrypt() {
+	k, v := cryptFlags()
+	if ds, err := xcpts.Decrypt(k, v); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	} else {
+		fmt.Println(ds)
+	}
+}
+
+func cryptFlags() (k, v string) {
+	k, v = flag.Arg(1), flag.Arg(2)
+	if v == "" {
+		initConfigs()
+		k, v = app.Secret(), k
+	}
+	return
 }

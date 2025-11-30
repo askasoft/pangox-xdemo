@@ -1,7 +1,6 @@
 package settings
 
 import (
-	"encoding/csv"
 	"errors"
 	"fmt"
 	"net/http"
@@ -25,22 +24,6 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 )
 
-type settingItem struct {
-	Name    string
-	Value   string
-	Display string
-}
-
-type settingGroup struct {
-	Name  string            `json:"name"`
-	Items []*models.Setting `json:"items"`
-}
-
-type settingCategory struct {
-	Name   string          `json:"name"`
-	Groups []*settingGroup `json:"groups"`
-}
-
 func loadSettingList(c *xin.Context, actor string) []*models.Setting {
 	tt := tenant.FromCtx(c)
 	au := tenant.AuthUser(c)
@@ -61,32 +44,6 @@ func disableSettingSuperSecret(c *xin.Context, settings []*models.Setting) {
 			stg.Secret = false
 		}
 	}
-}
-
-func buildSettingCategories(c *xin.Context, settings []*models.Setting) []*settingCategory {
-	scs := []*settingCategory{}
-
-	sks := tbs.GetBundle(c.Locale).GetSection("setting.category").Keys()
-	for _, sk := range sks {
-		sgs := []*settingGroup{}
-		gks := str.Fields(tbs.GetText(c.Locale, "setting.category."+sk))
-		for _, gk := range gks {
-			items := []*models.Setting{}
-			for _, stg := range settings {
-				if str.StartsWith(stg.Name, gk) {
-					items = append(items, stg)
-				}
-			}
-			if len(items) > 0 {
-				sgs = append(sgs, &settingGroup{Name: gk, Items: items})
-			}
-		}
-		if len(sgs) > 0 {
-			scs = append(scs, &settingCategory{Name: sk, Groups: sgs})
-		}
-	}
-
-	return scs
 }
 
 func getSettingItemList(locale string, name string) *linkedhashmap.LinkedHashMap[string, string] {
@@ -120,7 +77,7 @@ func SettingIndex(c *xin.Context) {
 
 	disableSettingSuperSecret(c, settings)
 
-	scs := buildSettingCategories(c, settings)
+	scs := schema.BuildSettingCategories(c.Locale, settings)
 
 	h := middles.H(c)
 	h["Settings"] = scs
@@ -152,7 +109,7 @@ func SettingSave(c *xin.Context) {
 }
 
 func buildSettingDetails(c *xin.Context, settings []*models.Setting, usettings []*models.Setting) string {
-	scs := buildSettingCategories(c, settings)
+	scs := schema.BuildSettingCategories(c.Locale, settings)
 
 	ads := linkedhashmap.NewLinkedHashMap[string, any]()
 	for _, sc := range scs {
@@ -334,32 +291,13 @@ func SettingExport(c *xin.Context) {
 
 	disableSettingSuperSecret(c, settings)
 
-	scs := buildSettingCategories(c, settings)
+	scs := schema.BuildSettingCategories(c.Locale, settings)
 
 	c.SetAttachmentHeader("settings.csv")
 	_, _ = c.Writer.WriteString(string(iox.BOM))
 
-	cw := csv.NewWriter(c.Writer)
-	cw.UseCRLF = true
-	defer cw.Flush()
-
-	if err := cw.Write([]string{"Name", "Value", "Display"}); err != nil {
+	if err := schema.ExportSettings(c.Writer, c.Locale, scs); err != nil {
 		c.Logger.Error(err)
-		return
-	}
-
-	for _, sc := range scs {
-		scn := tbs.GetText(c.Locale, "setting.category.label."+sc.Name)
-		for _, sg := range sc.Groups {
-			sgn := tbs.GetText(c.Locale, "setting.group.label."+sg.Name)
-			for _, ci := range sg.Items {
-				disp := fmt.Sprintf("%s / %s / %s", scn, sgn, tbs.GetText(c.Locale, "setting."+ci.Name, ci.Name))
-				if err := cw.Write([]string{ci.Name, ci.DisplayValue(), disp}); err != nil {
-					c.Logger.Error(err)
-					return
-				}
-			}
-		}
 	}
 }
 
@@ -380,7 +318,7 @@ func SettingImport(c *xin.Context) {
 	}
 	defer uf.Close()
 
-	var csvstgs []*settingItem
+	var csvstgs []*models.SettingItem
 	if err := csvx.ScanReader(uf, &csvstgs); err != nil {
 		err = tbs.Error(c.Locale, "csv.error.data")
 		c.AddError(err)
@@ -408,7 +346,7 @@ func SettingImport(c *xin.Context) {
 	c.JSON(http.StatusOK, xin.H{"success": tbs.GetText(c.Locale, "success.imported")})
 }
 
-func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*settingItem) (usettings []*models.Setting) {
+func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*models.SettingItem) (usettings []*models.Setting) {
 	stgmaps := map[string]*models.Setting{}
 	for _, stg := range settings {
 		stgmaps[stg.Name] = stg

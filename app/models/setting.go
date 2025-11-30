@@ -25,6 +25,22 @@ const (
 	SettingStyleTime           = "TT"
 )
 
+type SettingItem struct {
+	Name    string
+	Value   string
+	Display string
+}
+
+type SettingGroup struct {
+	Name  string     `json:"name"`
+	Items []*Setting `json:"items"`
+}
+
+type SettingCategory struct {
+	Name   string          `json:"name"`
+	Groups []*SettingGroup `json:"groups"`
+}
+
 type Setting struct {
 	Name       string    `gorm:"size:64;not null;primaryKey"`
 	Value      string    `gorm:"not null"`

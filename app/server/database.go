@@ -1,6 +1,10 @@
 package server
 
 import (
+	"os"
+	"path/filepath"
+
+	"github.com/askasoft/pango/asg"
 	"github.com/askasoft/pango/fsu"
 	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pangox-xdemo/app"
@@ -47,6 +51,20 @@ func dbMigrateSettings(schemas ...string) error {
 
 	return dbIterateSchemas(func(sm schema.Schema) error {
 		return sm.MigrateSettings(settings)
+	}, schemas...)
+}
+
+func dbExportSettings(dir string, schemas ...string) error {
+	return dbIterateSchemas(func(sm schema.Schema) error {
+		log.Infof("Export settings %q", sm)
+
+		fw, err := os.Create(filepath.Join(dir, string(sm)+".csv"))
+		if err != nil {
+			return err
+		}
+		defer fw.Close()
+
+		return sm.ExportSettings(app.SDB(), fw, asg.First(app.Locales()))
 	}, schemas...)
 }
 

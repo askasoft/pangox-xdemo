@@ -1,7 +1,10 @@
 package schema
 
 import (
+	"encoding/csv"
 	"errors"
+	"fmt"
+	"io"
 	"time"
 
 	"github.com/askasoft/pango/sqx/sqlx"
@@ -110,4 +113,70 @@ func (sm Schema) SaveSettingsByRole(tx sqlx.Sqlx, au *models.User, settings []*m
 	}
 
 	return nil
+}
+
+func (sm Schema) ExportSettings(tx sqlx.Sqlx, w io.Writer, locale string) error {
+	settings, err := sm.SelectSettings(tx)
+	if err != nil {
+		return err
+	}
+
+	for _, stg := range settings {
+		stg.Secret = false
+	}
+
+	scs := BuildSettingCategories(locale, settings)
+
+	return ExportSettings(w, locale, scs)
+}
+
+func ExportSettings(w io.Writer, locale string, scs []*models.SettingCategory) error {
+	cw := csv.NewWriter(w)
+	cw.UseCRLF = true
+	defer cw.Flush()
+
+	if err := cw.Write([]string{"Name", "Value", "Display"}); err != nil {
+		return err
+	}
+
+	for _, sc := range scs {
+		scn := tbs.GetText(locale, "setting.category.label."+sc.Name)
+		for _, sg := range sc.Groups {
+			sgn := tbs.GetText(locale, "setting.group.label."+sg.Name)
+			for _, ci := range sg.Items {
+				disp := fmt.Sprintf("%s / %s / %s", scn, sgn, tbs.GetText(locale, "setting."+ci.Name, ci.Name))
+				if err := cw.Write([]string{ci.Name, ci.DisplayValue(), disp}); err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+func BuildSettingCategories(locale string, settings []*models.Setting) []*models.SettingCategory {
+	scs := []*models.SettingCategory{}
+
+	sks := tbs.GetBundle(locale).GetSection("setting.category").Keys()
+	for _, sk := range sks {
+		sgs := []*models.SettingGroup{}
+		gks := str.Fields(tbs.GetText(locale, "setting.category."+sk))
+		for _, gk := range gks {
+			items := []*models.Setting{}
+			for _, stg := range settings {
+				if str.StartsWith(stg.Name, gk) {
+					items = append(items, stg)
+				}
+			}
+			if len(items) > 0 {
+				sgs = append(sgs, &models.SettingGroup{Name: gk, Items: items})
+			}
+		}
+		if len(sgs) > 0 {
+			scs = append(scs, &models.SettingCategory{Name: sk, Groups: sgs})
+		}
+	}
+
+	return scs
 }
