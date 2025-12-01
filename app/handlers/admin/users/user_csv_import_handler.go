@@ -78,10 +78,10 @@ func UserCsvImportSample(c *xin.Context) {
 
 	domain := c.RequestHostname()
 	data := [][]string{
-		{"101", "admin", "admin@" + domain, ran.RandString(16), rm.SafeGet(models.RoleAdmin), sm.SafeGet(models.UserActive), mm.SafeGet(app.LOGIN_MFA_EMAIL), "127.0.0.1/32\n192.168.1.1/32"},
-		{"102", "editor", "editor@" + domain, ran.RandString(16), rm.SafeGet(models.RoleEditor), sm.SafeGet(models.UserActive), mm.SafeGet(app.LOGIN_MFA_MOBILE), "127.0.0.1/32\n192.168.1.1/32"},
-		{"103", "viewer", "viewer@" + domain, ran.RandString(16), rm.SafeGet(models.RoleViewer), sm.SafeGet(models.UserActive), mm.SafeGet(app.LOGIN_MFA_NONE), "127.0.0.1/32\n192.168.1.1/32"},
-		{"104", "api", "api@" + domain, ran.RandString(16), rm.SafeGet(models.RoleApiOnly), sm.SafeGet(models.UserActive), "", "127.0.0.1/32\n192.168.1.1/32"},
+		{"100", "admin", "admin@" + domain, ran.RandString(16), rm.SafeGet(models.RoleAdmin), sm.SafeGet(models.UserActive), mm.SafeGet(app.LOGIN_MFA_EMAIL), "127.0.0.1/32\n192.168.1.1/32"},
+		{"101", "editor", "editor@" + domain, ran.RandString(16), rm.SafeGet(models.RoleEditor), sm.SafeGet(models.UserActive), mm.SafeGet(app.LOGIN_MFA_MOBILE), "127.0.0.1/32\n192.168.1.1/32"},
+		{"102", "viewer", "viewer@" + domain, ran.RandString(16), rm.SafeGet(models.RoleViewer), sm.SafeGet(models.UserActive), mm.SafeGet(app.LOGIN_MFA_NONE), "127.0.0.1/32\n192.168.1.1/32"},
+		{"103", "api", "api@" + domain, ran.RandString(16), rm.SafeGet(models.RoleApiOnly), sm.SafeGet(models.UserActive), "", "127.0.0.1/32\n192.168.1.1/32"},
 		{"", "disabled", "disabled@" + domain, ran.RandString(16), rm.SafeGet(models.RoleViewer), sm.SafeGet(models.UserDisabled), "", "127.0.0.1/32\n192.168.1.1/32"},
 	}
 

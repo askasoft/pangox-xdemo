@@ -465,7 +465,7 @@ div.verr {
 	width: 1%;
 	white-space: nowrap;
 }
-.s-table td.actions > .btn {
+.s-table td.actions > * {
 	padding: 6px 8px;
 	margin: 0 0 5px 0;
 }
@@ -477,6 +477,7 @@ div.verr {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	word-break: break-all;
+	margin: 0;
 }
 .s-table td > pre {
 	max-height: 3em;

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	UserStartID = int64(101)
+	UserStartID = int64(100)
 
 	RoleSuper   = "$"
 	RoleDevel   = "%"
