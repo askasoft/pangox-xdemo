@@ -145,7 +145,7 @@ input::placeholder, textarea::placeholder {
 	border-bottom: solid 1px var(--bs-border-color);
 }
 .ui-sidenavi .card-header, .ui-sidenavi .card-body {
-	color: #fff;
+	color: var(--bs-body-color);
 }
 .ui-sidenavi > .card > .card-header > * {
 	padding: 0.25rem 0.5rem;
@@ -154,12 +154,11 @@ input::placeholder, textarea::placeholder {
 }
 .ui-sidenavi a {
 	border-radius: 0.25rem;
-	color: #fff;
+	color: var(--bs-body-color);
 	text-decoration: none;
 }
 .ui-sidenavi a:focus, .ui-sidenavi a:hover {
-	background-color: var(--bs-secondary-bg);
-	color: var(--bs-link-hover-color);
+	background-color: var(--bs-tertiary-bg);
 }
 
 
@@ -241,8 +240,6 @@ body {
 }
 
 #sidenavi {
-	background-color: var(--bs-primary);
-	color: #fff;
 	display: flex;
 	flex-direction: column;
 	padding: 50px 0 0 0;
@@ -269,8 +266,10 @@ body {
 }
 
 #content {
-	margin: 0 0 0 250px;
+	display: flex;
+	flex-direction: column;
 	min-height: calc(100vh - 100px);
+	margin: 0 0 0 250px;
 	padding: 1.5rem;
 }
 
