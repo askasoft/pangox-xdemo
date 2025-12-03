@@ -76,7 +76,7 @@ pre {
 	padding: 0;
 	overflow: visible;
 	white-space: pre-wrap;
-	word-break: break-all;
+	overflow-wrap: anywhere;
 }
 
 /* dropdown menu */
@@ -470,13 +470,13 @@ div.verr {
 }
 
 .s-table td > p {
+	margin: 0;
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	word-break: break-all;
-	margin: 0;
+	overflow-wrap: anywhere;
 }
 .s-table td > pre {
 	max-height: 3em;
@@ -598,7 +598,7 @@ div.verr {
 	min-width: 400px;
 	max-width: 600px;
 	white-space: pre-wrap;
-	word-break: break-all;
+	overflow-wrap: anywhere;
 }
 
 
