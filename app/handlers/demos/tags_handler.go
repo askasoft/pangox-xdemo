@@ -4,15 +4,15 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/askasoft/pango/cog/linkedhashmap"
 	"github.com/askasoft/pango/str"
-	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app/middles"
+	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
 )
 
 type tagsArg struct {
 	Text     string   `form:"text"`
+	Label    string   `form:"label"`
 	Hchecks  []string `form:"hchecks"`
 	Vchecks  []string `form:"vchecks"`
 	Ochecks  []string `form:"ochecks"`
@@ -29,20 +29,20 @@ func TagsIndex(c *xin.Context) {
 	h := middles.H(c)
 
 	a := &tagsArg{
+		Label:    "label-right",
 		Ochecks:  []string{"c2"},
+		Hradios:  "r1",
+		Vradios:  "r2",
 		Htmledit: "<pre>HTML本文</pre>",
 	}
 	_ = c.Bind(a)
 
-	checks := &linkedhashmap.LinkedHashMap[string, string]{}
-	_ = checks.UnmarshalJSON(str.UnsafeBytes(tbs.GetText(c.Locale, "demos.tags.checks")))
+	labels := tbsutil.GetLinkedHashMap(c.Locale, "demos.tags.labels")
+	checks := tbsutil.GetLinkedHashMap(c.Locale, "demos.tags.checks")
+	radios := tbsutil.GetLinkedHashMap(c.Locale, "demos.tags.radios")
+	selects := tbsutil.GetLinkedHashMap(c.Locale, "demos.tags.selects")
 
-	radios := &linkedhashmap.LinkedHashMap[string, string]{}
-	_ = radios.UnmarshalJSON(str.UnsafeBytes(tbs.GetText(c.Locale, "demos.tags.radios")))
-
-	selects := &linkedhashmap.LinkedHashMap[string, string]{}
-	_ = selects.UnmarshalJSON(str.UnsafeBytes(tbs.GetText(c.Locale, "demos.tags.selects")))
-
+	h["LabelsList"] = labels
 	h["ChecksList"] = checks
 	h["RadiosList"] = radios
 	h["SelectList"] = selects

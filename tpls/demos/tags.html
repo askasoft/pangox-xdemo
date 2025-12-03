@@ -1,5 +1,6 @@
 {{MapSet .Ctx.Attrs "sstyles" (Array "summernote/summernote-lite.min.css")}}
 {{MapSet .Ctx.Attrs "sscripts" (Array "summernote/summernote-lite.min.js" (printf "summernote/lang/summernote-%s.min.js" (SummernoteLang .Loc "en")))}}
+{{MapSet .Ctx.Attrs "ascripts" (Array "demos/tags.js")}}
 
 {{template "main_header" .}}
 
@@ -16,6 +17,12 @@
 		</fieldset>
 		
 		<form id="tags_form" class="ui-form lined" autocomplete="off">
+			<div class="row">
+				<label class="col-md-2 col-form-label informed" title="change label align">Label Align (longlonglonglong longlonglonglong longlonglonglong longlonglonglong)</label>
+				<div class="col-md-10">
+					{{Radios "Name=" "label" "List=" .LabelsList "Value=" .Arg.Label}}
+				</div>
+			</div>
 			<div class="row">
 				<label class="col-md-2 col-form-label required">Text</label>
 				<div class="col-md-10">
