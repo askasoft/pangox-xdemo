@@ -2,23 +2,21 @@
 <div id="header" class="fixed-top">
 	<a href="{{$.Base}}/" class="brand"><img src="{{$.Base}}/assets/{{$.REV}}/logo.png"><span>{{T .Loc "sitename"}}</span></a>
 	<div class="me-auto"></div>
-	<div class="theme">
-		<div class="btn-group btn-group-sm">
-			<a class="btn btn-outline-primary" href="#light" title="{{T .Loc "theme.light"}}"><i class="fa-fw fas fa-sun"></i></a>
-			<a class="btn btn-outline-primary active" href="#dark" title="{{T .Loc "theme.dark"}}"><i class="fa-fw fas fa-moon"></i></a>
-		</div>
+	<div class="themedrop dropdown" title="{{T .Loc "button.theme"}}">
+		<button class="theme btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-fw fa-circle-half-stroke"></i></button>
+		<ul class="dropdown-menu dropdown-menu-end">
+			<li><a class="dropdown-item active" href="#auto">{{I "theme.auto"}} {{T .Loc "theme.auto"}}</a></li>
+			<li><a class="dropdown-item" href="#light">{{I "theme.light"}} {{T .Loc "theme.light"}}</a></li>
+			<li><a class="dropdown-item" href="#dark">{{I "theme.dark"}} {{T .Loc "theme.dark"}}</a></li>
+		</ul>
 	</div>
 	{{if gt (len .Locales) 1}}
-	<div class="langdrop dropdown">
-		<button class="locale btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">{{I "language"}}</button>
+	<div class="langdrop dropdown" title="{{T .Loc "button.language"}}">
+		<button class="locale btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">{{I "language"}} {{I (print "locale." .Loc)}}</button>
 		<ul class="dropdown-menu dropdown-menu-end">
 			{{range $l := .Locales}}
 			<li>
-				{{if eq $.Loc $l}}
-				<a class="dropdown-item active"><i>{{I (print "locale." $l)}}</i> {{T $.Loc (print "locale." $l)}}</a>
-				{{else}}
-				<a class="dropdown-item" href="#{{$l}}"><i>{{I (print "locale." $l)}}</i> {{T $.Loc (print "locale." $l)}}</a>
-				{{end}}
+				<a {{if eq $.Loc $l}}class="dropdown-item active"{{else}}class="dropdown-item" href="#{{$l}}"{{end}}>{{I (print "locale." $l)}} {{T $.Loc (print "locale." $l)}}</a>
 			</li>
 			{{end}}
 		</ul>

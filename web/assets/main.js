@@ -566,13 +566,23 @@ var main = {
 	},
 
 	init: function() {
-		// summernote
-		main.summernote($('textarea[summernote]'));
+		// header theme switch
+		$('#header .themedrop a').on('click', function(e) {
+			e.preventDefault();
 
-		// sidenavi
-		$('#sidenavi i').each(function() {
-			$(this).attr('title', $(this).next('span').text());
-		});
+			var $a = $(this), t = $a.attr('href').substring(1);
+
+			localStorage.theme = t;
+
+			if (t == 'auto') {
+				t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+			}
+			$('html').attr('data-bs-theme', t);
+			$('#header .themedrop a').removeClass('active');
+			$a.addClass('active');
+
+			$('#header .themedrop button').find('i').attr('class', $a.find('i').attr('class'));
+		}).filter('[href="#' + localStorage.theme + '"]').trigger('click');
 
 		// header locale switch
 		$('#header .langdrop a').on('click', function() {
@@ -584,17 +594,13 @@ var main = {
 			return false;
 		});
 
-		// header theme switch
-		$('#header .theme a').on('click', function() {
-			var $a = $(this), t = $a.attr('href').substring(1);
+		// sidenavi
+		$('#sidenavi i').each(function() {
+			$(this).attr('title', $(this).next('span').text());
+		});
 
-			localStorage.theme = t;
-
-			$('body').attr('data-bs-theme', t);
-			$('#header .theme a').removeClass('active');
-			$a.addClass('active');
-			return false;
-		}).filter('[href="#' + localStorage.theme + '"]').trigger('click');
+		// summernote
+		main.summernote($('textarea[summernote]'));
 	}
 };
 

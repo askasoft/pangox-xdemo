@@ -180,12 +180,12 @@ body {
 	display: flex;
 	align-items: center;
 	margin: 0;
-	padding: 0;
+	padding: 0 1rem;
 	height: 50px;
 	/* z-index: 1; */ /* set z-index if header is not fixed-top */
 }
-#header > * {
-	margin-right: 1rem;
+#header > *:not(:last-child) {
+	margin-right: .5rem;
 }
 #header .brand {
 	color: inherit;
@@ -193,42 +193,17 @@ body {
 	align-items: center;
 	font-weight: bold;
 	font-size: 1.25em;
-	margin: 0 1rem;
+	margin: 0 1rem 0 0;
 	text-decoration: none;
 }
 #header .brand > img {
-	margin: 1px 12px 1px 0;
-	vertical-align: top;
+	margin: 1px .5rem 1px 0;
 }
-#header .langdrop > ul.dropdown-menu {
+#header ul.dropdown-menu {
 	min-width: auto;
 }
 #header .maindrop {
 	display: none;
-}
-#header .username {
-	border-radius: 24px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 24px;
-	font-weight: bold;
-	width: 48px;
-	height: 48px;
-	margin-right: 10px;
-}
-#header .username.dropdown-toggle::after {
-	border-top-color: var(--bs-primary);
-	font-size: 18px;
-	position: absolute;
-	right: 0px;
-	bottom: 8px;
-}
-#header .username:hover {
-	border-color: var(--bs-btn-hover-bg);
-}
-#header .username.dropdown-toggle:hover::after {
-	border-top-color: var(--bs-btn-hover-bg);
 }
 @media (max-width: 767px) {
 	#header .brand > span {
@@ -266,8 +241,6 @@ body {
 }
 
 #content {
-	display: flex;
-	flex-direction: column;
 	min-height: calc(100vh - 100px);
 	margin: 0 0 0 250px;
 	padding: 1.5rem;
@@ -338,6 +311,33 @@ body {
 }
 .nosidenavi #footer {
 	margin-left: 0;
+}
+
+
+/** userdrop **/
+.userdrop .username {
+	border-radius: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 24px;
+	font-weight: bold;
+	width: 48px;
+	height: 48px;
+	margin-right: 10px;
+}
+.userdrop .username.dropdown-toggle::after {
+	border-top-color: var(--bs-primary);
+	font-size: 18px;
+	position: absolute;
+	right: 0px;
+	bottom: 8px;
+}
+.userdrop .username:hover {
+	border-color: var(--bs-btn-hover-bg);
+}
+.userdrop .username.dropdown-toggle:hover::after {
+	border-top-color: var(--bs-btn-hover-bg);
 }
 
 

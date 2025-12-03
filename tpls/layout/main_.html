@@ -1,8 +1,8 @@
 {{define "main_header"}}
 <!DOCTYPE html>
-<html lang="{{.Loc}}">
+<html lang="{{.Loc}}" data-bs-theme="auto">
 {{template "head" .}}
-<body data-bs-theme="dark"{{if .Ctx.Attrs.nosidenavi}} class="nosidenavi"{{end}}>
+<body{{if .Ctx.Attrs.nosidenavi}} class="nosidenavi"{{end}}>
 {{template "header" .}}
 
 {{if not .Ctx.Attrs.nosidenavi}}
