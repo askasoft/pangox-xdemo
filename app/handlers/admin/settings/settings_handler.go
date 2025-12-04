@@ -158,7 +158,7 @@ func validateSetting(c *xin.Context, stg *models.Setting) bool {
 
 	switch stg.Style {
 	case models.SettingStyleNumeric:
-		*v = str.RemoveByte(*v, ',')
+		*v = str.RemoveByte(str.Strip(*v), ',')
 		if *v != "" && !str.IsNumeric(*v) {
 			c.AddError(&args.ParamError{
 				Param:   stg.Name,
@@ -168,7 +168,7 @@ func validateSetting(c *xin.Context, stg *models.Setting) bool {
 			return false
 		}
 	case models.SettingStyleDecimal:
-		*v = str.RemoveByte(*v, ',')
+		*v = str.RemoveByte(str.Strip(*v), ',')
 		if *v != "" && !str.IsDecimal(*v) {
 			c.AddError(&args.ParamError{
 				Param:   stg.Name,
@@ -177,6 +177,10 @@ func validateSetting(c *xin.Context, stg *models.Setting) bool {
 			})
 			return false
 		}
+	case models.SettingStyleTextarea:
+		// we keep space for textarea value
+	default:
+		*v = str.Strip(*v)
 	}
 
 	validation := ""

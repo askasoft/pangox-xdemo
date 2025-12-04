@@ -63,24 +63,10 @@ func (s *Setting) Readonly(role string) bool {
 	return s.Editor < role
 }
 
-func (s *Setting) MaskedValue() string {
-	n := str.RuneCount(s.Value)
-	switch {
-	case n > 8:
-		return str.Left(s.Value, 4) + str.Repeat("*", n-4)
-	case n > 6:
-		return str.Left(s.Value, 3) + str.Repeat("*", n-3)
-	case n > 4:
-		return str.Left(s.Value, 2) + str.Repeat("*", n-2)
-	default:
-		return str.Repeat("*", n)
-	}
-}
-
 func (s *Setting) DisplayValue() string {
 	if s.Value != "" {
 		if s.Secret {
-			return s.MaskedValue()
+			return str.Mask(s.Value)
 		}
 
 		switch s.Style {
