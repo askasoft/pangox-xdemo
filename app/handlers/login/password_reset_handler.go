@@ -32,12 +32,12 @@ func (pts *PwdRstToken) String() string {
 }
 
 type PwdRstSendArg struct {
-	Email string `form:"email" validate:"required,email"`
+	Email string `form:"email,strip" validate:"required,email"`
 }
 
 type PwdRstExecArg struct {
-	Newpwd string `form:"newpwd" validate:"required,printascii"`
-	Conpwd string `form:"conpwd" validate:"required,eqfield=Newpwd"`
+	Newpwd string `form:"newpwd,strip" validate:"required,printascii"`
+	Conpwd string `form:"conpwd,strip" validate:"required,eqfield=Newpwd"`
 }
 
 func PasswordResetIndex(c *xin.Context) {

@@ -8,19 +8,19 @@
 		<div class="row">
 			<label class="col-md-2 col-form-label required">{{T .Loc "user.name"}}</label>
 			<div class="col-md-10">
-				<input name="name" type="text" class="form-control" maxlength="100" textclear value="{{$u.Name}}">
+				<input name="name" type="text" class="form-control" maxlength="100" textclear textstrip value="{{$u.Name}}">
 			</div>
 		</div>
 		<div class="row">
 			<label class="col-md-2 col-form-label required">{{T .Loc "user.email"}}</label>
 			<div class="col-md-10">
-				<input name="email" type="text" class="form-control" maxlength="200" textclear value="{{$u.Email}}">
+				<input name="email" type="text" class="form-control" maxlength="200" textclear textstrip value="{{$u.Email}}">
 			</div>
 		</div>
 		<div class="row">
 			<label class="col-md-2 col-form-label">{{T .Loc "user.password"}}</label>
 			<div class="col-md-10">
-				<input name="password" type="text" class="form-control" maxlength="64" textclear value="">
+				<input name="password" type="text" class="form-control" maxlength="64" textclear textstrip value="">
 				<div class="desc">{{if $u.ID}}{{T .Loc "user.desc.update.password"}}{{else}}{{T .Loc "user.desc.create.password"}}{{end}}</div>
 			</div>
 		</div>

@@ -8,7 +8,7 @@
 		<div class="row">
 			<label class="col-md-2 col-form-label required">{{T .Loc "pet.name"}}</label>
 			<div class="col-md-10">
-				<input name="name" type="text" class="form-control" maxlength="100" textclear value="{{$p.Name}}">
+				<input name="name" type="text" class="form-control" maxlength="100" textclear textstrip value="{{$p.Name}}">
 			</div>
 		</div>
 		<div class="row">
@@ -57,31 +57,31 @@
 		<div class="row">
 			<label class="col-md-2 col-form-label">{{T .Loc "pet.amount"}}</label>
 			<div class="col-md-4">
-				<input name="amount" type="number" class="form-control" value="{{$p.Amount}}">
+				<input name="amount" type="number" min="0" class="form-control" value="{{$p.Amount}}">
 			</div>
 			<label class="col-md-2 col-form-label">{{T .Loc "pet.price"}}</label>
 			<div class="col-md-4">
-				<input name="price" type="number" class="form-control" value="{{$p.Price}}">
+				<input name="price" type="number" min="0" class="form-control" value="{{$p.Price}}">
 			</div>
 		</div>
 		<div class="row">
 			<label class="col-md-2 col-form-label">{{T .Loc "pet.shop_name"}}</label>
 			<div class="col-md-4">
-				<input name="shop_name" type="text" class="form-control" maxlength="200" textclear value="{{$p.ShopName}}">
+				<input name="shop_name" type="text" class="form-control" maxlength="200" textclear textstrip value="{{$p.ShopName}}">
 			</div>
 			<label class="col-md-2 col-form-label">{{T .Loc "pet.shop_address"}}</label>
 			<div class="col-md-4">
-				<input name="shop_address" type="text" class="form-control" maxlength="200" textclear value="{{$p.ShopAddress}}">
+				<input name="shop_address" type="text" class="form-control" maxlength="200" textclear textstrip value="{{$p.ShopAddress}}">
 			</div>
 		</div>
 		<div class="row">
 			<label class="col-md-2 col-form-label">{{T .Loc "pet.shop_telephone"}}</label>
 			<div class="col-md-4">
-				<input name="shop_telephone" type="text" class="form-control" maxlength="20" textclear value="{{$p.ShopTelephone}}">
+				<input name="shop_telephone" type="text" class="form-control" maxlength="20" textclear textstrip value="{{$p.ShopTelephone}}">
 			</div>
 			<label class="col-md-2 col-form-label">{{T .Loc "pet.shop_link"}}</label>
 			<div class="col-md-4">
-				<input name="shop_link" type="text" class="form-control" maxlength="1000" textclear value="{{$p.ShopLink}}">
+				<input name="shop_link" type="text" class="form-control" maxlength="1000" textclear textstrip value="{{$p.ShopLink}}">
 			</div>
 		</div>
 		<div class="row">

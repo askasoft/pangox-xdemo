@@ -86,7 +86,7 @@
 								{{else if eq $s.Style "TM"}}
 									<input name="{{$s.Name}}" type="month" class="form-control" textclear value="{{$s.DisplayValue}}"{{if $ro}} disabled{{end}}/>
 								{{else}}
-									<input name="{{$s.Name}}" type="text" class="form-control" textclear value="{{$s.DisplayValue}}" placeholder="{{T $.Loc (print "setting.placeholder." $s.Name)}}"{{if $ro}} disabled{{end}}/>
+									<input name="{{$s.Name}}" type="text" class="form-control" textclear textstrip value="{{$s.DisplayValue}}" placeholder="{{T $.Loc (print "setting.placeholder." $s.Name)}}"{{if $ro}} disabled{{end}}/>
 								{{end}}
 								{{$desc := (T $.Loc (print "setting.desc." $s.Name))}}
 								{{if $desc}}

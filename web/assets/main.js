@@ -273,6 +273,7 @@ var main = {
 		$d.find('[data-spy="niceSelect"]').niceSelect();
 		$d.find('[data-spy="uploader"]').uploader();
 		$d.find('[textclear]').textclear();
+		$d.find('[textstrip]').textstrip();
 		$d.find('textarea[autosize]').autosize();
 		$d.find('textarea[enterfire]').enterfire();
 		$d.find('[linkify]').linkify();

@@ -20,9 +20,9 @@ func PasswordChangeIndex(c *xin.Context) {
 }
 
 type PwdChgArg struct {
-	Oldpwd string `form:"oldpwd" validate:"required"`
-	Newpwd string `form:"newpwd" validate:"required,printascii"`
-	Conpwd string `form:"conpwd" validate:"required,eqfield=Newpwd"`
+	Oldpwd string `form:"oldpwd,strip" validate:"required"`
+	Newpwd string `form:"newpwd,strip" validate:"required,printascii"`
+	Conpwd string `form:"conpwd,strip" validate:"required,eqfield=Newpwd"`
 }
 
 func pwdchgValidatePassword(c *xin.Context, password string) {

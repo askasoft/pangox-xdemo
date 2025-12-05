@@ -13,8 +13,8 @@ type Pet struct {
 	Origin        string    `gorm:"size:10;not null" json:"origin" form:"origin,strip" validate:"required"`
 	Temper        string    `gorm:"size:1;not null" json:"temper" form:"temper,strip" validate:"required"`
 	Habits        Strings   `gorm:"type:jsonb" json:"habits" form:"habits,strip"`
-	Amount        int       `gorm:"not null" json:"amount" form:"amount"`
-	Price         float64   `gorm:"not null;precision:10;scale:2" json:"price" form:"price"`
+	Amount        int       `gorm:"not null" json:"amount" form:"amount,strip" validate:"omitempty,min=0"`
+	Price         float64   `gorm:"not null;precision:10;scale:2" json:"price" form:"price,strip" validate:"omitempty,min=0"`
 	ShopName      string    `gorm:"size:200;not null" json:"shop_name" form:"shop_name,strip" validate:"omitempty,maxlen=200"`
 	ShopAddress   string    `gorm:"size:200;not null" json:"shop_address" form:"shop_address,strip" validate:"omitempty,maxlen=200"`
 	ShopTelephone string    `gorm:"size:20;not null" json:"shop_telephone" form:"shop_telephone,strip" validate:"omitempty,maxlen=200"`

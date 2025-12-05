@@ -20,7 +20,7 @@
 				<div class="row">
 					<label class="col-md-2 col-form-label">{{T .Loc "tenant.name"}}</label>
 					<div class="col">
-						<input name="name" type="text" class="form-control" textclear value="{{.Q.Name}}"/>
+						<input name="name" type="text" class="form-control" textclear textstrip value="{{.Q.Name}}"/>
 					</div>
 				</div>
 				<div class="row pt-3 pb-2">
@@ -47,7 +47,7 @@
 			<div class="row">
 				<label class="col-md-2 col-form-label">{{T .Loc "tenant.name"}}</label>
 				<div class="col-md-10">
-					<input name="name" type="text" class="form-control" maxlength="30" value="" textclear>
+					<input name="name" type="text" class="form-control" maxlength="30" value="" textclear textstrip>
 					<div class="desc">{{T .Loc "tenant.desc.name"}}</div>
 				</div>
 			</div>
@@ -78,7 +78,7 @@
 			<div class="row">
 				<label class="col-md-2 col-form-label">{{T .Loc "tenant.name"}}</label>
 				<div class="col-md-10">
-					<input name="name" type="text" class="form-control" textclear>
+					<input name="name" type="text" class="form-control" textclear textstrip>
 				</div>
 			</div>
 			<div class="row">
