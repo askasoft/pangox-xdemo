@@ -100,7 +100,7 @@ Environment = WEBHOOK=https://hooks.slack.com/services/...
 ExecStart = /usr/bin/curl -X POST -H "Content-Type: application/json" -d '"'"'{"icon_emoji": ":boom:", "text": "[%H] %i failure alert"}'"'"' $WEBHOOK
 User = nobody
 Group = systemd-journal
-' | sudo tee /etc/systemd/system/slack-alert@.service
+' | sudo tee /usr/lib/systemd/system/slack-alert@.service
 
 echo '
 [Unit]

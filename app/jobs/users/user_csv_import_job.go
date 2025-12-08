@@ -38,9 +38,7 @@ type UserCsvImportArg struct {
 }
 
 func NewUserCsvImportArg(role string) *UserCsvImportArg {
-	ucij := &UserCsvImportArg{}
-	ucij.Role = role
-	return ucij
+	return &UserCsvImportArg{Role: role}
 }
 
 func (ucia *UserCsvImportArg) Bind(c *xin.Context) error {
