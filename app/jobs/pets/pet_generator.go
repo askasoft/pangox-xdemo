@@ -109,7 +109,7 @@ func (pg *PetGenerator) randText(n int) string {
 	sb := &strings.Builder{}
 	for i := 0; i < n; i++ {
 		x := rand.Intn(cnt) //nolint: gosec
-		sb.WriteString(str.Mid(pns, x, 1))
+		sb.WriteString(str.Substr(pns, x, 1))
 	}
 
 	return str.Strip(sb.String())
