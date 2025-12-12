@@ -600,6 +600,21 @@ var main = {
 			$(this).attr('title', $(this).next('span').text());
 		});
 
+		// maindrop
+		var $maindrop = $('#header .maindrop > ul.dropdown-menu');
+		$('#sidenavi .card-body > ul.nav').each(function() {
+			var $l = $maindrop.children('li:last');
+			if ($l.length && $l.find('hr').length == 0) {
+				$maindrop.append('<li><hr class="dropdown-divider"></li>');
+			}
+
+			$(this).children('li').each(function() {
+				var $li = $(this).clone().attr('class', '');
+				$li.children('a').attr('class', 'dropdown-item');
+				$maindrop.append($li);
+			})
+		});
+
 		// summernote
 		main.summernote($('textarea[summernote]'));
 	}
