@@ -67,6 +67,9 @@ blockquote {
 mark {
 	background-color: yellow;
 }
+code {
+	white-space: pre-wrap;
+}
 pre {
 	background-color: transparent;
 	border: 0 none;
@@ -120,7 +123,7 @@ input::placeholder, textarea::placeholder {
 
 
 /** summernote-lite patch for bootstrap5 **/
-.note-editor {
+.note-frame {
 	background-color: var(--bs-body-bg, #fff);
 	color: var(--bs-body-color, #212529);
 }
@@ -142,13 +145,12 @@ input::placeholder, textarea::placeholder {
 
 /* sidenavi */
 .ui-sidenavi .card-header {
-	border-bottom: solid 1px var(--bs-border-color);
+	border-bottom: 1px solid var(--bs-border-color);
 }
 .ui-sidenavi .card-header, .ui-sidenavi .card-body {
 	color: var(--bs-body-color);
 }
 .ui-sidenavi > .card > .card-header > * {
-	padding: 0.25rem 0.5rem;
 	align-items: center;
 	display: flex;
 }
@@ -247,7 +249,7 @@ body {
 }
 
 #footer {
-	border-top: solid 1px var(--bs-border-color);
+	border-top: 1px solid var(--bs-border-color);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -277,6 +279,11 @@ body {
 	bottom: 5px;
 }
 
+@media (min-width: 992px) {
+	#sidenavi .indent {
+		padding-left: 0.5rem !important;
+	}
+}
 @media (max-width: 991px) {
 	#content {
 		margin-left: 48px;
@@ -530,7 +537,7 @@ div.verr {
 
 .s-popup-detail > .prev, .s-popup-detail > .next {
 	background-color: var(--bs-body-bg);
-	border: solid 1px var(--bs-secondary);
+	border: 1px solid var(--bs-secondary);
 	border-radius: 24px;
 	cursor: pointer;
 	display: none;
@@ -610,7 +617,7 @@ div.verr {
 	height: 120px;
 	padding: 10px;
 	margin: 10px;
-	border: solid 1px #ccc;
+	border: 1px solid #ccc;
 	border-radius: 5px;
 	text-align: center;
 	vertical-align: middle;

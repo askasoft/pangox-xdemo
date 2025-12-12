@@ -15,11 +15,11 @@
 	scrollbar-width: thin;
 }
 #jobchain_tabs > ul.nav-pills > li {
-	border: solid 1px transparent;
+	border: 1px solidtransparent;
 	margin-left: 2px;
 }
 #jobchain_tabs > ul.nav-pills .nav-link {
-	border: solid 1px transparent;
+	border: 1px solidtransparent;
 }
 #jobchain_tabs > ul.nav-pills .nav-link.active,
 #jobchain_tabs > ul.nav-pills .show > .nav-link {
@@ -54,7 +54,7 @@
 }
 
 .jobchain {
-	border: solid 1px transparent;
+	border: 1px solidtransparent;
 	margin-bottom: 1.5em;
 	padding: 1em 1em 0 1em;
 }
@@ -131,7 +131,7 @@
 	display: none;
 }
 .jnm {
-	border: solid 2px transparent;
+	border: 2px solid transparent;
 	margin: 0 0 0.5em 0;
 	padding: 0.5em 1em;
 	text-align: center;

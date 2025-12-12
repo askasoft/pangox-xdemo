@@ -18,11 +18,11 @@ fieldset > form {
 	scrollbar-width: thin;
 }
 #job_tabs > ul.nav-pills > li {
-	border: solid 1px transparent;
+	border: 1px solid transparent;
 	margin-left: 2px;
 }
 #job_tabs > ul.nav-pills .nav-link {
-	border: solid 1px transparent;
+	border: 1px solid transparent;
 }
 #job_tabs > ul.nav-pills .nav-link.active,
 #job_tabs > ul.nav-pills .show > .nav-link {
