@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="{{.Loc}}" data-bs-theme="auto">
 {{template "head" .}}
-<body{{if .Ctx.Attrs.nosidenavi}} class="nosidenavi"{{end}}>
+<body class="minimal{{if .Ctx.Attrs.nosidenavi}} nosidenavi{{end}}">
 {{template "header" .}}
 
 {{if not .Ctx.Attrs.nosidenavi}}

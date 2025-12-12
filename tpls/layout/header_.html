@@ -1,7 +1,8 @@
 {{define "header"}}
 <div id="header" class="fixed-top">
-	<a href="{{$.Base}}/" class="brand"><img src="{{$.Base}}/assets/{{$.REV}}/logo.png"><span>{{T .Loc "sitename"}}</span></a>
+	<a href="{{$.Base}}/" class="brand"><img src="{{$.Base}}/assets/{{$.REV}}/logo.png"><span class="d-none d-md-block">{{T .Loc "sitename"}}</span></a>
 	<div class="me-auto"></div>
+	<button id="sidectrl" class="d-lg-none btn btn-sm btn-outline-primary" type="button"><i class="fas fa-bars"></i></button>
 	<div class="themedrop dropdown" title="{{T .Loc "button.theme"}}">
 		<button class="theme btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-fw fa-circle-half-stroke"></i></button>
 		<ul class="dropdown-menu dropdown-menu-end">
@@ -22,13 +23,6 @@
 		</ul>
 	</div>
 	{{end}}
-	<div class="maindrop dropdown">
-		<button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-			<i class="fas fa-bars"></i>
-		</button>
-		<ul class="dropdown-menu dropdown-menu-end">
-		</ul>
-	</div>
 	{{if .AU}}
 	<div class="userdrop dropdown">
 		<button class="username btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" title="{{.AU.DisplayName}}">

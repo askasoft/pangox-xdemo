@@ -1,6 +1,6 @@
 {{define "sidenavi"}}
 <div id="sidenavi">
-	<div class="mainnavi ui-sidenavi minimal">
+	<div class="mainnavi ui-sidenavi">
 		<div id="navi_demos_pets" class="card">
 			<div class="card-header">
 				<div>{{I "demos.pets"}}<span>{{T .Loc "menu.demos.pets"}}</span></div>
@@ -64,15 +64,10 @@
 	</div>
 
 	{{if and .AU .AU.IsAdmin}}
-	<div class="footnavi ui-sidenavi minimal">
-		<div class="card">
-			<div class="card-header"></div>
-			<div class="card-body">
-				<ul class="nav flex-column">
-					<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/settings/">{{I "admin.settings"}}<span>{{T .Loc "menu.admin.settings"}}</span></a></li>
-				</ul>
-			</div>
-		</div>
+	<div class="footnavi ui-sidenavi">
+		<ul class="nav flex-column">
+			<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/settings/">{{I "admin.settings"}}<span>{{T .Loc "menu.admin.settings"}}</span></a></li>
+		</ul>
 	</div>
 	{{end}}
 </div>
