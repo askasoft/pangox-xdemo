@@ -211,9 +211,14 @@ func (ucij *UserCsvImportJob) doCheckCsv(data []byte) (cnt int, err error) {
 func (ucij *UserCsvImportJob) checkRecord(rec *csvUserRecord) error {
 	var errs []string
 
-	if rec.ID != "" && num.Atol(rec.ID) < models.UserStartID {
-		errs = append(errs, tbs.GetText(ucij.Locale(), "user.id", "ID")+":"+tbs.Format(ucij.Locale(), "error.param.gte", num.Ltoa(models.UserStartID)))
+	sid := models.UserStartID
+	if ucij.Arg.Role == models.RoleSuper {
+		sid = 1
 	}
+	if rec.ID != "" && num.Atol(rec.ID) < sid {
+		errs = append(errs, tbs.GetText(ucij.Locale(), "user.id", "ID")+":"+tbs.Format(ucij.Locale(), "error.param.gte", num.Ltoa(sid)))
+	}
+
 	if rec.Name == "" {
 		errs = append(errs, tbs.GetText(ucij.Locale(), "user.name"))
 	}

@@ -1,4 +1,4 @@
-<s>[{{T .Loc "sitename"}}] セキュリティー通知</s>
+<s>[{{T .Loc "sitename"}}] セキュリティ通知</s>
 
 <div>
 	<p>{{.User.Name}}様</p>
