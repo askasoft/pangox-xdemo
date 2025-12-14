@@ -150,16 +150,12 @@ input::placeholder, textarea::placeholder {
 .ui-sidenavi .card-header, .ui-sidenavi .card-body {
 	color: var(--bs-body-color);
 }
-.ui-sidenavi > .card > .card-header > * {
-	align-items: center;
-	display: flex;
-}
 .ui-sidenavi a {
-	border-radius: 0.25rem;
+	border-radius: 0.25em;
 	color: var(--bs-body-color);
 	text-decoration: none;
 }
-.ui-sidenavi a:focus, .ui-sidenavi a:hover {
+.ui-sidenavi a[href]:focus, .ui-sidenavi a[href]:hover {
 	background-color: var(--bs-tertiary-bg);
 }
 
@@ -234,9 +230,6 @@ body {
 	padding-bottom: 0.75rem;
 	min-height: 50px;
 }
-#sidenavi .indent {
-	padding-left: 0.75rem;
-}
 
 #content {
 	box-sizing: border-box;
@@ -252,10 +245,8 @@ body {
 	justify-content: center;
 	align-items: center;
 	height: 50px;
-	margin-top: auto;
-	margin-bottom: 0;
-	margin-left: 250px;
 	position: relative;
+	margin: auto 0 0 250px;
 }
 #footsite {
 	padding: 5px 10px;
@@ -364,9 +355,6 @@ body {
 	.minimal #sidenavi > .ui-sidenavi {
 		padding-left: 5px;
 		padding-right: 5px;
-	}
-	.minimal #sidenavi .indent {
-		padding-left: 0;
 	}
 	.minimal #content {
 		margin-left: 48px;

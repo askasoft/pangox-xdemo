@@ -3,10 +3,10 @@
 	<div class="mainnavi ui-sidenavi">
 		<div id="navi_demos_pets" class="card">
 			<div class="card-header">
-				<div>{{I "demos.pets"}}<span>{{T .Loc "menu.demos.pets"}}</span></div>
+				<a>{{I "demos.pets"}}<span>{{T .Loc "menu.demos.pets"}}</span></a>
 			</div>
 			<div class="card-body">
-				<ul class="nav flex-column">
+				<ul class="nav">
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/pets/">{{I "demos.pets.list"}}<span>{{T .Loc "menu.demos.pets.list"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/pets/jobs/catgen/">{{I "demos.pets.create.cat"}}<span>{{T .Loc "menu.demos.pets.create.cat"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/pets/jobs/doggen/">{{I "demos.pets.create.dog"}}<span>{{T .Loc "menu.demos.pets.create.dog"}}</span></a></li>
@@ -18,10 +18,10 @@
 
 		<div id="navi_demos_samples" class="card">
 			<div class="card-header">
-				<div>{{I "demos"}}<span>{{T .Loc "menu.demos"}}</span></div>
+				<a>{{I "demos"}}<span>{{T .Loc "menu.demos"}}</span></a>
 			</div>
 			<div class="card-body">
-				<ul class="nav flex-column">
+				<ul class="nav">
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/files/">{{I "demos.files"}}<span>{{T .Loc "menu.demos.files"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/tags/">{{I "demos.tags"}}<span>{{T .Loc "menu.demos.tags"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/chiconv/">{{I "demos.chiconv"}}<span>{{T .Loc "menu.demos.chiconv"}}</span></a></li>
@@ -34,10 +34,10 @@
 
 		<div id="navi_demos_errors" class="card">
 			<div class="card-header">
-				<div>{{I "errors"}}<span>{{T .Loc "menu.errors"}}</span></div>
+				<a>{{I "errors"}}<span>{{T .Loc "menu.errors"}}</span></a>
 			</div>
 			<div class="card-body">
-				<ul class="nav flex-column">
+				<ul class="nav">
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/e/403">{{I "ban"}}<span>403</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/e/404">{{I "question"}}<span>404</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/e/500">{{I "error"}}<span>500</span></a></li>
@@ -51,7 +51,7 @@
 				<a href="{{.Base}}/a/">{{I "admin"}}<span>{{T .Loc "menu.admin"}}</span></a>
 			</div>
 			<div class="card-body">
-				<ul class="nav flex-column">
+				<ul class="nav">
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/users/">{{I "admin.users"}}<span>{{T .Loc "menu.admin.users"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/auditlogs/">{{I "admin.auditlogs"}}<span>{{T .Loc "menu.admin.auditlogs"}}</span></a></li>
 					{{if and .TT.IsDefault .AU .AU.IsSuper}}
@@ -65,7 +65,7 @@
 
 	{{if and .AU .AU.IsAdmin}}
 	<div class="footnavi ui-sidenavi">
-		<ul class="nav flex-column">
+		<ul class="nav">
 			<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/settings/">{{I "admin.settings"}}<span>{{T .Loc "menu.admin.settings"}}</span></a></li>
 		</ul>
 	</div>
