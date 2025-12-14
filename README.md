@@ -326,14 +326,14 @@ httpsRedirect = false
 			"args": [ "migrate", "schema" ]
 		},
 		{
-			"name": "generate schema",
+			"name": "schema generate DDL",
 			"type": "go",
 			"request": "launch",
 			"mode": "debug",
 			"program": "${workspaceRoot}/main.go",
 			"cwd": "${workspaceRoot}",
 			"env": {},
-			"args": [ "generate" ]
+			"args": [ "schema", "genddl" ]
 		},
 		{
 			"name": "execsql",
@@ -343,17 +343,7 @@ httpsRedirect = false
 			"program": "${workspaceRoot}/main.go",
 			"env": {},
 			"args": [ "execsql", "${workspaceRoot}/data/dev.sql" ]
-		},
-		{
-			"name": "cmd/generate schema",
-			"type": "go",
-			"request": "launch",
-			"mode": "debug",
-			"program": "${workspaceRoot}/cmd/main.go",
-			"cwd": "${workspaceRoot}",
-			"env": {},
-			"args": [ "generate" ]
-		},
+		}
 	]
 }
 ```

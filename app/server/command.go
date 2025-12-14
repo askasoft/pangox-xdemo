@@ -37,26 +37,26 @@ func (s *service) Usage() {
 	fmt.Println("  <command>:")
 	srv.PrintDefaultCommand(os.Stdout)
 	fmt.Println("    migrate <target> [schema]...")
-	fmt.Println("      target=settings    migrate tenant settings.")
-	fmt.Println("      target=super       migrate tenant super user.")
 	fmt.Println("      target=schema      migrate database schema.")
-	fmt.Println("      [schema]...        specify schemas to migrate.")
-	fmt.Println("    schema <command> [schema]...")
-	fmt.Println("      command=init       initialize the schema.")
-	fmt.Println("      command=check      check schema tables.")
-	fmt.Println("      command=update     apply schema update scripts.")
-	fmt.Println("      command=vacuum     vacuum schema tables (postgresql only).")
-	fmt.Println("      [schema]...        specify schemas to execute.")
-	fmt.Println("    generate [output]    generate database schema DDL.")
-	fmt.Println("      [output]           specify the output DDL file.")
+	fmt.Println("      target=settings    migrate database settings.")
+	fmt.Println("      target=super       migrate database super users.")
+	fmt.Println("        [schema]...      specify schemas to migrate.")
+	fmt.Println("    schema <action> [schema]... [output]")
+	fmt.Println("      action=init        initialize the schema.")
+	fmt.Println("      action=check       check schema tables.")
+	fmt.Println("      action=update      apply schema update scripts.")
+	fmt.Println("      action=vacuum      vacuum schema tables (postgresql only).")
+	fmt.Println("        [schema]...      specify schemas to execute.")
+	fmt.Println("      action=genddl      generate schema DDL script.")
+	fmt.Println("        [output]         specify the output DDL file.")
 	fmt.Println("    execsql <file> [schema]...")
 	fmt.Println("      <file>             execute sql file.")
-	fmt.Println("      [schema]...        specify schemas to execute sql.")
+	fmt.Println("        [schema]...      specify schemas to execute sql.")
 	fmt.Println("    exectask <task>      execute task [ " + str.Join(xschs.Schedules.Keys(), ", ") + " ]")
 	fmt.Println("    export <target> ...")
 	fmt.Println("      target=settings    export settings from database.")
 	fmt.Println("        [schema]...      specify schemas to export.")
-	fmt.Println("      target=assets      export embed assets.")
+	fmt.Println("      target=assets      export embedded assets.")
 	fmt.Println("        <pwd>            specify the develop password.")
 	fmt.Println("        [dir]            specify the output directory.")
 	fmt.Println("    encrypt [key] <str>  encrypt string.")
@@ -81,8 +81,6 @@ func (s *service) Exec(cmd string) {
 		doMigrate()
 	case "schema":
 		doSchemas()
-	case "generate":
-		doGenerate()
 	case "execsql":
 		doExecSQL()
 	case "exectask":
@@ -180,22 +178,20 @@ func doSchemas() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
 		}
+	case "genddl":
+		outfile := flag.Arg(2)
+
+		initConfigs()
+
+		if err := gormdb.GenerateDDL(outfile); err != nil {
+			log.Fatal(app.ExitErrDB, err)
+		}
 	default:
 		fmt.Fprintf(os.Stderr, "Invalid schema <command>: %q", sub)
 		os.Exit(app.ExitErrARG)
 	}
 
 	log.Info("DONE.")
-}
-
-func doGenerate() {
-	outfile := flag.Arg(1)
-
-	initConfigs()
-
-	if err := gormdb.GenerateDDL(outfile); err != nil {
-		log.Fatal(app.ExitErrDB, err)
-	}
 }
 
 func doExecSQL() {
