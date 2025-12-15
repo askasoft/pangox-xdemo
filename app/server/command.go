@@ -109,6 +109,11 @@ func doMigrate() {
 	args := flag.Args()[2:]
 
 	switch sub {
+	case "schema":
+		initConfigs()
+		if err := gormdb.MigrateSchemas(args...); err != nil {
+			log.Fatal(app.ExitErrDB, err)
+		}
 	case "settings":
 		initConfigs()
 		initDatabase()
@@ -122,11 +127,6 @@ func doMigrate() {
 		if err := dbMigrateSupers(args...); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
-		}
-	case "schema":
-		initConfigs()
-		if err := gormdb.MigrateSchemas(args...); err != nil {
-			log.Fatal(app.ExitErrDB, err)
 		}
 	default:
 		fmt.Fprintf(os.Stderr, "Invalid migrate <target>: %q", sub)

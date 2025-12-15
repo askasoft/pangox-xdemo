@@ -1,37 +1,31 @@
 package tenant
 
 import (
-	"errors"
-	"fmt"
 	"sync"
 
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/schema"
+	"github.com/askasoft/pangox-xdemo/app/utils/varutil"
+	"github.com/askasoft/pangox/xwa/xerrs"
 )
-
-type HostnameError struct {
-	host string
-}
-
-func (he *HostnameError) Error() string {
-	return fmt.Sprintf("Invalid host %q", he.host)
-}
-
-func IsHostnameError(err error) bool {
-	var he *HostnameError
-	return errors.As(err, &he)
-}
 
 type Tenant struct {
 	schema.Schema
-	settings map[string]string
+	settings  map[string]string
+	variables map[string]string
 }
 
 func NewTenant(name string) *Tenant {
 	tt := &Tenant{Schema: schema.Schema(name)}
 	tt.settings = tt.getSettings()
+
+	vars, err := varutil.BuildVariables(tt.SV("environ_variables"))
+	if err != nil {
+		tt.Logger("SET").Errorf("invalid setting environ_variables: %v", err)
+	}
+	tt.variables = vars
 	return tt
 }
 
@@ -75,7 +69,7 @@ func FindAndSetTenant(c *xin.Context) (*Tenant, error) {
 
 	s, ok := GetSubdomain(c)
 	if !ok {
-		return nil, &HostnameError{c.Request.Host}
+		return nil, xerrs.NewHostnameError(c.Request.Host)
 	}
 
 	if s == "" {
@@ -88,7 +82,7 @@ func FindAndSetTenant(c *xin.Context) (*Tenant, error) {
 			return nil, err
 		}
 		if !ok {
-			return nil, &HostnameError{c.Request.Host}
+			return nil, xerrs.NewHostnameError(c.Request.Host)
 		}
 	}
 

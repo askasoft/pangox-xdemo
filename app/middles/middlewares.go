@@ -9,6 +9,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox/xfs"
+	"github.com/askasoft/pangox/xwa/xerrs"
 	"github.com/askasoft/pangox/xwa/xmwas"
 )
 
@@ -20,7 +21,7 @@ func SetCtxLogProp(c *xin.Context) {
 // TenantProtect only allow access for known tenant
 func TenantProtect(c *xin.Context) {
 	if _, err := tenant.FindAndSetTenant(c); err != nil {
-		if tenant.IsHostnameError(err) {
+		if xerrs.IsHostnameError(err) {
 			c.Logger.Warn(err)
 			c.AbortWithStatus(http.StatusNotFound)
 		} else {

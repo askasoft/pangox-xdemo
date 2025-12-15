@@ -6,13 +6,13 @@ import (
 	"time"
 
 	"github.com/askasoft/pango/bol"
-	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
+	"github.com/askasoft/pangox-xdemo/app/utils/varutil"
 )
 
 // TSETS write lock
@@ -61,10 +61,11 @@ func (tt *Tenant) loadSettings(tx sqlx.Sqlx) (map[string]string, error) {
 	var sr *str.Replacer
 	for _, stg := range settings {
 		if stg.Name == "tenant_vars" {
-			var err error
-			sr, err = buildSettingVarsReplacer(stg.Value)
+			vars, err := varutil.BuildVariables(stg.Value)
 			if err != nil {
 				tt.Logger("SET").Errorf("Invalid tenant_vars: %s", stg.Value)
+			} else {
+				sr = varutil.BuildVarReplacer(vars)
 			}
 			break
 		}
@@ -81,24 +82,12 @@ func (tt *Tenant) loadSettings(tx sqlx.Sqlx) (map[string]string, error) {
 	return stgs, nil
 }
 
-func buildSettingVarsReplacer(vars string) (*strings.Replacer, error) {
-	i := ini.NewIni()
-
-	err := i.LoadData(str.NewReader(vars))
-	if err != nil {
-		return nil, err
-	}
-
-	var kvs []string
-	sec := i.Section("")
-	for _, key := range sec.Keys() {
-		kvs = append(kvs, "{{"+key+"}}", sec.GetString(key))
-	}
-	return str.NewReplacer(kvs...), nil
+func (tt *Tenant) VariablesReplacer() *strings.Replacer {
+	return varutil.BuildVarReplacer(tt.variables)
 }
 
-func (tt *Tenant) SettingVarsReplacer() (*strings.Replacer, error) {
-	return buildSettingVarsReplacer(tt.SV("tenant_vars"))
+func (tt *Tenant) Variables() map[string]string {
+	return tt.variables
 }
 
 func (tt *Tenant) Settings() map[string]string {
