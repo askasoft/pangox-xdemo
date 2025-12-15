@@ -56,9 +56,11 @@ func dbMigrateSettings(schemas ...string) error {
 
 func dbExportSettings(dir string, schemas ...string) error {
 	return dbIterateSchemas(func(sm schema.Schema) error {
-		log.Infof("Export settings %q", sm)
+		outfile := filepath.Join(dir, string(sm)+".csv")
 
-		fw, err := os.Create(filepath.Join(dir, string(sm)+".csv"))
+		log.Infof("Export settings %q to '%s'", sm, outfile)
+
+		fw, err := os.Create(outfile)
 		if err != nil {
 			return err
 		}

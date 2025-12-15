@@ -1,6 +1,8 @@
 package gormdb
 
 import (
+	"path/filepath"
+
 	"github.com/askasoft/gogormx/gormx"
 	"github.com/askasoft/pango/fsu"
 	"github.com/askasoft/pango/ini"
@@ -12,13 +14,15 @@ import (
 )
 
 // Generate DDL sql
-func GenerateDDL(outfile string) error {
+func GenerateDDL(outdir string) error {
 	driver := ini.GetString("database", "driver")
-	if outfile == "" {
-		outfile = "conf/" + str.If(driver == "pgx", "postgres", driver) + ".sql"
+	if outdir == "" {
+		outdir = "./conf"
 	}
 
-	log.Infof("Generate schema DDL: %q", outfile)
+	outfile := filepath.Join(outdir, str.If(driver == "pgx", "postgres", driver)+".sql")
+
+	log.Infof("Generate schema DDL: '%s'", outfile)
 
 	gsp := &gormx.GormSQLPrinter{}
 

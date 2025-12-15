@@ -29,7 +29,7 @@ func MigrateSchemas(schemas ...string) (err error) {
 }
 
 func migrateSchema(schema string) error {
-	log.Infof("Migrate schema: %q", schema)
+	log.Infof("Migrate schema %q", schema)
 
 	dbt := ini.GetString("database", "driver")
 

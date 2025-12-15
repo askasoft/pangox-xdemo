@@ -25,7 +25,8 @@ var SRV = &service{}
 
 // service srv.App, srv.Cmd implement
 type service struct {
-	debug bool
+	outdir string
+	debug  bool
 }
 
 // -----------------------------------

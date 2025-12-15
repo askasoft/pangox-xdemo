@@ -67,7 +67,7 @@ func (sm Schema) ExecSchemaSQL() error {
 func (sm Schema) MigrateSettings(settings []*models.Setting) error {
 	tb := sm.TableSettings()
 
-	log.Infof("Migrate Settings %q", tb)
+	log.Infof("Migrate settings %q", tb)
 
 	db := app.SDB()
 

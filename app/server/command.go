@@ -28,6 +28,7 @@ import (
 
 // Flag process optional command flag
 func (s *service) Flag() {
+	flag.StringVar(&s.outdir, "out", "", "specify the output directory.")
 	flag.BoolVar(&s.debug, "debug", false, "print debug log.")
 }
 
@@ -41,14 +42,13 @@ func (s *service) Usage() {
 	fmt.Println("      target=settings    migrate database settings.")
 	fmt.Println("      target=super       migrate database super users.")
 	fmt.Println("        [schema]...      specify schemas to migrate.")
-	fmt.Println("    schema <action> [schema]... [output]")
+	fmt.Println("    schema <action> [schema]...")
 	fmt.Println("      action=init        initialize the schema.")
 	fmt.Println("      action=check       check schema tables.")
 	fmt.Println("      action=update      apply schema update scripts.")
 	fmt.Println("      action=vacuum      vacuum schema tables (postgresql only).")
 	fmt.Println("        [schema]...      specify schemas to execute.")
 	fmt.Println("      action=genddl      generate schema DDL script.")
-	fmt.Println("        [output]         specify the output DDL file.")
 	fmt.Println("    execsql <file> [schema]...")
 	fmt.Println("      <file>             execute sql file.")
 	fmt.Println("        [schema]...      specify schemas to execute sql.")
@@ -58,11 +58,11 @@ func (s *service) Usage() {
 	fmt.Println("        [schema]...      specify schemas to export.")
 	fmt.Println("      target=assets      export embedded assets.")
 	fmt.Println("        <pwd>            specify the develop password.")
-	fmt.Println("        [dir]            specify the output directory.")
 	fmt.Println("    encrypt [key] <str>  encrypt string.")
 	fmt.Println("    decrypt [key] <str>  decrypt string.")
 	fmt.Println("  <options>:")
 	srv.PrintDefaultOptions(os.Stdout)
+	fmt.Println("    -out                 specify the output directory.")
 	fmt.Println("    -debug               print the debug log.")
 }
 
@@ -78,19 +78,19 @@ func (s *service) Exec(cmd string) {
 
 	switch cmd {
 	case "migrate":
-		doMigrate()
+		s.doMigrate()
 	case "schema":
-		doSchemas()
+		s.doSchemas()
 	case "execsql":
-		doExecSQL()
+		s.doExecSQL()
 	case "exectask":
-		doExecTask()
+		s.doExecTask()
 	case "encrypt":
-		doEncrypt()
+		s.doEncrypt()
 	case "decrypt":
-		doDecrypt()
+		s.doDecrypt()
 	case "export":
-		doExport()
+		s.doExport()
 	default:
 		flag.CommandLine.SetOutput(os.Stdout)
 		fmt.Fprintf(os.Stderr, "Invalid command %q\n\n", cmd)
@@ -99,7 +99,7 @@ func (s *service) Exec(cmd string) {
 	}
 }
 
-func doMigrate() {
+func (s *service) doMigrate() {
 	sub := flag.Arg(1)
 	if sub == "" {
 		fmt.Fprintln(os.Stderr, "Missing migrate <target>.")
@@ -136,7 +136,7 @@ func doMigrate() {
 	log.Info("DONE.")
 }
 
-func doSchemas() {
+func (s *service) doSchemas() {
 	sub := flag.Arg(1)
 	if sub == "" {
 		fmt.Fprintln(os.Stderr, "Missing schema <command>.")
@@ -179,11 +179,9 @@ func doSchemas() {
 			os.Exit(app.ExitErrDB)
 		}
 	case "genddl":
-		outfile := flag.Arg(2)
-
 		initConfigs()
 
-		if err := gormdb.GenerateDDL(outfile); err != nil {
+		if err := gormdb.GenerateDDL(s.outdir); err != nil {
 			log.Fatal(app.ExitErrDB, err)
 		}
 	default:
@@ -194,7 +192,7 @@ func doSchemas() {
 	log.Info("DONE.")
 }
 
-func doExecSQL() {
+func (s *service) doExecSQL() {
 	file := flag.Arg(1)
 	if file == "" {
 		fmt.Fprintln(os.Stderr, "Missing SQL file.")
@@ -214,7 +212,7 @@ func doExecSQL() {
 	log.Info("DONE.")
 }
 
-func doExecTask() {
+func (s *service) doExecTask() {
 	tn := flag.Arg(1)
 	tf, ok := xschs.Schedules.Get(tn)
 	if !ok {
@@ -231,7 +229,7 @@ func doExecTask() {
 	log.Info("DONE.")
 }
 
-func doExport() {
+func (s *service) doExport() {
 	sub := flag.Arg(1)
 	if sub == "" {
 		fmt.Fprintln(os.Stderr, "Missing export <target>.")
@@ -245,34 +243,26 @@ func doExport() {
 		initConfigs()
 		initMessages()
 		initDatabase()
-		if err := dbExportSettings(".", args...); err != nil {
+		if err := dbExportSettings(s.outdir, args...); err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
 		}
 	case "assets":
-		doExportAssets(args)
+		pwd := asg.First(args)
+		if pwd != "askadevelop" {
+			fmt.Fprintln(os.Stderr, "invalid develop password!")
+			os.Exit(app.ExitErrARG)
+		}
+		if err := exportAssets(s.outdir); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
 	default:
 		fmt.Fprintf(os.Stderr, "Invalid export <target>: %q", sub)
 		os.Exit(app.ExitErrARG)
 	}
 
 	log.Info("DONE.")
-}
-
-func doExportAssets(args []string) {
-	pwd := asg.First(args)
-	if pwd != "askadevelop" {
-		fmt.Fprintln(os.Stderr, "invalid develop password!")
-		os.Exit(app.ExitErrARG)
-	}
-
-	dir, _ := asg.Get(args, 1)
-	dir = str.IfEmpty(dir, ".")
-
-	if err := exportAssets(dir); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
 }
 
 func exportAssets(dir string) error {
@@ -289,7 +279,6 @@ func exportAssets(dir string) error {
 	if err := copyFS(filepath.Join(dir, "web"), web.FS); err != nil {
 		return err
 	}
-
 	for key, fs := range web.Statics {
 		if err := copyFS(filepath.Join(dir, "web", "static", key), fs); err != nil {
 			return err
@@ -339,7 +328,7 @@ func copyFS(dir string, fsys fs.FS) error {
 	})
 }
 
-func doEncrypt() {
+func (s *service) doEncrypt() {
 	k, v := cryptFlags()
 	if es, err := xcpts.Encrypt(k, v); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -348,7 +337,7 @@ func doEncrypt() {
 	}
 }
 
-func doDecrypt() {
+func (s *service) doDecrypt() {
 	k, v := cryptFlags()
 	if ds, err := xcpts.Decrypt(k, v); err != nil {
 		fmt.Fprintln(os.Stderr, err)
