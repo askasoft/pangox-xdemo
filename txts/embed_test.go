@@ -4,13 +4,21 @@ import (
 	"fmt"
 	"io/fs"
 	"testing"
+
+	"github.com/askasoft/pango/ini"
 )
 
 func TestEmbedFS(t *testing.T) {
 	fmt.Println("------------------------")
-	fs.WalkDir(FS, ".", func(path string, d fs.DirEntry, err error) error {
+	err := fs.WalkDir(FS, ".", func(path string, d fs.DirEntry, err error) error {
 		fmt.Println(path, d.IsDir())
-		return nil
+		if d.IsDir() {
+			return nil
+		}
+		return ini.NewIni().LoadFileFS(FS, path)
 	})
+	if err != nil {
+		t.Error(err)
+	}
 	fmt.Println("------------------------")
 }

@@ -39,7 +39,7 @@ func NewPetGenerator(tt *tenant.Tenant, cat string) *PetGenerator {
 	pg.pts = tbsutil.GetPetTemperMap("").Keys()
 	pg.phs = tbsutil.GetPetHabitsMap("").Keys()
 
-	ipath := "./data/pets/"
+	ipath := "./z/pets/"
 
 	for i := 1; ; i++ {
 		fn := filepath.Join(ipath, fmt.Sprintf("%s%02d.jpg", pg.cat, i))

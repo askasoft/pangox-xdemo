@@ -7,7 +7,7 @@ import (
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
-	"github.com/askasoft/pangox-xdemo/sqls"
+	"github.com/askasoft/pangox-xdemo/data"
 	"github.com/askasoft/pangox/xwa/xsqls"
 )
 
@@ -47,7 +47,7 @@ func (sm Schema) UpdateSchema(db *sqlx.DB) error {
 	logger := log.GetLogger("SQL")
 	logger.Info(str.PadCenter(" "+string(sm)+" ", 60, "="))
 
-	return xsqls.ApplySchemaChanges(db, string(sm), sqls.FS, app.DBType(), logger)
+	return xsqls.ApplySchemaChanges(db, string(sm), data.FS, "sqls/"+app.DBType(), logger)
 }
 
 func (sm Schema) VacuumSchema(db *sqlx.DB) error {

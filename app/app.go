@@ -2,7 +2,6 @@ package app
 
 import (
 	"crypto/tls"
-	"path/filepath"
 	"time"
 
 	"github.com/askasoft/pango/gwp"
@@ -126,14 +125,6 @@ func SDB() *sqlx.DB {
 func DBType() string {
 	d := xsqls.Driver()
 	return str.If(d == "pgx", "postgres", d)
-}
-
-func SettingsCsvFile() string {
-	return filepath.Join(xwa.DirConfig, "settings.csv")
-}
-
-func SchemaSQLFile() string {
-	return filepath.Join(xwa.DirConfig, DBType()+".sql")
 }
 
 func FormatDate(a any) string {

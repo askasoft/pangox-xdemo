@@ -17,7 +17,7 @@ import (
 func GenerateDDL(outdir string) error {
 	driver := ini.GetString("database", "driver")
 	if outdir == "" {
-		outdir = "./conf"
+		outdir = "./data/sqls/"
 	}
 
 	outfile := filepath.Join(outdir, str.If(driver == "pgx", "postgres", driver)+".sql")

@@ -342,7 +342,7 @@ httpsRedirect = false
 			"mode": "debug",
 			"program": "${workspaceRoot}/main.go",
 			"env": {},
-			"args": [ "execsql", "${workspaceRoot}/data/dev.sql" ]
+			"args": [ "execsql", "${workspaceRoot}/z/dev.sql" ]
 		}
 	]
 }

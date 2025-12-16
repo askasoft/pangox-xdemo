@@ -15,7 +15,7 @@ import (
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/server/gormdb"
-	"github.com/askasoft/pangox-xdemo/sqls"
+	"github.com/askasoft/pangox-xdemo/data"
 	"github.com/askasoft/pangox-xdemo/tpls"
 	"github.com/askasoft/pangox-xdemo/txts"
 	"github.com/askasoft/pangox-xdemo/web"
@@ -60,7 +60,7 @@ func (s *service) Usage() {
 	fmt.Println("        <pwd>            specify the develop password.")
 	fmt.Println("    encrypt [key] <str>  encrypt string.")
 	fmt.Println("    decrypt [key] <str>  decrypt string.")
-	fmt.Println("  <options>:")
+	fmt.Println("  [options]:")
 	srv.PrintDefaultOptions(os.Stdout)
 	fmt.Println("    -out                 specify the output directory.")
 	fmt.Println("    -debug               print the debug log.")
@@ -266,7 +266,7 @@ func (s *service) doExport() {
 }
 
 func exportAssets(dir string) error {
-	if err := copyFS(filepath.Join(dir, "sqls"), sqls.FS); err != nil {
+	if err := copyFS(filepath.Join(dir, "data"), data.FS); err != nil {
 		return err
 	}
 	if err := copyFS(filepath.Join(dir, "txts"), txts.FS); err != nil {

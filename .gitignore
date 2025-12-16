@@ -2,8 +2,8 @@
 .#*
 .vscode
 /conf/env.ini
-/data
 /logs
+/temp
 /z
 /xdemo*
 /*.exe

@@ -13,15 +13,16 @@ import (
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
+	"github.com/askasoft/pangox-xdemo/data"
 )
 
 func ReadSettingsFile() ([]*models.Setting, error) {
-	file := app.SettingsCsvFile()
+	file := "settings.csv"
 
 	log.Infof("Read settings file '%s'", file)
 
 	settings := []*models.Setting{}
-	if err := csvx.ScanFile(file, &settings); err != nil {
+	if err := csvx.ScanFileFS(data.FS, file, &settings); err != nil {
 		return nil, err
 	}
 
@@ -52,11 +53,11 @@ func (sm Schema) InitSchema() error {
 }
 
 func (sm Schema) ExecSchemaSQL() error {
-	file := app.SchemaSQLFile()
+	file := "sqls/" + app.DBType() + ".sql"
 
 	log.Infof("Execute Schema SQL file '%s'", file)
 
-	sqls, err := fsu.ReadString(file)
+	sqls, err := fsu.ReadStringFS(data.FS, file)
 	if err != nil {
 		return err
 	}

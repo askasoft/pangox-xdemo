@@ -4,7 +4,7 @@ import (
 	"embed"
 )
 
-// FS embed text message folder
+// FS embed text messages
 //
 //go:embed *.ini */*
 var FS embed.FS
