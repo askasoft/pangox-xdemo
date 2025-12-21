@@ -63,9 +63,8 @@ a > s {
 blockquote {
 	border-left: 0.25rem solid var(--bs-border-color, #ccc);
 	padding-left: 0.5rem;
-}
-mark {
-	background-color: yellow;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
 }
 code {
 	white-space: pre-wrap;
@@ -80,6 +79,9 @@ pre {
 	overflow: visible;
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
+}
+mark {
+	background-color: yellow;
 }
 
 /* dropdown menu */
@@ -248,20 +250,21 @@ body {
 	position: relative;
 	margin: auto 0 0 250px;
 }
-#footsite {
+#footer .ver {
+	color: #999;
+	font-size: 80%;
+	position: absolute;
+	left: 5px;
+	bottom: 5px;
+}
+.footsite {
 	padding: 5px 10px;
 	text-align: center;
 	z-index: 1;
 }
-#footer .cpr, #footer .pwr, #footer .ver {
+.footsite .cpr, .footsite .pwr {
 	font-size: 80%;
 	white-space: nowrap;
-}
-#footer .ver {
-	color: #999;
-	position: absolute;
-	left: 5px;
-	bottom: 5px;
 }
 
 #sidenavi, #content, #footer {
