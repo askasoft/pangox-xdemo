@@ -269,6 +269,7 @@ var main = {
 	},
 
 	ui_init: function($d) {
+		$d.find('.nav-tabs').each(function() { new bootstrap.Tab(this); });
 		$d.find('[data-spy="fieldset"]').fieldset();
 		$d.find('[data-spy="niceSelect"]').niceSelect();
 		$d.find('[data-spy="uploader"]').uploader();
@@ -316,6 +317,66 @@ var main = {
 				setTimeout(callback, 100);
 			}
 		};
+	},
+
+	// popup confirm messagebox
+	popup_confirm: function(ps, el) {
+		ps = $.extend({
+			onok: function(){},
+			oncancel: function(){},
+			icon: {},
+			text: {}
+		}, ps);
+
+		var $pc = $('#main_popup_confirm');
+		if (!$pc.length) {
+			$pc = $('<div id="main_popup_confirm" class="ui-popup s-popup-confirm">'
+				+ '<h5 class="ui-popup-header"></h5>'
+				+ '<div class="ui-popup-body">'
+					+ '<i class="icon"></i>'
+					+ '<div class="msg"></div>'
+				+ '</div>'
+				+ '<div class="ui-popup-footer">'
+					+ '<button class="btn btn-primary ok"><i></i> <span></span></button>\n'
+					+ '<button class="btn btn-secondary cancel" popup-dismiss="true"><i></i> <span></span></button>'
+				+ '</div>'
+			+ '</div>');
+
+			$pc.on('hidden.popup', function() {
+				$pc.data('popc')[$pc.data('onok') ? 'onok' : 'oncancel']();
+			});
+			$pc.find('.ok').on('click', function() {
+				$pc.data('onok', true).popup('hide');
+			});
+		}
+
+		$pc.data({ 'popc': ps, 'onok': false });
+		
+		var $ph = $pc.find('.ui-popup-header');
+		if (ps.title) {
+			$ph.text(ps.title);
+		} else {
+			$ph.hide();
+		}
+
+		if (ps.content) {
+			$pc.find('.msg').html(ps.content);
+		} else {
+			$pc.find('.msg').text(ps.message);
+		}
+
+		$pc.find('.icon').attr('class', 'icon ' + (ps.icon.msg || 'far fa-3x fa-circle-question'));
+		$pc.find('.ok > i').attr('class', ps.icon.ok || 'fas fa-check');
+		$pc.find('.cancel > i').attr('class', ps.icon.cancel || 'fas fa-xmark');
+		$pc.find('.ok > span').text(ps.text.ok || 'OK');
+		$pc.find('.cancel > span').text(ps.text.cancel || 'Cancel');
+	
+		$pc.popup($.extend({
+			closer: false,
+			mask: true,
+			position: el ? 'auto' : 'center',
+			scroll: false
+		}, ps.popup)).popup('show', el);
 	},
 
 	// detail popup
