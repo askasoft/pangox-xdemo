@@ -132,15 +132,14 @@ func buildSettingDetails(c *xin.Context, settings []*models.Setting, usettings [
 
 				lm := getSettingItemList(c.Locale, stg.Name)
 				if lm != nil && !lm.IsEmpty() {
-					switch stg.Style {
-					case models.SettingStyleChecks, models.SettingStyleVerticalChecks, models.SettingStyleOrderedChecks, models.SettingStyleMultiSelect:
-						vs := str.FieldsByte(stg.Value, '\t')
+					if stg.IsMultiple() {
+						vs := stg.Values()
 						lbs := make([]string, 0, len(vs))
 						for _, v := range vs {
 							lbs = append(lbs, lm.SafeGet(v, v))
 						}
 						siv = lbs
-					default:
+					} else {
 						siv = lm.SafeGet(stg.Value, stg.Value)
 					}
 				}
@@ -215,11 +214,10 @@ func validateSetting(c *xin.Context, stg *models.Setting) bool {
 	if lm != nil && !lm.IsEmpty() {
 		var ok bool
 
-		switch stg.Style {
-		case models.SettingStyleChecks, models.SettingStyleVerticalChecks, models.SettingStyleOrderedChecks, models.SettingStyleMultiSelect:
+		if stg.IsMultiple() {
 			vs := str.FieldsByte(*v, '\t')
 			ok = lm.ContainsAll(vs...)
-		default:
+		} else {
 			ok = lm.Contains(*v)
 		}
 
@@ -242,14 +240,13 @@ func checkPostSettings(c *xin.Context, settings []*models.Setting) (usettings []
 	var ok bool
 
 	for _, stg := range settings {
-		switch stg.Style {
-		case models.SettingStyleChecks, models.SettingStyleVerticalChecks, models.SettingStyleOrderedChecks, models.SettingStyleMultiSelect:
+		if stg.IsMultiple() {
 			vs, ok = c.GetPostFormArray(stg.Name)
 			if ok {
-				vs = str.RemoveEmpties(vs)
+				vs = str.RemoveEmpties(asg.Clone(vs))
 				v = str.Join(vs, "\t")
 			}
-		default:
+		} else {
 			v, ok = c.GetPostForm(stg.Name)
 		}
 

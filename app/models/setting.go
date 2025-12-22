@@ -8,21 +8,22 @@ import (
 )
 
 const (
-	SettingStyleDefault        = ""
-	SettingStyleHidden         = "H"
-	SettingStyleChecks         = "C"
-	SettingStyleVerticalChecks = "VC"
-	SettingStyleOrderedChecks  = "OC"
-	SettingStyleRadios         = "R"
-	SettingStyleVerticalRadios = "VR"
-	SettingStyleSelect         = "S"
-	SettingStyleMultiSelect    = "MS"
-	SettingStyleTextarea       = "T"
-	SettingStyleNumeric        = "N"
-	SettingStyleDecimal        = "D"
-	SettingStyleMonth          = "TM"
-	SettingStyleDate           = "TD"
-	SettingStyleTime           = "TT"
+	SettingStyleDefault               = ""
+	SettingStyleHidden                = "H"
+	SettingStyleChecks                = "C"
+	SettingStyleChecksVertical        = "CV"
+	SettingStyleChecksOrdered         = "CO"
+	SettingStyleChecksOrderedVertical = "COV"
+	SettingStyleRadios                = "R"
+	SettingStyleRadiosVertical        = "RV"
+	SettingStyleSelect                = "S"
+	SettingStyleSelectMulti           = "SM"
+	SettingStyleTextarea              = "T"
+	SettingStyleNumeric               = "N"
+	SettingStyleDecimal               = "D"
+	SettingStyleMonth                 = "TM"
+	SettingStyleDate                  = "TD"
+	SettingStyleTime                  = "TT"
 )
 
 type SettingItem struct {
@@ -44,7 +45,7 @@ type SettingCategory struct {
 type Setting struct {
 	Name       string    `gorm:"size:64;not null;primaryKey"`
 	Value      string    `gorm:"not null"`
-	Style      string    `gorm:"size:2;not null"`
+	Style      string    `gorm:"size:3;not null"`
 	Order      int       `gorm:"not null"`
 	Required   bool      `gorm:"not null"`
 	Secret     bool      `gorm:"not null"`
@@ -81,6 +82,15 @@ func (s *Setting) DisplayValue() string {
 
 func (s *Setting) Values() []string {
 	return str.FieldsByte(s.Value, '\t')
+}
+
+func (s *Setting) IsMultiple() bool {
+	switch s.Style {
+	case SettingStyleChecks, SettingStyleChecksVertical, SettingStyleChecksOrdered, SettingStyleChecksOrderedVertical, SettingStyleSelectMulti:
+		return true
+	default:
+		return false
+	}
 }
 
 func (s *Setting) IsSameMeta(n *Setting) bool {

@@ -58,19 +58,22 @@
 								{{else if eq $s.Style "C"}}
 									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
 									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro}}
-								{{else if eq $s.Style "VC"}}
+								{{else if eq $s.Style "CV"}}
 									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
 									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro "class=" "vertical"}}
-								{{else if eq $s.Style "OC"}}
+								{{else if eq $s.Style "CO"}}
+									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
+									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro "Ordered=" true}}
+								{{else if eq $s.Style "COV"}}
 									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
 									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro "Ordered=" true "class=" "vertical"}}
 								{{else if eq $s.Style "R"}}
 									{{Radios "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Value=" $s.Value "Disabled=" $ro}}
-								{{else if eq $s.Style "VR"}}
+								{{else if eq $s.Style "RV"}}
 									{{Radios "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Value=" $s.Value "Disabled=" $ro "class=" "vertical"}}
 								{{else if eq $s.Style "S"}}
 									{{Select "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Value=" $s.Value "Disabled=" $ro "data-spy=" "niceSelect" "class=" "wide"}}
-								{{else if eq $s.Style "MS"}}
+								{{else if eq $s.Style "SM"}}
 									{{Select "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Multiple=" true "Values=" $s.Values "Disabled=" $ro "data-spy=" "niceSelect" "class=" "wide"}}
 								{{else if eq $s.Style "T"}}
 									<textarea name="{{$s.Name}}" class="form-control" rows="2" placeholder="{{T $.Loc (print "setting.placeholder." $s.Name)}}" textclear enterfire{{if $ro}} disabled{{end}}>

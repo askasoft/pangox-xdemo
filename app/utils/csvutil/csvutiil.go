@@ -64,9 +64,5 @@ func GetString(row []string, idx int) string {
 }
 
 func GetStrings(row []string, idx int) []string {
-	ss := str.FieldsAny(GetColumn(row, idx), "\r\n")
-	for i := 0; i < len(ss); i++ {
-		ss[i] = str.Strip(ss[i])
-	}
-	return str.RemoveEmpties(ss)
+	return str.RemoveEmpties(str.Strips(str.FieldsAny(GetColumn(row, idx), "\r\n")))
 }

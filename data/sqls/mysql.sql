@@ -68,7 +68,7 @@ CREATE TABLE `SCHEMA`.`users` (
 CREATE TABLE `SCHEMA`.`settings` (
 	`name` varchar(64) NOT NULL,
 	`value` longtext NOT NULL,
-	`style` varchar(2) NOT NULL,
+	`style` varchar(3) NOT NULL,
 	`order` bigint NOT NULL,
 	`required` boolean NOT NULL,
 	`secret` boolean NOT NULL,
