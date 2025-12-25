@@ -4,9 +4,9 @@ go 1.24.0
 
 require (
 	github.com/askasoft/gogormx v1.0.7
-	github.com/askasoft/pango v1.2.10
-	github.com/askasoft/pangox v1.2.10
-	github.com/askasoft/pangox-assets v1.1.6
+	github.com/askasoft/pango v1.2.11
+	github.com/askasoft/pangox v1.2.11
+	github.com/askasoft/pangox-assets v1.1.7
 	github.com/crewjam/saml v0.5.1
 	github.com/go-ldap/ldap/v3 v3.4.12
 	github.com/go-sql-driver/mysql v1.9.3
