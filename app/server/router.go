@@ -100,10 +100,10 @@ func initHandlers() {
 	r.Use(xin.Recovery())
 	r.Use(middles.SetCtxLogProp) // Set TENANT logger prop
 	r.Use(xmwas.XAL.Handle)
-	r.Use(xmwas.XLL.Handle)
 	r.Use(xmwas.XSL.Handle)
 	r.Use(xmwas.XRC.Handle)
 	r.Use(xmwas.XHD.Handle)
+	r.Use(xmwas.XLL.Handle)
 	r.Use(xmwas.XRH.Handle)
 
 	rg := r.Group(app.Base())
