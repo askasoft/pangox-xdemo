@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/askasoft/pango/log"
+	"github.com/askasoft/pango/sch"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/jobs"
 	"github.com/askasoft/pangox-xdemo/app/tasks"
@@ -26,4 +27,8 @@ func initScheduler() {
 
 func reScheduler() {
 	xschs.ReScheduler()
+}
+
+func stopScheduler() {
+	sch.Stop()
 }

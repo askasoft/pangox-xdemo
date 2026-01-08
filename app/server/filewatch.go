@@ -36,3 +36,7 @@ func reloadFileWatch() {
 		log.Error(err)
 	}
 }
+
+func closeFileWatch() {
+	_ = xfsws.CloseFileWatch()
+}

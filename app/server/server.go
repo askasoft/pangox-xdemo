@@ -9,13 +9,11 @@ import (
 	"github.com/askasoft/pango/imc"
 	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/log"
-	"github.com/askasoft/pango/sch"
 	"github.com/askasoft/pango/srv"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/jobs"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox/xwa"
-	"github.com/askasoft/pangox/xwa/xfsws"
 	"github.com/askasoft/pangox/xwa/xhsvs"
 	"github.com/askasoft/pangox/xwa/xxins"
 )
@@ -133,12 +131,12 @@ func Shutdown() {
 	log.Info("Shutting down ...")
 
 	// stop scheduler
-	sch.Stop()
+	stopScheduler()
 
-	// close fs watch
-	_ = xfsws.CloseFileWatch()
+	// close file watch
+	closeFileWatch()
 
-	// gracefully shutdown the http servers with timeout '[server] shutdownTimeout' (defautl 5 seconds).
+	// gracefully shutdown the http servers with timeout '[server] shutdownTimeout'.
 	xhsvs.Shutdowns()
 
 	log.Info("EXIT.")
