@@ -35,7 +35,7 @@ var main = {
 
 	safe_parse_json: function(s, d) {
 		try {
-			return $.parseJSON(s);
+			return JSON.parse(s);
 		} catch (e) {
 			console.error(e);
 			return d || s;
