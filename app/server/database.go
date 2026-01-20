@@ -1,13 +1,18 @@
 package server
 
 import (
+	"encoding/csv"
+	"io"
 	"os"
 	"path/filepath"
 
 	"github.com/askasoft/pango/asg"
+	"github.com/askasoft/pango/doc/csvx"
 	"github.com/askasoft/pango/fsu"
 	"github.com/askasoft/pango/log"
+	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pangox-xdemo/app"
+	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/schema"
 	"github.com/askasoft/pangox-xdemo/app/utils/sqlutil"
 	"github.com/askasoft/pangox/xwa/xsqls"
@@ -54,9 +59,9 @@ func dbMigrateSettings(schemas ...string) error {
 	}, schemas...)
 }
 
-func dbExportSettings(dir string, schemas ...string) error {
+func dbExportSettings(outdir string, schemas ...string) error {
 	return dbIterateSchemas(func(sm schema.Schema) error {
-		outfile := filepath.Join(dir, string(sm)+".csv")
+		outfile := filepath.Join(outdir, string(sm)+".csv")
 
 		log.Infof("Export settings %q to '%s'", sm, outfile)
 
@@ -66,8 +71,54 @@ func dbExportSettings(dir string, schemas ...string) error {
 		}
 		defer fw.Close()
 
-		return sm.ExportSettings(app.SDB(), fw, asg.First(app.Locales()))
+		settings, err := sm.SelectSettings(app.SDB())
+		if err != nil {
+			return err
+		}
+
+		return exportSettings(fw, settings)
 	}, schemas...)
+}
+
+func exportSettings(w io.Writer, settings []*models.Setting) error {
+	cw := csv.NewWriter(w)
+	cw.UseCRLF = true
+	defer cw.Flush()
+
+	if err := cw.Write([]string{"Name", "Value"}); err != nil {
+		return err
+	}
+
+	for _, s := range settings {
+		if err := cw.Write([]string{s.Name, s.Value}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func dbImportSettings(srcdir string) error {
+	return dbIterateSchemas(func(sm schema.Schema) error {
+		srcfile := filepath.Join(srcdir, string(sm)+".csv")
+
+		if err := fsu.FileExists(srcfile); err != nil {
+			log.Infof("Skip import settings %q: %v", sm, err)
+			return nil
+		}
+
+		log.Infof("Import settings %q from '%s'", sm, srcfile)
+
+		var settings []*models.Setting
+		if err := csvx.ScanFile(srcfile, &settings); err != nil {
+			return err
+		}
+
+		err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
+			return sm.SaveSettings(tx, settings, asg.First(app.Locales()))
+		})
+		return err
+	})
 }
 
 func dbMigrateSupers(schemas ...string) error {

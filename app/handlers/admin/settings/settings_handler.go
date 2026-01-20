@@ -1,8 +1,10 @@
 package settings
 
 import (
+	"encoding/csv"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/askasoft/pango/asg"
@@ -72,12 +74,38 @@ func bindSettingLists(c *xin.Context, h xin.H, settings []*models.Setting) {
 	h["Lists"] = lists
 }
 
+func buildSettingCategories(locale string, settings []*models.Setting) []*models.SettingCategory {
+	scs := []*models.SettingCategory{}
+
+	sks := tbs.GetBundle(locale).GetSection("setting.category").Keys()
+	for _, sk := range sks {
+		sgs := []*models.SettingGroup{}
+		gks := str.Fields(tbs.GetText(locale, "setting.category."+sk))
+		for _, gk := range gks {
+			items := []*models.Setting{}
+			for _, stg := range settings {
+				if str.StartsWith(stg.Name, gk) {
+					items = append(items, stg)
+				}
+			}
+			if len(items) > 0 {
+				sgs = append(sgs, &models.SettingGroup{Name: gk, Items: items})
+			}
+		}
+		if len(sgs) > 0 {
+			scs = append(scs, &models.SettingCategory{Name: sk, Groups: sgs})
+		}
+	}
+
+	return scs
+}
+
 func SettingIndex(c *xin.Context) {
 	settings := loadSettingList(c, "viewer")
 
 	disableSettingSuperSecret(c, settings)
 
-	scs := schema.BuildSettingCategories(c.Locale, settings)
+	scs := buildSettingCategories(c.Locale, settings)
 
 	h := middles.H(c)
 	h["Settings"] = scs
@@ -109,7 +137,7 @@ func SettingSave(c *xin.Context) {
 }
 
 func buildSettingDetails(c *xin.Context, settings []*models.Setting, usettings []*models.Setting) string {
-	scs := schema.BuildSettingCategories(c.Locale, settings)
+	scs := buildSettingCategories(c.Locale, settings)
 
 	ads := linkedhashmap.NewLinkedHashMap[string, any]()
 	for _, sc := range scs {
@@ -292,14 +320,39 @@ func SettingExport(c *xin.Context) {
 
 	disableSettingSuperSecret(c, settings)
 
-	scs := schema.BuildSettingCategories(c.Locale, settings)
+	scs := buildSettingCategories(c.Locale, settings)
 
 	c.SetAttachmentHeader("settings.csv")
 	_, _ = c.Writer.WriteString(string(iox.BOM))
 
-	if err := schema.ExportSettings(c.Writer, c.Locale, scs); err != nil {
+	if err := exportSettings(c.Writer, c.Locale, scs); err != nil {
 		c.Logger.Error(err)
 	}
+}
+
+func exportSettings(w io.Writer, locale string, scs []*models.SettingCategory) error {
+	cw := csv.NewWriter(w)
+	cw.UseCRLF = true
+	defer cw.Flush()
+
+	if err := cw.Write([]string{"Name", "Value", "Display"}); err != nil {
+		return err
+	}
+
+	for _, sc := range scs {
+		scn := tbs.GetText(locale, "setting.category.label."+sc.Name)
+		for _, sg := range sc.Groups {
+			sgn := tbs.GetText(locale, "setting.group.label."+sg.Name)
+			for _, ci := range sg.Items {
+				disp := fmt.Sprintf("%s / %s / %s", scn, sgn, tbs.GetText(locale, "setting."+ci.Name, ci.Name))
+				if err := cw.Write([]string{ci.Name, ci.DisplayValue(), disp}); err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	return nil
 }
 
 func SettingImport(c *xin.Context) {

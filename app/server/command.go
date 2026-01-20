@@ -3,12 +3,10 @@ package server
 import (
 	"flag"
 	"fmt"
-	"io/fs"
 	"os"
 	"path/filepath"
 
 	"github.com/askasoft/pango/asg"
-	"github.com/askasoft/pango/fsu"
 	"github.com/askasoft/pango/gog"
 	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/srv"
@@ -52,12 +50,15 @@ func (s *service) Usage() {
 	fmt.Println("    execsql <file> [schema]...")
 	fmt.Println("      <file>             execute sql file.")
 	fmt.Println("        [schema]...      specify schemas to execute sql.")
-	fmt.Println("    exectask <task>      execute task [ " + str.Join(xschs.Schedules.Keys(), ", ") + " ]")
+	fmt.Println("    exectask <task>      execute task [ " + str.Join(xschs.Schedules.Keys(), ", ") + " ].")
 	fmt.Println("    export <target> ...")
 	fmt.Println("      target=settings    export settings from database.")
 	fmt.Println("        [schema]...      specify schemas to export.")
 	fmt.Println("      target=assets      export embedded assets.")
-	fmt.Println("        <pwd>            specify the develop password.")
+	fmt.Println("        <password>       specify the develop password.")
+	fmt.Println("    import <target> <source>")
+	fmt.Println("      target=settings    import settings to database.")
+	fmt.Println("        <source>         specify setting files ({schema}.csv) directory to import.")
 	fmt.Println("    encrypt [key] <str>  encrypt string.")
 	fmt.Println("    decrypt [key] <str>  decrypt string.")
 	fmt.Println("  [options]:")
@@ -91,6 +92,8 @@ func (s *service) Exec(cmd string) {
 		s.doDecrypt()
 	case "export":
 		s.doExport()
+	case "import":
+		s.doImport()
 	default:
 		flag.CommandLine.SetOutput(os.Stdout)
 		fmt.Fprintf(os.Stderr, "Invalid command %q\n\n", cmd)
@@ -266,66 +269,49 @@ func (s *service) doExport() {
 }
 
 func exportAssets(dir string) error {
-	if err := copyFS(filepath.Join(dir, "data"), data.FS); err != nil {
+	if err := os.CopyFS(filepath.Join(dir, "data"), data.FS); err != nil {
 		return err
 	}
-	if err := copyFS(filepath.Join(dir, "txts"), txts.FS); err != nil {
+	if err := os.CopyFS(filepath.Join(dir, "txts"), txts.FS); err != nil {
 		return err
 	}
-	if err := copyFS(filepath.Join(dir, "tpls"), tpls.FS); err != nil {
+	if err := os.CopyFS(filepath.Join(dir, "tpls"), tpls.FS); err != nil {
 		return err
 	}
 
-	if err := copyFS(filepath.Join(dir, "web"), web.FS); err != nil {
+	if err := os.CopyFS(filepath.Join(dir, "web"), web.FS); err != nil {
 		return err
 	}
 	for key, fs := range web.Statics {
-		if err := copyFS(filepath.Join(dir, "web", "static", key), fs); err != nil {
+		if err := os.CopyFS(filepath.Join(dir, "web", "static", key), fs); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func copyFS(dir string, fsys fs.FS) error {
-	return fs.WalkDir(fsys, ".", func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
+func (s *service) doImport() {
+	sub := flag.Arg(1)
+	if sub == "" {
+		fmt.Fprintln(os.Stderr, "Missing import <source>.")
+		os.Exit(app.ExitErrARG)
+	}
 
-		if d.IsDir() {
-			return nil
+	switch sub {
+	case "settings":
+		initConfigs()
+		initMessages()
+		initDatabase()
+		if err := dbImportSettings(flag.Arg(2)); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(app.ExitErrDB)
 		}
+	default:
+		fmt.Fprintf(os.Stderr, "Invalid import <target>: %q", sub)
+		os.Exit(app.ExitErrARG)
+	}
 
-		fi, err := d.Info()
-		if err != nil {
-			return err
-		}
-
-		fsrc, err := fsys.Open(path)
-		if err != nil {
-			return err
-		}
-		defer fsrc.Close()
-
-		fdes := filepath.Join(dir, path)
-		fmt.Println(fdes)
-
-		fdir := filepath.Dir(fdes)
-		if err = fsu.MkdirAll(fdir, 0770); err != nil {
-			return err
-		}
-
-		if err = fsu.WriteReader(fdes, fsrc, 0660); err != nil {
-			return err
-		}
-
-		mt := fi.ModTime()
-		if mt.IsZero() {
-			mt = app.BuildTime()
-		}
-		return os.Chtimes(fdes, mt, mt)
-	})
+	log.Info("DONE.")
 }
 
 func (s *service) doEncrypt() {
