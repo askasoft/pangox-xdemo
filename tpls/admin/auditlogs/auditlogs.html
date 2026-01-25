@@ -6,11 +6,10 @@
 <div class="s-section">
 	<div class="s-section-head">
 		<h2>{{I "admin.auditlogs"}}<span>{{T .Loc "menu.admin.auditlogs"}}</span></h2>
-		<div class="ms-auto">
-			<button class="btn btn-sm btn-outline-primary" id="auditlogs_export">
-				{{I "csv"}} {{T .Loc "button.csvexp"}}
-			</button>
-		</div>
+		<div class="ms-auto"></div>
+		<button class="btn btn-sm btn-outline-primary" id="auditlogs_export">
+			{{I "csv"}} {{T .Loc "button.csvexp"}}
+		</button>
 	</div>
 	<div class="s-section-body">
 		{{if .AU.IsSuper}}
