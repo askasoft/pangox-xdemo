@@ -48,32 +48,6 @@ func disableSettingSuperSecret(c *xin.Context, settings []*models.Setting) {
 	}
 }
 
-func getSettingItemList(locale string, name string) *linkedhashmap.LinkedHashMap[string, string] {
-	value := tbs.GetText(locale, "setting.list."+name)
-	if value == "" {
-		return nil
-	}
-
-	m := &linkedhashmap.LinkedHashMap[string, string]{}
-	if err := m.UnmarshalJSON(str.UnsafeBytes(value)); err != nil {
-		panic(fmt.Errorf("invalid setting list [%s] %s: %w", locale, name, err))
-	}
-	return m
-}
-
-func bindSettingLists(c *xin.Context, h xin.H, settings []*models.Setting) {
-	lists := map[string]any{}
-
-	for _, stg := range settings {
-		list := getSettingItemList(c.Locale, stg.Name)
-		if list != nil {
-			lists[stg.Name] = list
-		}
-	}
-
-	h["Lists"] = lists
-}
-
 func buildSettingCategories(locale string, settings []*models.Setting) []*models.SettingCategory {
 	scs := []*models.SettingCategory{}
 
@@ -98,6 +72,32 @@ func buildSettingCategories(locale string, settings []*models.Setting) []*models
 	}
 
 	return scs
+}
+
+func getSettingItemList(locale string, name string) *linkedhashmap.LinkedHashMap[string, string] {
+	value := tbs.GetText(locale, "setting.list."+name)
+	if value == "" {
+		return nil
+	}
+
+	m := &linkedhashmap.LinkedHashMap[string, string]{}
+	if err := m.UnmarshalJSON(str.UnsafeBytes(value)); err != nil {
+		panic(fmt.Errorf("invalid setting list [%s] %s: %w", locale, name, err))
+	}
+	return m
+}
+
+func bindSettingLists(c *xin.Context, h xin.H, settings []*models.Setting) {
+	lists := map[string]any{}
+
+	for _, stg := range settings {
+		list := getSettingItemList(c.Locale, stg.Name)
+		if list != nil {
+			lists[stg.Name] = list
+		}
+	}
+
+	h["Lists"] = lists
 }
 
 func SettingIndex(c *xin.Context) {
