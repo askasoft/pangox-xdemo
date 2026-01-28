@@ -86,7 +86,7 @@ var main = {
 	location_replace_search: function(vs) {
 		var p = $.extend({}, vs);
 
-		// delete p.o; // order
+		delete p.o; // order
 		delete p.p; // page
 		delete p.l; // limit
 
@@ -319,7 +319,60 @@ var main = {
 		};
 	},
 
-	// popup confirm messagebox
+	// popup alert message box
+	popup_alert: function(ps, el) {
+		ps = $.extend({
+			onclose: function(){},
+			icon: {},
+			text: {}
+		}, ps);
+
+		var $pa = $('#main_popup_alert');
+		if (!$pa.length) {
+			$pa = $('<div id="main_popup_alert" class="ui-popup s-popup-msgbox">'
+				+ '<h5 class="ui-popup-header"></h5>'
+				+ '<div class="ui-popup-body">'
+					+ '<i class="icon"></i>'
+					+ '<div class="msg"></div>'
+				+ '</div>'
+				+ '<div class="ui-popup-footer">'
+					+ '<button class="close btn btn-primary" popup-dismiss="true"><i></i> <span></span></button>'
+				+ '</div>'
+			+ '</div>');
+
+			$pa.on('hidden.popup', function() {
+				$pa.data('popa').onclose();
+			});
+		}
+
+		$pa.data({ 'popa': ps });
+		
+		var $ph = $pa.find('.ui-popup-header');
+		if (ps.title) {
+			$ph.text(ps.title);
+		} else {
+			$ph.hide();
+		}
+
+		if (ps.content) {
+			$pa.find('.msg').html(ps.content);
+		} else {
+			$pa.find('.msg').text(ps.message);
+		}
+
+		$pa.find('.icon').attr('class', 'icon ' + (ps.icon.msg || 'far fa-3x fa-triangle-exclamation'));
+		$pa.find('.close > i').attr('class', ps.icon.close || 'fas fa-xmark');
+		$pa.find('.close > span').text(ps.text.close || 'Close');
+	
+		$pa.popup($.extend({
+			closer: false,
+			mask: true,
+			position: el ? 'auto' : 'center',
+			scroll: false
+		}, ps.popup)).popup('show', el);
+	},
+
+	// popup confirm message box
 	popup_confirm: function(ps, el) {
 		ps = $.extend({
 			onok: function(){},
@@ -330,7 +383,7 @@ var main = {
 
 		var $pc = $('#main_popup_confirm');
 		if (!$pc.length) {
-			$pc = $('<div id="main_popup_confirm" class="ui-popup s-popup-confirm">'
+			$pc = $('<div id="main_popup_confirm" class="ui-popup s-popup-msgbox">'
 				+ '<h5 class="ui-popup-header"></h5>'
 				+ '<div class="ui-popup-body">'
 					+ '<i class="icon"></i>'
@@ -493,6 +546,23 @@ var main = {
 				($s.length ? $s : $c).text(v);
 			} else {
 				$td.text(v);
+			}
+		}
+	},
+
+	// spinner
+	button_spinner: function($p, btn) {
+		return function() {
+			$p.find('button.' + btn).prop('disabled', true).find('i').addClass('fa-spin');
+			main.blink_start($p);
+		}
+	},
+	button_unspinner: function($p, btn, callback) {
+		return function() {
+			$p.find('button.' + btn).prop('disabled', false).find('i').removeClass('fa-spin');
+			main.blink_stop($p);
+			if (callback) {
+				callback();
 			}
 		}
 	},
