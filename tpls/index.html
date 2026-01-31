@@ -1,11 +1,11 @@
 {{template "main_header" .}}
 
 <div class="s-section">
+	<div class="s-section-head">
+		<h2>{{I "home"}}<span>{{T .Loc "home.well"}}</span></h2>
+	</div>
 	<div class="s-section-body">
-		<div class="well">{{T .Loc "home.well"}}</div>
-
 		<div class="s-menu">
-			<hr>
 			<a class="s-menu-item" href="{{.Base}}/demos/pets/">{{I "demos.pets.list"}}<div>{{T .Loc "menu.demos.pets.list"}}</div></a>
 			<a class="s-menu-item" href="{{.Base}}/demos/pets/jobs/catgen/">{{I "demos.pets.create.cat"}}<div>{{T .Loc "menu.demos.pets.create.cat"}}</div></a>
 			<a class="s-menu-item" href="{{.Base}}/demos/pets/jobs/doggen/">{{I "demos.pets.create.dog"}}<div>{{T .Loc "menu.demos.pets.create.dog"}}</div></a>
