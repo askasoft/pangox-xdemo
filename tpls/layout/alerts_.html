@@ -1,7 +1,9 @@
 {{define "alerts"}}
 {{if or .Ctx.Errors .Error .Errors}}
 <div class="alert alert-danger alert-dismissible">
+	{{if not .Ctx.Attrs.noalertclose}}
 	<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+	{{end}}
 	<ul class="fa-ul">
 		{{range $e := .Ctx.Errors}}
 		<li><span class="fa-li">{{I "error"}}</span><span>{{$e}}</span></li>
