@@ -16,7 +16,6 @@ func (sm Schema) SelectSettings(tx sqlx.Sqlx, items ...string) (settings []*mode
 	if len(items) > 0 {
 		sqb.In("name", items)
 	}
-	sqb.Order("order")
 	sqb.Order("name")
 	sql, args := sqb.Build()
 

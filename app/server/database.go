@@ -60,6 +60,10 @@ func dbMigrateSettings(schemas ...string) error {
 }
 
 func dbExportSettings(outdir string, schemas ...string) error {
+	if err := os.MkdirAll(outdir, 0770); err != nil {
+		return err
+	}
+
 	return dbIterateSchemas(func(sm schema.Schema) error {
 		outfile := filepath.Join(outdir, string(sm)+".csv")
 

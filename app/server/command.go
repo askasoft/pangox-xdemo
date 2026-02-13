@@ -269,6 +269,10 @@ func (s *service) doExport() {
 }
 
 func exportAssets(dir string) error {
+	if err := os.MkdirAll(dir, 0770); err != nil {
+		return err
+	}
+
 	if err := os.CopyFS(filepath.Join(dir, "data"), data.FS); err != nil {
 		return err
 	}
