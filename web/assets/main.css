@@ -384,15 +384,6 @@ body {
 	}
 }
 
-/** login **/
-.s-login {
-	display: flex;
-	justify-content: center;
-}
-.s-login > .s-section {
-	max-width: 720px;
-	width: 90vw;
-}
 
 /** form **/
 div.desc, div.verr {
@@ -429,54 +420,6 @@ div.verr {
 	flex-wrap: wrap;
 	gap: 0.5rem;
 	margin-bottom: 1.5rem;
-}
-
-/** table **/
-.s-table {
-	border-top: 1px solid #ccc;
-	border-bottom: 1px solid #ccc;
-}
-
-.s-table > thead > tr > th {
-	background-color: var(--bs-tertiary-bg);
-	vertical-align: middle;
-}
-.s-table th.datetime, .s-table td.datetime,
-.s-table th.created_at, .s-table td.created_at,
-.s-table th.updated_at, .s-table td.updated_at {
-	width: 110px;
-	min-width: 110px;
-}
-.s-table th.actions {
-	text-align: center;
-}
-.s-table th.id, .s-table td.id,
-.s-table th.no, .s-table td.no,
-.s-table th.check, .s-table td.check,
-.s-table th.actions, .s-table td.actions {
-	width: 1%;
-	white-space: nowrap;
-}
-.s-table td.actions > * {
-	padding: 6px 8px;
-	margin: 0 0 5px 0;
-}
-
-.s-table td > p {
-	margin: 0;
-	display: -webkit-box;
-	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 2;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	overflow-wrap: anywhere;
-}
-.s-table td > pre {
-	max-height: 3em;
-	overflow-y: auto;
-}
-.s-table tr.ui-blink-1s td, .s-table tr.ui-blink-1s2 td {
-	background-color: transparent;
 }
 
 /** popup **/
@@ -595,6 +538,54 @@ div.verr {
 }
 
 
+/** table **/
+.s-table {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+}
+
+.s-table > thead > tr > th {
+	background-color: var(--bs-tertiary-bg);
+	vertical-align: middle;
+}
+.s-table th.datetime, .s-table td.datetime,
+.s-table th.created_at, .s-table td.created_at,
+.s-table th.updated_at, .s-table td.updated_at {
+	width: 110px;
+	min-width: 110px;
+}
+.s-table th.actions {
+	text-align: center;
+}
+.s-table th.id, .s-table td.id,
+.s-table th.no, .s-table td.no,
+.s-table th.check, .s-table td.check,
+.s-table th.actions, .s-table td.actions {
+	width: 1%;
+	white-space: nowrap;
+}
+.s-table td.actions > * {
+	padding: 6px 8px;
+	margin: 0 0 5px 0;
+}
+
+.s-table td > p {
+	margin: 0;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	overflow-wrap: anywhere;
+}
+.s-table td > pre {
+	max-height: 3em;
+	overflow-y: auto;
+}
+.s-table tr.ui-blink-1s td, .s-table tr.ui-blink-1s2 td {
+	background-color: transparent;
+}
+
 /** menu **/
 .s-menu-item {
 	background-color: #eee;
@@ -627,4 +618,13 @@ div.verr {
 	background-color: #393c3f;
 }
 
+/** login **/
+.s-login {
+	display: flex;
+	justify-content: center;
+}
+.s-login > .s-section {
+	max-width: 720px;
+	width: 90vw;
+}
 
