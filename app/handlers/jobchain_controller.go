@@ -128,7 +128,7 @@ func (jcc *JobChainController) Status(c *xin.Context) {
 
 func (jcc *JobChainController) InvalidChainJobs(c *xin.Context) {
 	c.AddError(tbs.Errorf(c.Locale, "error.setting.invalid", jcc.ChainName))
-	c.JSON(http.StatusInternalServerError, middles.E(c))
+	middles.InternalServerError(c)
 }
 
 func (jcc *JobChainController) BindJobCtx(c *xin.Context, h xin.H) bool {
