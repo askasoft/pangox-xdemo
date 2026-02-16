@@ -17,13 +17,13 @@ var main = {
 		return typeof(d) == 'string' ? new Date(d) : d;
 	},
 	format_date: function(d) {
-		return main.to_date(d).toLocaleDateString('sv-SE'); // yyyy-MM-dd
+		return d ? main.to_date(d).toLocaleDateString('sv-SE') : ''; // yyyy-MM-dd
 	},
 	format_time_only: function(d) {
-		return main.to_date(d).toLocaleTimeString('sv-SE'); // HH:mm:ss
+		return d ? main.to_date(d).toLocaleTimeString('sv-SE') : ''; // HH:mm:ss
 	},
 	format_time: function(d) {
-		return main.to_date(d).toLocaleString('sv-SE'); // yyyy-MM-dd HH:mm:ss
+		return d ? main.to_date(d).toLocaleString('sv-SE') : ''; // yyyy-MM-dd HH:mm:ss
 	},
 	comma: function(n) {
 		return isNaN(n) ? n : parseInt(n).toLocaleString();
@@ -407,7 +407,7 @@ var main = {
 		
 		var $ph = $pc.find('.ui-popup-header');
 		if (ps.title) {
-			$ph.text(ps.title);
+			$ph.text(ps.title).show();
 		} else {
 			$ph.hide();
 		}
@@ -418,7 +418,7 @@ var main = {
 			$pc.find('.msg').text(ps.message);
 		}
 
-		$pc.find('.icon').attr('class', 'icon ' + (ps.icon.msg || 'far fa-3x fa-circle-question'));
+		$pc.find('.icon').attr('class', 'icon ' + (ps.icon.msg || 'far fa-3x fa-circle-question text-info'));
 		$pc.find('.ok > i').attr('class', ps.icon.ok || 'fas fa-check');
 		$pc.find('.cancel > i').attr('class', ps.icon.cancel || 'fas fa-xmark');
 		$pc.find('.ok > span').text(ps.text.ok || 'OK');
