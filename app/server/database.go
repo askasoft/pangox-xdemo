@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/csv"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -105,18 +106,25 @@ func exportSettings(w io.Writer, settings []*models.Setting) error {
 func dbImportSettings(srcdir string) error {
 	return dbIterateSchemas(func(sm schema.Schema) error {
 		srcfile := filepath.Join(srcdir, string(sm)+".csv")
-
 		if err := fsu.FileExists(srcfile); err != nil {
-			log.Infof("Skip import settings %q: %v", sm, err)
-			return nil
+			srcfile = filepath.Join(srcdir, "_default.csv")
+			if err = fsu.FileExists(srcfile); err != nil {
+				log.Infof("Skip import settings %q: %v", sm, err)
+				return nil
+			}
 		}
-
-		log.Infof("Import settings %q from '%s'", sm, srcfile)
 
 		var settings []*models.Setting
 		if err := csvx.ScanFile(srcfile, &settings); err != nil {
-			return err
+			return fmt.Errorf("'%s': %w", srcfile, err)
 		}
+
+		if len(settings) == 0 {
+			log.Infof("Skip import settings %q: '%s' is empty", sm, srcfile)
+			return nil
+		}
+
+		log.Infof("Import settings %q from '%s' [%d]", sm, srcfile, len(settings))
 
 		err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 			return sm.SaveSettings(tx, settings, asg.First(app.Locales()))

@@ -82,7 +82,7 @@ func (sm Schema) SaveSettings(tx sqlx.Sqlx, settings []*models.Setting, locale s
 	sqb.Eq("name", "")
 	sql := tx.Rebind(sqb.SQL())
 
-	stmt, err := tx.Prepare(sql)
+	stmt, err := tx.Preparex(sql)
 	if err != nil {
 		return err
 	}
@@ -119,7 +119,7 @@ func (sm Schema) SaveSettingsByRole(tx sqlx.Sqlx, au *models.User, settings []*m
 	sqb.Gte("editor", "")
 	sql := tx.Rebind(sqb.SQL())
 
-	stmt, err := tx.Prepare(sql)
+	stmt, err := tx.Preparex(sql)
 	if err != nil {
 		return err
 	}
