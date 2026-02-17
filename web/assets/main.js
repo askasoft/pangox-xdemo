@@ -349,7 +349,7 @@ var main = {
 		
 		var $ph = $pa.find('.ui-popup-header');
 		if (ps.title) {
-			$ph.text(ps.title);
+			$ph.text(ps.title).show();
 		} else {
 			$ph.hide();
 		}
