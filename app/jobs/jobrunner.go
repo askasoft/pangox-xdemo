@@ -103,18 +103,20 @@ func RegisterJobRun(name string, jrc JobRunCreator) {
 
 type FailedItem = xjobs.FailedItem
 
-type JobRunner[T any] struct {
+type JobContext = xjobs.JobContext
+
+type JobRunner[A any] struct {
 	*xjobs.JobRunner
 
 	Tenant *tenant.Tenant
 	Logger log.Logger
-	Arg    T
+	Arg    A
 }
 
-func NewJobRunner[T any](tt *tenant.Tenant, job *xjm.Job) *JobRunner[T] {
+func NewJobRunner[A any](tt *tenant.Tenant, job *xjm.Job) *JobRunner[A] {
 	job.RID = app.Sequencer().NextID().Int64()
 
-	jr := &JobRunner[T]{
+	jr := &JobRunner[A]{
 		JobRunner: xjobs.NewJobRunner(job, tt.JC(), tt.JM(), tt.Logger("JOB")),
 		Tenant:    tt,
 	}
@@ -131,6 +133,6 @@ func NewJobRunner[T any](tt *tenant.Tenant, job *xjm.Job) *JobRunner[T] {
 	return jr
 }
 
-func (jr *JobRunner[T]) jobChainContinue(next *xjobs.JobRunState) error {
+func (jr *JobRunner[A]) jobChainContinue(next *xjobs.JobRunState) error {
 	return JobChainAppendJob(jr.Tenant, next.Name, jr.Locale(), jr.ChainID(), jr.ChainSeq+1, jr.ChainData)
 }

@@ -72,11 +72,10 @@ func (pgj *PetGenerateJob) Run() error {
 		pgj.Total = pgj.Arg.Items
 	}
 
-	ctx, cancel := pgj.Running()
-	defer cancel(nil)
+	ctx := pgj.Running()
+	defer ctx.Cancel(nil)
 
 	err := pgj.run(ctx)
-	cancel(err)
 
 	return xerrs.ContextCause(ctx, err)
 }
