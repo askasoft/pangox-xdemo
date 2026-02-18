@@ -1,9 +1,26 @@
 var main = {
 	base: '',
 	cookie: { expires: 180 },
+	labels: {
+		ja: {
+			ok: 'はい',
+			cancel: 'キャンセル',
+			close: '閉じる'
+		},
+		zh: {
+			ok: '确定',
+			cancel: '取消',
+			close: '关闭'
+		},
+		en : {
+			ok: 'OK',
+			cancel: 'Cancel',
+			close: 'Close'
+		}
+	},
 
 	meta_props: function() {
-		var m = {}, p = 'xdemo:';
+		var p = 'xdemo:', m = { lang: $('html').attr('lang') || 'en' };
 		$('meta').each(function() {
 			var $t = $(this), a = $t.attr('property');
 			if (a && a.substring(0, p.length) == p) {
@@ -319,71 +336,88 @@ var main = {
 		};
 	},
 
-	// popup alert message box
-	popup_alert: function(ps, el) {
-		ps = $.extend({
-			onclose: function(){},
+	// popup message box
+	popup_message: function(s, el) {
+		s = $.extend({
 			icon: {},
-			text: {}
-		}, ps);
+			text: {},
+			onclose: function(){}
+		}, s);
 
-		var $pa = $('#main_popup_alert');
-		if (!$pa.length) {
-			$pa = $('<div id="main_popup_alert" class="ui-popup s-popup-msgbox">'
+		var $p = $('#main_popup_message');
+		if (!$p.length) {
+			$p = $('<div id="main_popup_message">'
 				+ '<h5 class="ui-popup-header"></h5>'
 				+ '<div class="ui-popup-body">'
-					+ '<i class="icon"></i>'
 					+ '<div class="msg"></div>'
 				+ '</div>'
 				+ '<div class="ui-popup-footer">'
-					+ '<button class="close btn btn-primary" popup-dismiss="true"><i></i> <span></span></button>'
+					+ '<button class="btn btn-secondary close" popup-dismiss="true"><i></i> <span></span></button>'
 				+ '</div>'
 			+ '</div>');
 
-			$pa.on('hidden.popup', function() {
-				$pa.data('popa').onclose();
+			$p.on('hidden.popup', function() {
+				$p.data('popm').onclose();
 			});
 		}
 
-		$pa.data({ 'popa': ps });
+		$p.attr('class', 'ui-popup s-popup-msgbox ' + (s.type || ''));
+		$p.data({ 'popm': s });
 		
-		var $ph = $pa.find('.ui-popup-header');
-		if (ps.title) {
-			$ph.text(ps.title).show();
+		var $ph = $p.find('.ui-popup-header');
+		if (s.title) {
+			$ph.text(s.title).show();
 		} else {
 			$ph.hide();
 		}
 
-		if (ps.content) {
-			$pa.find('.msg').html(ps.content);
+		var $pm = $p.find('.msg');
+		if (s.content) {
+			$pm.html(s.content);
 		} else {
-			$pa.find('.msg').text(ps.message);
+			$pm.text(s.message);
 		}
 
-		$pa.find('.icon').attr('class', 'icon ' + (ps.icon.msg || 'far fa-3x fa-triangle-exclamation'));
-		$pa.find('.close > i').attr('class', ps.icon.close || 'fas fa-xmark');
-		$pa.find('.close > span').text(ps.text.close || 'Close');
+		$p.find('.icon').remove();
+		if (s.icon.msg) {
+			$('<i>').addClass('icon ' + s.icon.msg).insertBefore($pm);
+		}
+
+		$p.find('.close > i').attr('class', s.icon.close || 'fas fa-xmark');
+		$p.find('.close > span').text(s.text.close || main.labels[main.lang].close);
 	
-		$pa.popup($.extend({
-			closer: false,
-			mask: true,
-			position: el ? 'auto' : 'center',
-			scroll: false
-		}, ps.popup)).popup('show', el);
+		$p.popup($.extend({
+			position: el ? 'auto' : 'center'
+		}, s.popup)).popup('show', el);
+	},
+
+	// popup info message box
+	popup_info: function(s, el) {
+		main.popup_message($.extend({ type: 'info', icon: { msg: 'fas fa-3x fa-circle-info' } }, s), el);
+	},
+
+	// popup warn message box
+	popup_warn: function(s, el) {
+		main.popup_message($.extend({ type: 'warn', icon: { msg: 'fas fa-3x fa-triangle-exclamation' } }, s), el);
+	},
+
+	// popup error message box
+	popup_error: function(s, el) {
+		main.popup_message($.extend({ type: 'error', icon: { msg: 'fas fa-3x fa-circle-exclamation' } }, s), el);
 	},
 
 	// popup confirm message box
-	popup_confirm: function(ps, el) {
-		ps = $.extend({
-			onok: function(){},
-			oncancel: function(){},
+	popup_confirm: function(s, el) {
+		s = $.extend({
 			icon: {},
-			text: {}
-		}, ps);
+			text: {},
+			onok: function(){},
+			oncancel: function(){}
+		}, s);
 
-		var $pc = $('#main_popup_confirm');
-		if (!$pc.length) {
-			$pc = $('<div id="main_popup_confirm" class="ui-popup s-popup-msgbox">'
+		var $p = $('#main_popup_confirm');
+		if (!$p.length) {
+			$p = $('<div id="main_popup_confirm" class="ui-popup s-popup-msgbox">'
 				+ '<h5 class="ui-popup-header"></h5>'
 				+ '<div class="ui-popup-body">'
 					+ '<i class="icon"></i>'
@@ -395,41 +429,41 @@ var main = {
 				+ '</div>'
 			+ '</div>');
 
-			$pc.on('hidden.popup', function() {
-				$pc.data('popc')[$pc.data('onok') ? 'onok' : 'oncancel']();
+			$p.on('hidden.popup', function() {
+				$p.data('popc')[$p.data('onok') ? 'onok' : 'oncancel']();
 			});
-			$pc.find('.ok').on('click', function() {
-				$pc.data('onok', true).popup('hide');
+			$p.find('.ok').on('click', function() {
+				$p.data('onok', true).popup('hide');
 			});
 		}
 
-		$pc.data({ 'popc': ps, 'onok': false });
+		$p.data({ 'popc': s, 'onok': false });
 		
-		var $ph = $pc.find('.ui-popup-header');
-		if (ps.title) {
-			$ph.text(ps.title).show();
+		var $ph = $p.find('.ui-popup-header');
+		if (s.title) {
+			$ph.text(s.title).show();
 		} else {
 			$ph.hide();
 		}
 
-		if (ps.content) {
-			$pc.find('.msg').html(ps.content);
+		if (s.content) {
+			$p.find('.msg').html(s.content);
 		} else {
-			$pc.find('.msg').text(ps.message);
+			$p.find('.msg').text(s.message);
 		}
 
-		$pc.find('.icon').attr('class', 'icon ' + (ps.icon.msg || 'far fa-3x fa-circle-question text-info'));
-		$pc.find('.ok > i').attr('class', ps.icon.ok || 'fas fa-check');
-		$pc.find('.cancel > i').attr('class', ps.icon.cancel || 'fas fa-xmark');
-		$pc.find('.ok > span').text(ps.text.ok || 'OK');
-		$pc.find('.cancel > span').text(ps.text.cancel || 'Cancel');
+		$p.find('.icon').attr('class', 'icon ' + (s.icon.msg || 'far fa-3x fa-circle-question text-info'));
+		$p.find('.ok > i').attr('class', s.icon.ok || 'fas fa-check');
+		$p.find('.cancel > i').attr('class', s.icon.cancel || 'fas fa-xmark');
+		$p.find('.ok > span').text(s.text.ok || main.labels[main.lang].ok);
+		$p.find('.cancel > span').text(s.text.cancel || main.labels[main.lang].cancel);
 	
-		$pc.popup($.extend({
+		$p.popup($.extend({
 			closer: false,
 			mask: true,
 			position: el ? 'auto' : 'center',
 			scroll: false
-		}, ps.popup)).popup('show', el);
+		}, s.popup)).popup('show', el);
 	},
 
 	// detail popup
@@ -520,6 +554,9 @@ var main = {
 		prefix ||= '';
 		for (var k in vs) {
 			var v = vs[k];
+			if (v === null) {
+				v = '';
+			}
 			if (typeof(v) == 'object') {
 				continue;
 			}

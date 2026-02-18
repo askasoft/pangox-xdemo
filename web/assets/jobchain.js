@@ -317,8 +317,7 @@
 	}
 
 	function jobchain_error() {
-		$('#jobchain_error_popup .ui-popup-body').empty().text($(this).data('error'));
-		$('#jobchain_error_popup').popup('toggle', this);
+		main.popup_error({ message: $(this).data('error') }, this);
 		return false;
 	}
 

@@ -426,13 +426,26 @@ div.verr {
 .s-popup-msgbox .ui-popup-body {
 	min-height: 80px;
 	min-width: 400px;
+	max-width: 600px;
 }
 .s-popup-msgbox .icon {
 	position: absolute;
 }
-.s-popup-msgbox .msg {
+.s-popup-msgbox .icon + .msg {
 	padding: 5px 10px 5px 70px;
+}
+.s-popup-msgbox .msg {
 	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+.s-popup-msgbox.error .ui-popup-body {
+	color: var(--bs-danger, #dc3545);
+}
+.s-popup-msgbox.warn .ui-popup-body {
+	color: var(--bs-warning, #8a6d3b);
+}
+.s-popup-msgbox.info .ui-popup-body {
+	color: var(--bs-info, #337ab7);
 }
 
 .s-popup-detail {
@@ -527,14 +540,6 @@ div.verr {
 	padding: 10px 20px;
 	max-height: 100%;
 	overflow-y: auto;
-}
-
-.s-popup-error .ui-popup-body {
-	color: #a94442;
-	min-width: 400px;
-	max-width: 600px;
-	white-space: pre-wrap;
-	overflow-wrap: anywhere;
 }
 
 
