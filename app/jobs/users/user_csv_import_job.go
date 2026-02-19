@@ -188,7 +188,7 @@ func (ucij *UserCsvImportJob) doCheckCsv(data []byte) (cnt int, err error) {
 	ucij.Logger.Info(tbs.GetText(ucij.Locale(), "csv.info.checking"))
 
 	valid := true
-	err = ucij.doReadCsv(context.TODO(), data, func(rec *csvUserRecord) error {
+	err = ucij.doReadCsv(context.Background(), data, func(rec *csvUserRecord) error {
 		cnt++
 		err := ucij.checkRecord(rec)
 		if err != nil {
