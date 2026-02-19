@@ -633,3 +633,18 @@ div.verr {
 	width: 90vw;
 }
 
+/** error **/
+.s-error {
+	color: var(--bs-secondary);
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	font-family: var(--bs-font-monospace);
+	height: calc(100vh - 150px);
+}
+.s-error .icons {
+	font-size: 10vw;
+}
+.s-error.e500 .icons {
+	font-size: 5vw;
+}

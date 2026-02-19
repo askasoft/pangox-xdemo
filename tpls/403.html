@@ -2,12 +2,21 @@
 
 {{MapSet .Ctx.Attrs "noalertclose" true}}
 
-<div class="e403 d-flex flex-column align-items-center text-danger font-monospace">
-	<h1 class="mb-4">403 Forbidden</h1>
-
-	<div class="fs-3">{{template "alerts" .}}</div>
-
-	<i class="fas fa-ban fa-flip" style="font-size: 33vw; margin-top: 0.05em; --fa-animation-duration: 5s;"></i>
+<div class="s-error e403">
+	<div class="text-center w-100">
+		<div class="icons pb-4 border-bottom">
+			<i class="fas fa-4"></i><i class="fas fa-ban"></i><i class="fas fa-3"></i>
+		</div>
+		<div class="fs-3 my-4 p-4">
+			{{if .Ctx.Errors}}
+				{{range $e := .Ctx.Errors}}
+				<p>{{$e}}</p>
+				{{end}}
+			{{else}}
+				<p>{{T .Loc "error.request.forbidden"}}</p>
+			{{end}}
+		</div>
+	</div>
 </div>
 
 {{template "main_footer" .}}

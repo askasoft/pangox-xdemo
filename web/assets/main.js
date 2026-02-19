@@ -36,7 +36,7 @@ var main = {
 	format_date: function(d) {
 		return d ? main.to_date(d).toLocaleDateString('sv-SE') : ''; // yyyy-MM-dd
 	},
-	format_time_only: function(d) {
+	format_hms: function(d) {
 		return d ? main.to_date(d).toLocaleTimeString('sv-SE') : ''; // HH:mm:ss
 	},
 	format_time: function(d) {
@@ -338,11 +338,7 @@ var main = {
 
 	// popup message box
 	popup_message: function(s, el) {
-		s = $.extend({
-			icon: {},
-			text: {},
-			onclose: function(){}
-		}, s);
+		s = $.extend({ type: '', icon: '' }, s);
 
 		var $p = $('#main_popup_message');
 		if (!$p.length) {
@@ -351,19 +347,11 @@ var main = {
 				+ '<div class="ui-popup-body">'
 					+ '<div class="msg"></div>'
 				+ '</div>'
-				+ '<div class="ui-popup-footer">'
-					+ '<button class="btn btn-secondary close" popup-dismiss="true"><i></i> <span></span></button>'
-				+ '</div>'
 			+ '</div>');
-
-			$p.on('hidden.popup', function() {
-				$p.data('popm').onclose();
-			});
 		}
 
-		$p.attr('class', 'ui-popup s-popup-msgbox ' + (s.type || ''));
-		$p.data({ 'popm': s });
-		
+		$p.attr('class', 'ui-popup s-popup-msgbox ' + s.type);
+
 		var $ph = $p.find('.ui-popup-header');
 		if (s.title) {
 			$ph.text(s.title).show();
@@ -379,31 +367,26 @@ var main = {
 		}
 
 		$p.find('.icon').remove();
-		if (s.icon.msg) {
-			$('<i>').addClass('icon ' + s.icon.msg).insertBefore($pm);
+		if (s.icon) {
+			$('<i>').addClass('icon ' + s.icon).insertBefore($pm);
 		}
 
-		$p.find('.close > i').attr('class', s.icon.close || 'fas fa-xmark');
-		$p.find('.close > span').text(s.text.close || main.labels[main.lang].close);
-	
-		$p.popup($.extend({
-			position: el ? 'auto' : 'center'
-		}, s.popup)).popup('show', el);
+		$p.popup($.extend({ position: el ? 'auto' : 'center' }, s.popup)).popup('show', el);
 	},
 
 	// popup info message box
 	popup_info: function(s, el) {
-		main.popup_message($.extend({ type: 'info', icon: { msg: 'fas fa-3x fa-circle-info' } }, s), el);
+		main.popup_message($.extend({ type: 'info', icon: 'fas fa-3x fa-circle-info' }, s), el);
 	},
 
 	// popup warn message box
 	popup_warn: function(s, el) {
-		main.popup_message($.extend({ type: 'warn', icon: { msg: 'fas fa-3x fa-triangle-exclamation' } }, s), el);
+		main.popup_message($.extend({ type: 'warn', icon: 'fas fa-3x fa-triangle-exclamation' }, s), el);
 	},
 
 	// popup error message box
 	popup_error: function(s, el) {
-		main.popup_message($.extend({ type: 'error', icon: { msg: 'fas fa-3x fa-circle-exclamation' } }, s), el);
+		main.popup_message($.extend({ type: 'error', icon: 'fas fa-3x fa-circle-exclamation' }, s), el);
 	},
 
 	// popup confirm message box

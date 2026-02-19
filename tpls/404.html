@@ -2,10 +2,15 @@
 
 {{MapSet .Ctx.Attrs "noalertclose" true}}
 
-<div class="e404 d-flex flex-column align-items-center text-secondary font-monospace">
-	<h1 class="mb-3">404 Not Found</h1>
-
-	<i class="far fa-compass fa-spin" style="font-size: 33vw; margin-top: 0.05em;"></i>
+<div class="s-error e404">
+	<div class="text-center w-100">
+		<div class="icons pb-4 border-bottom">
+			<i class="fas fa-4"></i><i class="far fa-face-frown"></i><i class="fas fa-4"></i>
+		</div>
+		<div class="fs-3 my-4 p-4">
+			<p>{{T .Loc "error.request.notfound"}}</p>
+		</div>
+	</div>
 </div>
 
 {{template "main_footer" .}}
