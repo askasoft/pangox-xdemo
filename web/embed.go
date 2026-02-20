@@ -16,7 +16,7 @@ import (
 	"github.com/askasoft/pangox-assets/html/docxjs"
 	"github.com/askasoft/pangox-assets/html/flagicons"
 	"github.com/askasoft/pangox-assets/html/fontawesome7"
-	"github.com/askasoft/pangox-assets/html/jquery4"
+	"github.com/askasoft/pangox-assets/html/jquery3"
 	"github.com/askasoft/pangox-assets/html/jszip"
 	"github.com/askasoft/pangox-assets/html/pdfjs"
 	"github.com/askasoft/pangox-assets/html/pdfviewer"
@@ -35,7 +35,7 @@ var Statics = map[string]fs.FS{
 	"corejs":             corejs.FS,
 	"flagicons":          flagicons.FS,
 	"fontawesome7":       fontawesome7.FS,
-	"jquery4":            jquery4.FS,
+	"jquery3":            jquery3.FS,
 	"jszip":              jszip.FS,
 	"docxjs":             docxjs.FS,
 	"pdfjs":              pdfjs.FS,
