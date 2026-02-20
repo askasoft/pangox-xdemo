@@ -16,7 +16,8 @@
 			{{template "alerts" .}}
 		</fieldset>
 		
-		<form id="tags_form" class="ui-form lined" autocomplete="off">
+		<form id="tags_form" class="ui-form lined" autocomplete="off" method="POST">
+			<input type="hidden" name="_token_" value="{{$.Token}}"/>
 			<div class="row">
 				<label class="col-md-2 col-form-label informed" title="change label align">Label Align (longlonglonglong longlonglonglong longlonglonglong longlonglonglong)</label>
 				<div class="col-md-10">
@@ -87,6 +88,24 @@
 				<label class="col-md-2 col-form-label">Htmledit</label>
 				<div class="col-md-10">
 					<textarea name="htmledit" summernote>{{.Arg.Htmledit}}</textarea>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-md-2 col-form-label">Single File</label>
+				<div class="col-md-10">
+					<div data-spy="uploader" data-upload-name="file" data-upload-url="{{.Base}}/files/upload" data-dnload-url="{{.Base}}/files/preview$">
+						<input type="file" name="singlefile" class="ui-uploader-file" style="display:none"/>
+						<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-md-2 col-form-label">Multiple Files</label>
+				<div class="col-md-10">
+					<div data-spy="uploader" data-upload-name="file" data-upload-url="{{.Base}}/files/upload" data-dnload-url="{{.Base}}/files/preview$">
+						<input type="file" name="multifiles" multiple class="ui-uploader-file" style="display:none"/>
+						<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
+					</div>
 				</div>
 			</div>
 			<div class="row">
