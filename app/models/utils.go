@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	TagSetFile = "s"
 	TagTmpFile = "t"
 	TagJobFile = "j"
 	TagPetFile = "p"

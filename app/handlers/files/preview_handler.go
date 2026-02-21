@@ -17,15 +17,21 @@ import (
 )
 
 func Preview(c *xin.Context) {
-	id := c.Param("id")
-	if id == "" {
+	fid := c.Param("fid")
+	dnloadURL := app.Base() + "/files/dnload" + fid
+
+	PreviewFile(c, fid, dnloadURL)
+}
+
+func PreviewFile(c *xin.Context, fid, dnloadURL string) {
+	if fid == "" {
 		middles.NotFound(c)
 		return
 	}
 
 	tt := tenant.FromCtx(c)
 
-	file, err := tt.FS().FindFile(id)
+	file, err := tt.FS().FindFile(fid)
 	if errors.Is(err, sqlx.ErrNoRows) {
 		middles.NotFound(c)
 		return
@@ -38,6 +44,7 @@ func Preview(c *xin.Context) {
 
 	h := middles.H(c)
 	h["File"] = file
+	h["DnloadURL"] = dnloadURL
 
 	ext := str.ToLower(filepath.Ext(file.Name))
 	if ext == ".htm" {
@@ -49,7 +56,7 @@ func Preview(c *xin.Context) {
 		c.HTML(http.StatusOK, "files/preview"+ext, h)
 		return
 	case ".xlsx":
-		xsm, err := readXlsx(tt, file.ID)
+		xsm, err := readXlsx(tt, fid)
 		if err != nil {
 			c.AddError(err)
 			middles.InternalServerError(c)
@@ -59,7 +66,7 @@ func Preview(c *xin.Context) {
 		c.HTML(http.StatusOK, "files/preview"+ext, h)
 		return
 	case ".txt", ".tsv", ".csv":
-		data, err := tt.FS().ReadFile(file.ID)
+		data, err := tt.FS().ReadFile(fid)
 		if err != nil {
 			c.AddError(err)
 			middles.InternalServerError(c)
@@ -94,7 +101,7 @@ func Preview(c *xin.Context) {
 		c.HTML(http.StatusOK, "files/preview"+ext, h)
 		return
 	default:
-		c.Redirect(http.StatusFound, app.Base()+"/files/dnload"+file.ID)
+		c.Redirect(http.StatusFound, dnloadURL)
 		return
 	}
 }

@@ -13,7 +13,7 @@ func Router(rg *xin.RouterGroup) {
 	rg.POST("/upload", Upload)
 	rg.POST("/uploads", Uploads)
 
-	rg.GET("/preview/*id", Preview)
+	rg.GET("/preview/*fid", Preview)
 
 	xin.StaticFSFunc(rg, "/dnload/", middles.TenantHFS, xin.DisableAcceptRanges, xmwas.XCC.Handle)
 }

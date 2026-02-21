@@ -304,7 +304,7 @@
 			$cf.find('[type=file]').each(function() {
 				var $f = $(this).hide(), v = params[$f.attr('name')];
 				if (v) {
-					$('<a>', { 'class': 'btn btn-secondary', href: main.base + '/files' + v })
+					$('<a>', { 'class': 'btn btn-secondary', href: main.base + '/files/dnload' + v })
 						.append($('<i>', { 'class': 'fas fa-download' }))
 						.insertAfter($f);
 				}

@@ -18,12 +18,14 @@ const (
 	SettingStyleRadiosVertical        = "RV"
 	SettingStyleSelect                = "S"
 	SettingStyleSelectMulti           = "SM"
-	SettingStyleTextarea              = "T"
-	SettingStyleNumeric               = "N"
 	SettingStyleDecimal               = "D"
+	SettingStyleNumeric               = "N"
 	SettingStyleMonth                 = "TM"
 	SettingStyleDate                  = "TD"
 	SettingStyleTime                  = "TT"
+	SettingStyleTextarea              = "T"
+	SettingStyleFile                  = "F"
+	SettingStyleFiles                 = "FS"
 )
 
 type SettingItem struct {
@@ -86,7 +88,12 @@ func (s *Setting) Values() []string {
 
 func (s *Setting) IsMultiple() bool {
 	switch s.Style {
-	case SettingStyleChecks, SettingStyleChecksVertical, SettingStyleChecksOrdered, SettingStyleChecksOrderedVertical, SettingStyleSelectMulti:
+	case SettingStyleChecks,
+		SettingStyleChecksVertical,
+		SettingStyleChecksOrdered,
+		SettingStyleChecksOrderedVertical,
+		SettingStyleSelectMulti,
+		SettingStyleFiles:
 		return true
 	default:
 		return false

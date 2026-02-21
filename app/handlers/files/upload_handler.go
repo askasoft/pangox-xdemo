@@ -11,22 +11,30 @@ import (
 	"github.com/askasoft/pangox/xfs"
 )
 
-func SaveUploadedFile(c *xin.Context, mfh *multipart.FileHeader) (*xfs.File, error) {
-	fid := app.MakeFileID(models.TagTmpFile, mfh.Filename)
+func Upload(c *xin.Context) {
+	UploadFile(c, models.TagTmpFile)
+}
+
+func Uploads(c *xin.Context) {
+	UploadFiles(c, models.TagTmpFile)
+}
+
+func SaveUploadedFile(c *xin.Context, mfh *multipart.FileHeader, tag string) (*xfs.File, error) {
+	fid := app.MakeFileID(tag, mfh.Filename)
 
 	tt := tenant.FromCtx(c)
 	tfs := tt.FS()
-	return xfs.SaveUploadedFile(tfs, fid, mfh, models.TagTmpFile)
+	return xfs.SaveUploadedFile(tfs, fid, mfh, tag)
 }
 
-func Upload(c *xin.Context) {
+func UploadFile(c *xin.Context, tag string) {
 	file, err := c.FormFile("file")
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	fi, err := SaveUploadedFile(c, file)
+	fi, err := SaveUploadedFile(c, file, tag)
 	if err != nil {
 		c.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -36,7 +44,7 @@ func Upload(c *xin.Context) {
 	c.JSON(http.StatusOK, fr)
 }
 
-func Uploads(c *xin.Context) {
+func UploadFiles(c *xin.Context, tag string) {
 	files, err := c.FormFiles("files")
 	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
@@ -45,7 +53,7 @@ func Uploads(c *xin.Context) {
 
 	result := &xfs.FilesResult{}
 	for _, file := range files {
-		fi, err := SaveUploadedFile(c, file)
+		fi, err := SaveUploadedFile(c, file, tag)
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
 			return

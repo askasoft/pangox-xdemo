@@ -8,27 +8,23 @@
 	</div>
 	<div class="s-section-body">
 		<h4>{{T .Loc "file.uploads.label.single"}}</h4>
-		<div id="single"
+		<div data-spy="uploader"
 			data-upload-url="{{.Base}}/files/upload"
-			data-dnload-url="{{.Base}}/files/preview$"
-			data-spy="uploader">
-			
-			<input type="hidden" name="demo" class="ui-uploader-data" value="single"/>
+			data-upload-data='{"demo":"single"}'
+			data-dnload-url="{{.Base}}/files/preview$">
+
 			<input type="file" name="file" class="ui-uploader-file" style="display:none"/>
 			<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 		</div>
 
 		<hr>
 		<h4>{{T .Loc "file.uploads.label.multi"}}</h4>
-		<div id="multi"
+		<div data-spy="uploader" data-remover="false"
 			data-upload-url="{{.Base}}/files/upload"
-			data-dnload-url="{{.Base}}/files/preview$"
-			data-upload-remover="false"
-			data-spy="uploader">
-
-			<input type="hidden" name="demo" class="ui-uploader-data" value="multi"/>
+			data-upload-data='{"demo":"multi"}'
+			data-dnload-url="{{.Base}}/files/preview$">
 			<input type="file" name="file" multiple class="ui-uploader-file" style="display:none"/>
-			<div class="text-center">
+			<div>
 				<p>{{T .Loc "file.uploads.label.dragdrop"}}</p>
 				<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 			</div>
@@ -36,15 +32,13 @@
 
 		<hr>
 		<h4>{{T .Loc "file.uploads.label.multi_img"}}</h4>
-		<div id="multi2"
+		<div data-spy="uploader" data-preview="true"
 			data-upload-url="{{.Base}}/files/upload"
-			data-dnload-url="{{.Base}}/files/preview$"
-			data-dnload-view="true"
-			data-spy="uploader">
+			data-upload-data='{"demo":"multi"}'
+			data-dnload-url="{{.Base}}/files/preview$">
 
-			<input type="hidden" name="demo" class="ui-uploader-data" value="multi"/>
-			<input type="file" name="file" multiple class="ui-uploader-file" style="display:none"/>
-			<div class="text-center">
+			<input type="file" name="file" multiple class="ui-uploader-file" accept="image/*" style="display:none"/>
+			<div>
 				<p>{{T .Loc "file.uploads.label.dragdrop"}}</p>
 				<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 			</div>
@@ -52,15 +46,13 @@
 
 		<hr>
 		<h4>{{TF .Loc "file.uploads.label.multi_con" 5}}</h4>
-		<div id="multi2"
+		<div data-spy="uploader" data-upload-limit="5"
 			data-upload-url="{{.Base}}/files/upload"
-			data-dnload-url="{{.Base}}/files/preview$"
-			data-upload-limit="5"
-			data-spy="uploader">
+			data-upload-data='{"demo":"multi"}'
+			data-dnload-url="{{.Base}}/files/preview$">
 
-			<input type="hidden" name="demo" class="ui-uploader-data" value="multi"/>
 			<input type="file" name="file" multiple class="ui-uploader-file" style="display:none"/>
-			<div class="text-center">
+			<div>
 				<p>{{T .Loc "file.uploads.label.dragdrop"}}</p>
 				<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 			</div>

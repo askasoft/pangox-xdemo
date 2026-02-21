@@ -88,6 +88,18 @@
 									<input name="{{$s.Name}}" type="time" class="form-control" textclear value="{{$s.DisplayValue}}"{{if $ro}} disabled{{end}}/>
 								{{else if eq $s.Style "TM"}}
 									<input name="{{$s.Name}}" type="month" class="form-control" textclear value="{{$s.DisplayValue}}"{{if $ro}} disabled{{end}}/>
+								{{else if eq $s.Style "F"}}
+									<div data-spy="uploader" data-upload-name="file" data-upload-url="./files/upload" data-dnload-url="./files/preview$" data-value="{{$s.Value}}">
+										<input type="hidden" name="{{$s.Name}}" class="ui-uploader-empty" value=""/>
+										<input type="file" name="{{$s.Name}}" class="ui-uploader-file" style="display:none"/>
+										<a class="btn btn-sm btn-primary ui-uploader-btn">{{T $.Loc "button.browse"}}</a>
+									</div>
+								{{else if eq $s.Style "FS"}}
+									<div data-spy="uploader" data-upload-name="file" data-upload-url="./files/upload" data-dnload-url="./files/preview$" data-values="{{JSON $s.Values}}">
+										<input type="hidden" name="{{$s.Name}}" class="ui-uploader-empty" value=""/>
+										<input type="file" name="{{$s.Name}}" multiple class="ui-uploader-file" style="display:none"/>
+										<a class="btn btn-sm btn-primary ui-uploader-btn">{{T $.Loc "button.browse"}}</a>
+									</div>
 								{{else}}
 									<input name="{{$s.Name}}" type="text" class="form-control" textclear textstrip value="{{$s.DisplayValue}}" placeholder="{{T $.Loc (print "setting.placeholder." $s.Name)}}"{{if $ro}} disabled{{end}}/>
 								{{end}}

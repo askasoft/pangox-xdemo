@@ -18,6 +18,12 @@ func SetCtxLogProp(c *xin.Context) {
 	c.Logger.SetProp("TENANT", s)
 }
 
+// TenantHFS tenant http file system
+func TenantHFS(c *xin.Context) http.FileSystem {
+	tt := tenant.FromCtx(c)
+	return xfs.HFS(tt.FS())
+}
+
 // TenantProtect only allow access for known tenant
 func TenantProtect(c *xin.Context) {
 	if _, err := tenant.FindAndSetTenant(c); err != nil {
@@ -128,11 +134,4 @@ func RoleCustomProtector(s string) xin.HandlerFunc {
 		role := tt.SV(s)
 		RoleProtect(c, role)
 	}
-}
-
-//----------------------------------------------------
-
-func TenantHFS(c *xin.Context) http.FileSystem {
-	tt := tenant.FromCtx(c)
-	return xfs.HFS(tt.FS())
 }
