@@ -22,8 +22,8 @@
 			</div>
 			<div class="card-body">
 				<ul class="nav">
-					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/files/">{{I "demos.files"}}<span>{{T .Loc "menu.demos.files"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/tags/">{{I "demos.tags"}}<span>{{T .Loc "menu.demos.tags"}}</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/uploads/">{{I "demos.uploads"}}<span>{{T .Loc "menu.demos.uploads"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/chiconv/">{{I "demos.chiconv"}}<span>{{T .Loc "menu.demos.chiconv"}}</span></a></li>
 					{{if and .AU .AU.IsAdmin}}
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/demos/tests/">{{I "demos.tests"}}<span>{{T .Loc "menu.demos.tests"}}</span></a></li>
@@ -53,6 +53,7 @@
 			<div class="card-body">
 				<ul class="nav">
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/users/">{{I "admin.users"}}<span>{{T .Loc "menu.admin.users"}}</span></a></li>
+					<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/files/">{{I "admin.files"}}<span>{{T .Loc "menu.admin.files"}}</span></a></li>
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/a/auditlogs/">{{I "admin.auditlogs"}}<span>{{T .Loc "menu.admin.auditlogs"}}</span></a></li>
 					{{if and .TT.IsDefault .AU .AU.IsSuper}}
 					<li class="nav-item"><a class="nav-link" href="{{.Base}}/s/">{{I "super"}}<span>{{T .Loc "menu.super"}}</span></a></li>

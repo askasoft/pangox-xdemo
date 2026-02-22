@@ -43,7 +43,7 @@ func FileUpdates(c *xin.Context) {
 	}
 
 	c.JSON(http.StatusOK, xin.H{
-		"success": tbs.Format(c.Locale, "pet.success.updates", cnt),
+		"success": tbs.Format(c.Locale, "file.success.updates", cnt),
 		"updates": fua,
 	})
 }

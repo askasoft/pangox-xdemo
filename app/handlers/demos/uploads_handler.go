@@ -1,4 +1,4 @@
-package files
+package demos
 
 import (
 	"net/http"
@@ -7,8 +7,8 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/middles"
 )
 
-func FileUploadsIndex(c *xin.Context) {
+func UploadsIndex(c *xin.Context) {
 	h := middles.H(c)
 
-	c.HTML(http.StatusOK, "demos/files/uploads", h)
+	c.HTML(http.StatusOK, "demos/uploads", h)
 }

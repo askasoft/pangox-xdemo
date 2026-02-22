@@ -40,7 +40,7 @@ func FileIndex(c *xin.Context) {
 	h["Q"] = fqa
 	bindFileMaps(c, h)
 
-	c.HTML(http.StatusOK, "demos/files/files", h)
+	c.HTML(http.StatusOK, "admin/files/files", h)
 }
 
 func FileList(c *xin.Context) {
@@ -79,5 +79,5 @@ func FileList(c *xin.Context) {
 	h["Q"] = fqa
 	bindFileMaps(c, h)
 
-	c.HTML(http.StatusOK, "demos/files/files_list", h)
+	c.HTML(http.StatusOK, "admin/files/files_list", h)
 }

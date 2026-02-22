@@ -1,5 +1,5 @@
 (function($) {
-	var sskey = "d.files";
+	var sskey = "a.files";
 
 	//----------------------------------------------------
 	// list: pager & sorter

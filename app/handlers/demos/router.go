@@ -3,7 +3,6 @@ package demos
 import (
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
-	"github.com/askasoft/pangox-xdemo/app/handlers/demos/files"
 	"github.com/askasoft/pangox-xdemo/app/handlers/demos/pets"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 )
@@ -17,8 +16,9 @@ func Router(rg *xin.RouterGroup) {
 	rg.GET("/tags/", TagsIndex)
 	rg.POST("/tags/", TagsIndex)
 
+	rg.GET("/uploads/", UploadsIndex)
+
 	pets.Router(rg.Group("/pets"))
-	files.Router(rg.Group("/files"))
 
 	chiconvAddHandlers(rg.Group("/chiconv"))
 }
