@@ -31,19 +31,6 @@
 		return false;
 	}
 
-	function files_prev_page(callback) {
-		var pno = $('#files_list > .ui-pager > .pagination > .page-item.prev > a').attr('pageno');
-		$('#files_listform input[name="p"]').val(pno);
-		files_search(null, callback);
-	}
-
-	function files_next_page(callback) {
-		var pno = $('#files_list > .ui-pager > .pagination > .page-item.next > a').attr('pageno');
-		$('#files_listform input[name="p"]').val(pno);
-		files_search(null, callback);
-	}
-
-
 	//----------------------------------------------------
 	// deletes (selected / all)
 	//

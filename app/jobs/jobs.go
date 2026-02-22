@@ -153,30 +153,30 @@ func CleanOutdatedJobs() {
 			sfs := tt.SFS(tx)
 			cnt, err := sfs.DeleteTaggedBefore(models.TagJobFile, before)
 			if err != nil {
-				logger.Errorf("Failed to delete outdated job files (%q): %v", before.Format(time.RFC3339), err)
 				return err
 			}
 			if cnt > 0 {
-				logger.Infof("Delete outdated job files (%q): %d", before.Format(time.RFC3339), cnt)
+				logger.Infof("CleanOutdatedJobFiles(%q): %d", before.Format(time.RFC3339), cnt)
 			}
 
 			sjm := tt.SJM(tx)
 			cnt, _, err = sjm.CleanOutdatedJobs(before)
 			if err != nil {
-				logger.Errorf("Failed to delete outdated jobs (%q, %q): %v", string(tt.Schema), before.Format(time.RFC3339), err)
+				return err
 			}
 			if cnt > 0 {
-				logger.Infof("Delete outdated jobs (%q, %q): %d", string(tt.Schema), before.Format(time.RFC3339), cnt)
+				logger.Infof("CleanOutdatedJobs(%q): %d", before.Format(time.RFC3339), cnt)
 			}
 
 			xjc := tt.JC()
 			cnt, err = xjc.CleanOutdatedJobChains(before)
 			if err != nil {
-				logger.Errorf("Failed to delete outdated job chains (%q, %q): %v", string(tt.Schema), before.Format(time.RFC3339), err)
+				return err
 			}
 			if cnt > 0 {
-				logger.Infof("Delete outdated job chains (%q, %q): %d", string(tt.Schema), before.Format(time.RFC3339), cnt)
+				logger.Infof("CleanOutdatedJobChains(%q): %d", before.Format(time.RFC3339), cnt)
 			}
+
 			return nil
 		})
 	})

@@ -7,7 +7,6 @@ import (
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
-	"github.com/askasoft/pangox/xfs"
 )
 
 func CleanTemporaryFiles() {
@@ -15,7 +14,7 @@ func CleanTemporaryFiles() {
 
 	_ = tenant.Iterate(func(tt *tenant.Tenant) error {
 		tfs := tt.FS()
-		logger := tt.Logger("XFS")
+		logger := tt.Logger("SCH")
 
 		sqb := app.SDB().Builder()
 		sqb.Eq("tag", models.TagSetFile)
@@ -25,12 +24,19 @@ func CleanTemporaryFiles() {
 
 		cnt, err := tfs.DeleteWhere(sql, args...)
 		if err != nil {
-			logger.Debugf("CleanOutdatedSettingFiles('%s')", before.Format(time.RFC3339))
-		} else {
-			logger.Infof("CleanOutdatedSettingFiles('%s'): %d", before.Format(time.RFC3339), cnt)
+			return err
+		}
+		if cnt > 0 {
+			logger.Infof("CleanOutdatedSettingFiles(%q): %d", before.Format(time.RFC3339), cnt)
 		}
 
-		xfs.CleanOutdatedTaggedFiles(tfs, models.TagTmpFile, before, logger)
+		cnt, err = tfs.DeleteTaggedBefore(models.TagTmpFile, before)
+		if err != nil {
+			return err
+		}
+		if cnt > 0 {
+			logger.Infof("CleanOutdatedTemporaryFiles(%q): %d", before.Format(time.RFC3339), cnt)
+		}
 
 		return nil
 	})
