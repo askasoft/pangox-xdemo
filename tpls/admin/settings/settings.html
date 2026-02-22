@@ -56,16 +56,16 @@
 								{{if eq $s.Style "H"}}
 									<input name="{{$s.Name}}" type="hidden" value="{{$s.DisplayValue}}"{{if $ro}} disabled{{end}}/>
 								{{else if eq $s.Style "C"}}
-									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
+									<input name="{{$s.Name}}" type="checkbox" class="hidden" value="" checked{{if $ro}} disabled{{end}}>
 									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro}}
 								{{else if eq $s.Style "CV"}}
-									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
+									<input name="{{$s.Name}}" type="checkbox" class="hidden" value="" checked{{if $ro}} disabled{{end}}>
 									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro "class=" "vertical"}}
 								{{else if eq $s.Style "CO"}}
-									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
+									<input name="{{$s.Name}}" type="checkbox" class="hidden" value="" checked{{if $ro}} disabled{{end}}>
 									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro "Ordered=" true}}
 								{{else if eq $s.Style "COV"}}
-									<input type="checkbox" name="{{$s.Name}}" value="" checked{{if $ro}} disabled{{end}} style="display:none">
+									<input name="{{$s.Name}}" type="checkbox" class="hidden" value="" checked{{if $ro}} disabled{{end}}>
 									{{Checks "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Values=" $s.Values "Disabled=" $ro "Ordered=" true "class=" "vertical"}}
 								{{else if eq $s.Style "R"}}
 									{{Radios "Name=" $s.Name "List=" (MapGet $.Lists $s.Name) "Value=" $s.Value "Disabled=" $ro}}
@@ -91,13 +91,13 @@
 								{{else if eq $s.Style "F"}}
 									<div data-spy="uploader" data-upload-name="file" data-upload-url="./files/upload" data-dnload-url="./files/preview$" data-value="{{$s.Value}}">
 										<input type="hidden" name="{{$s.Name}}" class="ui-uploader-empty" value=""/>
-										<input type="file" name="{{$s.Name}}" class="ui-uploader-file" style="display:none"/>
+										<input type="file" name="{{$s.Name}}" class="ui-uploader-file"/>
 										<a class="btn btn-sm btn-primary ui-uploader-btn">{{T $.Loc "button.browse"}}</a>
 									</div>
 								{{else if eq $s.Style "FS"}}
 									<div data-spy="uploader" data-upload-name="file" data-upload-url="./files/upload" data-dnload-url="./files/preview$" data-values="{{JSON $s.Values}}">
 										<input type="hidden" name="{{$s.Name}}" class="ui-uploader-empty" value=""/>
-										<input type="file" name="{{$s.Name}}" multiple class="ui-uploader-file" style="display:none"/>
+										<input type="file" name="{{$s.Name}}" multiple class="ui-uploader-file"/>
 										<a class="btn btn-sm btn-primary ui-uploader-btn">{{T $.Loc "button.browse"}}</a>
 									</div>
 								{{else}}

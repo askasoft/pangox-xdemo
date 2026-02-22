@@ -11,18 +11,20 @@ import (
 )
 
 type tagsArg struct {
-	Text     string   `form:"text"`
-	Label    string   `form:"label"`
-	Hchecks  []string `form:"hchecks"`
-	Vchecks  []string `form:"vchecks"`
-	Ochecks  []string `form:"ochecks"`
-	Hradios  string   `form:"hradios"`
-	Vradios  string   `form:"vradios"`
-	Fselect  string   `form:"fselect"`
-	Nselect  string   `form:"nselect"`
-	Mselect  []string `form:"mselect"`
-	Textarea string   `form:"textarea"`
-	Htmledit string   `form:"htmledit"`
+	Text       string   `form:"text"`
+	Label      string   `form:"label"`
+	Hchecks    []string `form:"hchecks"`
+	Vchecks    []string `form:"vchecks"`
+	Ochecks    []string `form:"ochecks"`
+	Hradios    string   `form:"hradios"`
+	Vradios    string   `form:"vradios"`
+	Fselect    string   `form:"fselect"`
+	Nselect    string   `form:"nselect"`
+	Mselect    []string `form:"mselect"`
+	Textarea   string   `form:"textarea"`
+	Htmledit   string   `form:"htmledit"`
+	Singlefile string   `form:"singlefile"`
+	Multifiles []string `form:"multifiles"`
 }
 
 func TagsIndex(c *xin.Context) {

@@ -93,7 +93,12 @@
 			<div class="row">
 				<label class="col-md-2 col-form-label">Single File</label>
 				<div class="col-md-10">
-					<div data-spy="uploader" data-upload-name="file" data-upload-url="{{.Base}}/files/upload" data-dnload-url="{{.Base}}/files/preview$">
+					<div data-spy="uploader"
+						data-upload-name="file"
+						data-upload-url="{{.Base}}/files/upload"
+						data-dnload-url="{{.Base}}/files/preview$"
+						data-value="{{.Arg.Singlefile}}">
+
 						<input type="file" name="singlefile" class="ui-uploader-file" style="display:none"/>
 						<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 					</div>
@@ -102,7 +107,12 @@
 			<div class="row">
 				<label class="col-md-2 col-form-label">Multiple Files</label>
 				<div class="col-md-10">
-					<div data-spy="uploader" data-upload-name="file" data-upload-url="{{.Base}}/files/upload" data-dnload-url="{{.Base}}/files/preview$">
+					<div data-spy="uploader"
+						data-upload-name="file"
+						data-upload-url="{{.Base}}/files/upload"
+						data-dnload-url="{{.Base}}/files/preview$"
+						data-values="{{JSON .Arg.Multifiles}}">
+
 						<input type="file" name="multifiles" multiple class="ui-uploader-file" style="display:none"/>
 						<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 					</div>

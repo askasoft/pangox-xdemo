@@ -11,7 +11,7 @@
 			data-upload-data='{"demo":"single"}'
 			data-dnload-url="{{.Base}}/files/preview$">
 
-			<input type="file" name="file" class="ui-uploader-file" style="display:none"/>
+			<input type="file" name="file" class="ui-uploader-file"/>
 			<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 		</div>
 
@@ -21,11 +21,9 @@
 			data-upload-url="{{.Base}}/files/upload"
 			data-upload-data='{"demo":"multi"}'
 			data-dnload-url="{{.Base}}/files/preview$">
-			<input type="file" name="file" multiple class="ui-uploader-file" style="display:none"/>
-			<div>
-				<p>{{T .Loc "demos.uploads.label.dragdrop"}}</p>
-				<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
-			</div>
+			<input type="file" name="file" multiple class="ui-uploader-file"/>
+			<p class="w-100">{{T .Loc "demos.uploads.label.dragdrop"}}</p>
+			<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
 		</div>
 
 		<hr>
@@ -35,7 +33,7 @@
 			data-upload-data='{"demo":"multi"}'
 			data-dnload-url="{{.Base}}/files/preview$">
 
-			<input type="file" name="file" multiple class="ui-uploader-file" accept="image/*" style="display:none"/>
+			<input type="file" name="file" multiple class="ui-uploader-file" accept="image/*"/>
 			<div>
 				<p>{{T .Loc "demos.uploads.label.dragdrop"}}</p>
 				<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
@@ -49,7 +47,7 @@
 			data-upload-data='{"demo":"multi"}'
 			data-dnload-url="{{.Base}}/files/preview$">
 
-			<input type="file" name="file" multiple class="ui-uploader-file" style="display:none"/>
+			<input type="file" name="file" multiple class="ui-uploader-file"/>
 			<div>
 				<p>{{T .Loc "demos.uploads.label.dragdrop"}}</p>
 				<a class="btn btn-sm btn-primary ui-uploader-btn">{{T .Loc "button.browse"}}</a>
