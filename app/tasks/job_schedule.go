@@ -35,8 +35,8 @@ func startScheduleJobChain(tt *tenant.Tenant, key, jcname string, fn func(tt *te
 		return nil
 	}
 
-	xjc := tt.JC()
-	jc, err := xjc.FindJobChain(jcname, false)
+	tjc := tt.JC()
+	jc, err := tjc.FindJobChain(jcname, false)
 	if err != nil {
 		return err
 	}

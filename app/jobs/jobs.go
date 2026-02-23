@@ -133,11 +133,12 @@ func ReappendJobs() {
 		tjm := tt.JM()
 		cnt, err := tjm.ReappendJobs(before)
 		if err != nil {
-			tt.Logger("JOB").Errorf("Failed to ReappendJobs(%q, %q): %v", string(tt.Schema), before.Format(time.RFC3339), err)
-		} else if cnt > 0 {
-			tt.Logger("JOB").Infof("ReappendJobs(%q, %q): %d", string(tt.Schema), before.Format(time.RFC3339), cnt)
+			return err
 		}
-		return err
+		if cnt > 0 {
+			tt.Logger("JOB").Infof("ReappendJobs(%q): %d", before.Format(time.RFC3339), cnt)
+		}
+		return nil
 	})
 }
 
@@ -168,8 +169,8 @@ func CleanOutdatedJobs() {
 				logger.Infof("CleanOutdatedJobs(%q): %d", before.Format(time.RFC3339), cnt)
 			}
 
-			xjc := tt.JC()
-			cnt, err = xjc.CleanOutdatedJobChains(before)
+			tjc := tt.JC()
+			cnt, err = tjc.CleanOutdatedJobChains(before)
 			if err != nil {
 				return err
 			}
