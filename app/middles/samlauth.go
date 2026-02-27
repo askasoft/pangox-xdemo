@@ -135,8 +135,8 @@ func SamlServiceProvider(c *xin.Context) *samlsp.Middleware {
 
 	samlSP, _ := samlsp.New(samlsp.Options{
 		URL:         rootURL,
-		Key:         app.Certificate.PrivateKey.(*rsa.PrivateKey),
-		Certificate: app.Certificate.Leaf,
+		Key:         app.SAMLCertificate.PrivateKey.(*rsa.PrivateKey),
+		Certificate: app.SAMLCertificate.Leaf,
 		IDPMetadata: idpMetadata,
 	})
 	samlSP.OnError = SamlOnError
