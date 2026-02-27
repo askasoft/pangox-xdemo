@@ -52,7 +52,7 @@ var (
 	XCN *middleware.CookieAuth
 
 	// Certificate X509 KeyPair
-	Certificate *tls.Certificate
+	SAMLCertificate *tls.Certificate
 
 	// SCMAS schema cache
 	SCMAS *imc.Cache[string, bool]

@@ -177,7 +177,7 @@ func reloadCaches() {
 }
 
 func initServers() {
-	if err := xhsvs.InitServers(xxins.XIN, getCertificate); err != nil {
+	if err := xhsvs.InitServers(xxins.XIN); err != nil {
 		log.Fatal(app.ExitErrSRV, err)
 	}
 }
