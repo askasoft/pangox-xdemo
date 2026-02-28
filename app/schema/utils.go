@@ -41,10 +41,5 @@ func DeleteByKey[T any](tx sqlx.Sqlx, table, key string, vals ...T) (int64, erro
 	}
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }

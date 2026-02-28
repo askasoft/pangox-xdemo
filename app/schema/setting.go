@@ -31,12 +31,7 @@ func (sm Schema) UpdateSettingValue(tx sqlx.Sqlx, name, value string) (int64, er
 	sqb.Eq("name", name)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) ListSettingsByRole(tx sqlx.Sqlx, actor, role string) (settings []*models.Setting, err error) {
@@ -92,12 +87,11 @@ func (sm Schema) SaveSettings(tx sqlx.Sqlx, settings []*models.Setting, locale s
 
 	now := time.Now()
 	for _, stg := range settings {
-		r, err := stmt.Exec(stg.Value, now, stg.Name)
+		cnt, err := stmt.Update(stg.Value, now, stg.Name)
 		if err != nil {
 			return err
 		}
 
-		cnt, _ := r.RowsAffected()
 		if cnt != 1 {
 			eits = append(eits, stg.Name)
 		}
@@ -129,12 +123,11 @@ func (sm Schema) SaveSettingsByRole(tx sqlx.Sqlx, au *models.User, settings []*m
 
 	now := time.Now()
 	for _, stg := range settings {
-		r, err := stmt.Exec(stg.Value, now, stg.Name, au.Role)
+		cnt, err := stmt.Update(stg.Value, now, stg.Name, au.Role)
 		if err != nil {
 			return err
 		}
 
-		cnt, _ := r.RowsAffected()
 		if cnt != 1 {
 			eits = append(eits, stg.Name)
 		}

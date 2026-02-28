@@ -84,12 +84,7 @@ func (sm Schema) DeleteAuditLogsQuery(tx sqlx.Sqlx, alqa *args.AuditLogQueryArg,
 	sqb.Where("id IN ("+sqa.SQL()+")", sqa.Params()...)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) DeleteAuditLogs(tx sqlx.Sqlx, ids ...int64) (int64, error) {
@@ -103,12 +98,7 @@ func (sm Schema) DeleteAuditLogsBefore(tx sqlx.Sqlx, before time.Time) (int64, e
 	sqb.Lt("date", before)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) AddAuditLog(tx sqlx.Sqlx, uid int64, cip, role, funact string, params ...any) error {

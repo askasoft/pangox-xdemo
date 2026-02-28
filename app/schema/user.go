@@ -79,12 +79,7 @@ func (sm Schema) DeleteUsersQuery(tx sqlx.Sqlx, au *models.User, uqa *args.UserQ
 	uqa.AddFilters(sqb)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) GetUser(tx sqlx.Sqlx, uid int64) (*models.User, error) {
@@ -143,13 +138,7 @@ func (sm Schema) UpdateUser(tx sqlx.Sqlx, role string, user *models.User) (int64
 	sqb.Gte("role", role)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	cnt, _ := r.RowsAffected()
-	return cnt, err
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) UpdateUserPassword(tx sqlx.Sqlx, uid int64, password string) (int64, error) {
@@ -161,12 +150,7 @@ func (sm Schema) UpdateUserPassword(tx sqlx.Sqlx, uid int64, password string) (i
 	sqb.Eq("id", uid)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) UpdateUserSecret(tx sqlx.Sqlx, uid int64, secret int64) (int64, error) {
@@ -178,12 +162,7 @@ func (sm Schema) UpdateUserSecret(tx sqlx.Sqlx, uid int64, secret int64) (int64,
 	sqb.Eq("id", uid)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) DeleteUsers(tx sqlx.Sqlx, au *models.User, ids ...int64) (int64, error) {
@@ -195,12 +174,7 @@ func (sm Schema) DeleteUsers(tx sqlx.Sqlx, au *models.User, ids ...int64) (int64
 	xsqbs.AddIn(sqb, "id", ids)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) UpdateUsers(tx sqlx.Sqlx, au *models.User, uua *args.UserUpdatesArg) (int64, error) {
@@ -211,13 +185,7 @@ func (sm Schema) UpdateUsers(tx sqlx.Sqlx, au *models.User, uua *args.UserUpdate
 	sqb.Neq("id", au.ID)
 	sqb.Gte("role", au.Role)
 	xsqbs.AddIn(sqb, "id", uua.IDs())
-
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }

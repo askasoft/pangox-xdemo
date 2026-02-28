@@ -99,17 +99,12 @@ func SqlExec(c *xin.Context) {
 					sr.Datas = append(sr.Datas, data)
 				}
 			} else {
-				r, err := tx.Exec(sqs)
+				cnt, err := tx.Update(sqs)
 				if err != nil {
 					sr.Error = err.Error()
 					return io.EOF
 				}
-
-				sr.Effected, err = r.RowsAffected()
-				if err != nil {
-					sr.Error = err.Error()
-					return io.EOF
-				}
+				sr.Effected = cnt
 			}
 
 			sr.Elapsed = time.Since(start).String()

@@ -40,12 +40,7 @@ func (sm Schema) DeleteFilesQuery(tx sqlx.Sqlx, fqa *args.FileQueryArg) (int64, 
 	fqa.AddFilters(sqb)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) DeleteFiles(tx sqlx.Sqlx, ids ...string) (int64, error) {
@@ -55,12 +50,7 @@ func (sm Schema) DeleteFiles(tx sqlx.Sqlx, ids ...string) (int64, error) {
 	xsqbs.AddIn(sqb, "id", ids)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) UpdateFiles(tx sqlx.Sqlx, fua *args.FileUpdatesArg) (int64, error) {
@@ -69,13 +59,7 @@ func (sm Schema) UpdateFiles(tx sqlx.Sqlx, fua *args.FileUpdatesArg) (int64, err
 	sqb.Update(sm.TableFiles())
 	fua.AddUpdates(sqb)
 	xsqbs.AddIn(sqb, "id", fua.PKs())
-
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }

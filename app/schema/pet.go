@@ -72,12 +72,7 @@ func (sm Schema) DeletePetsQuery(tx sqlx.Sqlx, pqa *args.PetQueryArg) (int64, er
 	pqa.AddFilters(sqb)
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
 
 func (sm Schema) GetPet(tx sqlx.Sqlx, pid int64) (*models.Pet, error) {
@@ -111,12 +106,7 @@ func (sm Schema) UpdatePet(tx sqlx.Sqlx, pet *models.Pet) (int64, error) {
 	sqb.Where("id = :id")
 	sql := sqb.SQL()
 
-	r, err := tx.NamedExec(sql, pet)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.NamedUpdate(sql, pet)
 }
 
 func (sm Schema) DeletePets(tx sqlx.Sqlx, ids ...int64) (int64, error) {
@@ -128,15 +118,8 @@ func (sm Schema) UpdatePets(tx sqlx.Sqlx, pua *args.PetUpdatesArg) (int64, error
 
 	sqb.Update(sm.TablePets())
 	pua.AddUpdates(sqb)
-
 	xsqbs.AddIn(sqb, "id", pua.IDs())
-
 	sql, args := sqb.Build()
 
-	r, err := tx.Exec(sql, args...)
-	if err != nil {
-		return 0, err
-	}
-
-	return r.RowsAffected()
+	return tx.Update(sql, args...)
 }
