@@ -4,6 +4,8 @@
 	--bs-primary-rgb: 44, 62, 80; */
 	--bs-primary: #337ab7;
 	--bs-primary-rgb: 51, 122, 183;
+	--bs-warning: #e95420;
+	--bs-warning-rgb: 233, 84, 32;
 	--bs-link-color: var(--bs-primary);
 	--bs-link-color-rgb: var(--bs-primary-rgb);
 	--bs-link-hover-color: #23527c;
@@ -25,6 +27,26 @@
 	--bs-btn-active-border-color: var(--bs-primary);
 	--bs-btn-disabled-color: var(--bs-primary);
 	--bs-btn-disabled-border-color: var(--bs-primary);
+}
+.btn-warning {
+	--bs-btn-color: #fff;
+	--bs-btn-hover-color: #fff;
+	--bs-btn-disabled-color: #fff;
+	--bs-btn-bg: var(--bs-warning);
+	--bs-btn-border-color: var(--bs-warning);
+	--bs-btn-disabled-bg: var(--bs-warning);
+	--bs-btn-disabled-border-color: var(--bs-warning);
+}
+.btn-outline-warning {
+	--bs-btn-hover-color: #fff;
+	--bs-btn-color: var(--bs-warning);
+	--bs-btn-border-color: var(--bs-warning);
+	--bs-btn-hover-bg: var(--bs-warning);
+	--bs-btn-hover-border-color: var(--bs-warning);
+	--bs-btn-active-bg: var(--bs-warning);
+	--bs-btn-active-border-color: var(--bs-warning);
+	--bs-btn-disabled-color: var(--bs-warning);
+	--bs-btn-disabled-border-color: var(--bs-warning);
 }
 
 /** bootswatch5 (cosmo)
