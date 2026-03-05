@@ -6,6 +6,7 @@ import (
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/args"
+	"github.com/askasoft/pangox-xdemo/app/handlers/files"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
@@ -80,4 +81,11 @@ func FileList(c *xin.Context) {
 	bindFileMaps(c, h)
 
 	c.HTML(http.StatusOK, "admin/files/files_list", h)
+}
+
+func FilePreview(c *xin.Context) {
+	fid := c.Param("fid")
+	dnloadURL := app.Base() + "/a/files/dnload" + fid
+
+	files.PreviewFile(c, fid, dnloadURL)
 }

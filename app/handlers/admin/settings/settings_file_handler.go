@@ -12,7 +12,7 @@ func SettingFileUpload(c *xin.Context) {
 }
 
 func SettingFilePreview(c *xin.Context) {
-	fid := c.Param("id")
+	fid := c.Param("fid")
 	dnloadURL := app.Base() + "/a/settings/files/dnload" + fid
 
 	files.PreviewFile(c, fid, dnloadURL)

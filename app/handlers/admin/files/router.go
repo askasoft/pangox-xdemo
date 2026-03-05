@@ -2,7 +2,6 @@ package files
 
 import (
 	"github.com/askasoft/pango/xin"
-	"github.com/askasoft/pangox-xdemo/app/handlers/files"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox/xwa/xmwas"
 )
@@ -14,7 +13,7 @@ func Router(rg *xin.RouterGroup) {
 	rg.POST("/deletes", FileDeletes)
 	rg.POST("/deleteb", FileDeleteBatch)
 
-	rg.GET("/preview/*fid", files.Preview)
+	rg.GET("/preview/*fid", FilePreview)
 
 	xin.StaticFSFunc(rg, "/dnload/", middles.TenantHFS, xin.DisableAcceptRanges, xmwas.XCC.Handle)
 }
