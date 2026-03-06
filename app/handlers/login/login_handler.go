@@ -26,7 +26,7 @@ import (
 func Index(c *xin.Context) {
 	h := middles.H(c)
 
-	h["origin"] = c.Query(middleware.AuthRedirectOriginURLQuery)
+	h["origin"] = c.Query(middleware.AuthOriginQuery)
 
 	c.HTML(http.StatusOK, "login/login", h)
 }

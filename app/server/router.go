@@ -73,7 +73,7 @@ func configMiddleware() {
 	xmwas.ConfigMiddlewares()
 
 	app.XCA.SetSecret(app.Secret())
-	app.XCA.RedirectURL = app.Base() + "/login/"
+	app.XCA.AuthFailed = middleware.AuthFailedRedirector(app.Base()+"/login/", middleware.AuthOriginQuery)
 	app.XCA.CookiePath = str.IfEmpty(app.Base(), "/")
 	app.XCA.CookieMaxAge = ini.GetDuration("login", "cookieMaxAge", time.Minute*30)
 	app.XCA.CookieSecure = ini.GetBool("login", "cookieSecure", true)
