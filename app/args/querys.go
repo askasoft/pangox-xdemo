@@ -125,13 +125,13 @@ func (alqa *AuditLogQueryArg) AddOrders(sqb *sqlx.Builder, defaults string) {
 type FileQueryArg struct {
 	QueryArg
 
-	ID       string    `json:"id,omitempty" form:"id,strip,ascii" validate:"uintegers"`
-	Name     string    `json:"name,omitempty" form:"name,strip"`
-	Ext      string    `json:"ext,omitempty" form:"ext,strip"`
-	Tag      string    `json:"tag,omitempty" form:"tag,strip"`
-	Size     string    `json:"size,omitempty" form:"size,strip,ascii" validate:"uintegers"`
-	TimeFrom time.Time `json:"time_from,omitempty" form:"time_from,strip"`
-	TimeTo   time.Time `json:"time_to,omitempty" form:"time_to,strip" validate:"omitempty,gtefield=TimeFrom"`
+	ID     string    `json:"id,omitempty" form:"id,strip,ascii" validate:"uintegers"`
+	Name   string    `json:"name,omitempty" form:"name,strip"`
+	Ext    string    `json:"ext,omitempty" form:"ext,strip"`
+	Tag    string    `json:"tag,omitempty" form:"tag,strip"`
+	Size   string    `json:"size,omitempty" form:"size,strip,ascii" validate:"uintegers"`
+	TimeFr time.Time `json:"time_fr,omitempty" form:"time_fr,strip"`
+	TimeTo time.Time `json:"time_to,omitempty" form:"time_to,strip"`
 }
 
 func (fqa *FileQueryArg) String() string {
@@ -144,7 +144,7 @@ func (fqa *FileQueryArg) HasFilters() bool {
 		fqa.Ext != "" ||
 		fqa.Tag != "" ||
 		fqa.Size != "" ||
-		!fqa.TimeFrom.IsZero() ||
+		!fqa.TimeFr.IsZero() ||
 		!fqa.TimeTo.IsZero()
 }
 
@@ -154,7 +154,7 @@ func (fqa *FileQueryArg) AddFilters(sqb *sqlx.Builder) {
 	fqa.AddKeywords(sqb, "ext", fqa.Ext)
 	fqa.AddKeywords(sqb, "tag", fqa.Tag)
 	fqa.AddUintegers(sqb, "size", fqa.Size)
-	fqa.AddTimeRange(sqb, "time", fqa.TimeFrom, fqa.TimeTo)
+	fqa.AddDateRange(sqb, "time", fqa.TimeFr, fqa.TimeTo)
 }
 
 type PetQueryArg struct {
@@ -162,8 +162,8 @@ type PetQueryArg struct {
 
 	ID       string    `json:"id,omitempty" form:"id,strip,ascii" validate:"uintegers"`
 	Name     string    `json:"name,omitempty" form:"name,strip"`
-	BornFrom time.Time `json:"born_from,omitempty" form:"born_from,strip"`
-	BornTo   time.Time `json:"born_to,omitempty" form:"born_to,strip" validate:"omitempty,gtefield=BornFrom"`
+	BornFr   time.Time `json:"born_fr,omitempty" form:"born_fr,strip"`
+	BornTo   time.Time `json:"born_to,omitempty" form:"born_to,strip"`
 	Gender   []string  `json:"gender,omitempty" form:"gender,strip"`
 	Origin   []string  `json:"origin,omitempty" form:"origin,strip"`
 	Habits   []string  `json:"habits,omitempty" form:"habits,strip"`
@@ -184,7 +184,7 @@ func (pqa *PetQueryArg) HasFilters() bool {
 		len(pqa.Origin) > 0 ||
 		len(pqa.Temper) > 0 ||
 		len(pqa.Habits) > 0 ||
-		!pqa.BornFrom.IsZero() ||
+		!pqa.BornFr.IsZero() ||
 		!pqa.BornTo.IsZero() ||
 		pqa.Amount != "" ||
 		pqa.Price != "" ||
@@ -196,7 +196,7 @@ func (pqa *PetQueryArg) AddFilters(sqb *sqlx.Builder) {
 	pqa.AddIn(sqb, "gender", pqa.Gender)
 	pqa.AddIn(sqb, "origin", pqa.Origin)
 	pqa.AddIn(sqb, "temper", pqa.Temper)
-	pqa.AddTimeRange(sqb, "born_at", pqa.BornFrom, pqa.BornTo)
+	pqa.AddDateRange(sqb, "born_at", pqa.BornFr, pqa.BornTo)
 	pqa.AddUintegers(sqb, "amount", pqa.Amount)
 	pqa.AddDecimals(sqb, "price", pqa.Price)
 	pqa.AddKeywords(sqb, "name", pqa.Name)

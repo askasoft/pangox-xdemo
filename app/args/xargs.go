@@ -12,6 +12,7 @@ type ParamError = xargs.ParamError
 type Integers = xargs.Integers
 type Decimals = xargs.Decimals
 type Keywords = xargs.Keywords
+type Wildcards = xargs.Wildcards
 
 func ParseIntegers(val string) (Integers, error) {
 	return xargs.ParseIntegers(val)
@@ -33,8 +34,12 @@ func ParseKeywords(val string) Keywords {
 	return xargs.ParseKeywords(val)
 }
 
-func NextKeyword(s string) (string, string, bool) {
-	return xargs.NextKeyword(s)
+func NextKeyword(val string) (string, string, bool) {
+	return xargs.NextKeyword(val)
+}
+
+func ParseWildcards(val string) Wildcards {
+	return xargs.ParseWildcards(val)
 }
 
 // AddBindErrors translate bind or validate errors and add it to context
