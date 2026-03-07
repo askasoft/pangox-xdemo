@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/askasoft/pango/xin"
+	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/args"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/schema"
@@ -73,7 +74,7 @@ func TenantList(c *xin.Context) {
 		}
 
 		tt := tenant.FromCtx(c)
-		ds := schema.DefaultSchema()
+		ds := app.DefaultSchema()
 
 		tenants := make([]*TenantInfo, len(schemas))
 		for i, si := range schemas {

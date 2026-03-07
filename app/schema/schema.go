@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"github.com/askasoft/pango/ini"
-	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox/xfs"
@@ -17,20 +15,7 @@ import (
 type Schema string
 
 func (sm Schema) IsDefault() bool {
-	return string(sm) == DefaultSchema()
-}
-
-func (sm Schema) Logger(name string) log.Logger {
-	logger := log.GetLogger(name)
-	logger.SetProp("TENANT", string(sm))
-	return logger
-}
-
-func (sm Schema) FQDN() string {
-	if sm.IsDefault() {
-		return app.Domain()
-	}
-	return string(sm) + "." + app.Domain()
+	return string(sm) == app.DefaultSchema()
 }
 
 func (sm Schema) SJC(db sqlx.Sqlx) xjm.JobChainer {
@@ -55,14 +40,6 @@ func (sm Schema) JM() xjm.JobManager {
 
 func (sm Schema) FS() xfs.XFS {
 	return sm.SFS(app.SDB())
-}
-
-func IsMultiTenant() bool {
-	return ini.GetBool("tenant", "multiple")
-}
-
-func DefaultSchema() string {
-	return ini.GetString("database", "schema", "public")
 }
 
 func SSM(db *sqlx.DB) xsm.SchemaManager {
@@ -115,8 +92,8 @@ func FindSchemas(sq *xsm.SchemaQuery) (schemas []*xsm.SchemaInfo, err error) {
 }
 
 func Iterate(itf func(sm Schema) error) error {
-	if !IsMultiTenant() {
-		return itf(Schema(DefaultSchema()))
+	if !app.IsMultiTenant() {
+		return itf(Schema(app.DefaultSchema()))
 	}
 
 	ss, err := ListSchemas()

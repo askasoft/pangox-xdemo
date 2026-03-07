@@ -91,7 +91,7 @@ func RoleProtect(c *xin.Context, role string) {
 }
 
 func RoleRootProtect(c *xin.Context) {
-	if tenant.IsMultiTenant() {
+	if app.IsMultiTenant() {
 		tt := tenant.FromCtx(c)
 		au := tenant.AuthUser(c)
 

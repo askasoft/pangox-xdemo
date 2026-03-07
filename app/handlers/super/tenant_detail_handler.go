@@ -5,6 +5,7 @@ import (
 
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
+	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/args"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/schema"
@@ -55,7 +56,7 @@ func TenantUpdate(c *xin.Context) {
 	}
 
 	tt := tenant.FromCtx(c)
-	if te.Oname != te.Name && (te.Oname == string(tt.Schema) || te.Oname == schema.DefaultSchema()) {
+	if te.Oname != te.Name && (te.Oname == string(tt.Schema) || te.Oname == app.DefaultSchema()) {
 		c.AddError(tbs.Errorf(c.Locale, "tenant.error.unrename", te.Oname))
 		c.JSON(http.StatusBadRequest, middles.E(c))
 		return
@@ -110,7 +111,7 @@ func TenantDelete(c *xin.Context) {
 	}
 
 	tt := tenant.FromCtx(c)
-	if ti.Name == string(tt.Schema) || ti.Name == schema.DefaultSchema() {
+	if ti.Name == string(tt.Schema) || ti.Name == app.DefaultSchema() {
 		c.AddError(tbs.Errorf(c.Locale, "tenant.error.undelete", ti.Name))
 		c.JSON(http.StatusBadRequest, middles.E(c))
 		return

@@ -7,6 +7,7 @@ import (
 	"github.com/askasoft/pango/gwp"
 	"github.com/askasoft/pango/ids/snowflake"
 	"github.com/askasoft/pango/imc"
+	"github.com/askasoft/pango/ini"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tmu"
@@ -125,6 +126,22 @@ func SDB() *sqlx.DB {
 func DBType() string {
 	d := xsqls.Driver()
 	return str.If(d == "pgx", "postgres", d)
+}
+
+func IsMultiTenant() bool {
+	return ini.GetBool("tenant", "multiple")
+}
+
+func DefaultTenant() string {
+	return ini.GetString("tenant", "default")
+}
+
+func DefaultSchema() string {
+	return ini.GetString("database", "schema", "public")
+}
+
+func FormatMonth(a any) string {
+	return tmu.LocalFormat(a, "2006-01")
 }
 
 func FormatDate(a any) string {

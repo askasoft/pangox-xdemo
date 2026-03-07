@@ -3,6 +3,7 @@ package tenant
 import (
 	"sync"
 
+	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
@@ -17,6 +18,12 @@ type Tenant struct {
 	variables map[string]string
 }
 
+func (tt *Tenant) Logger(name string) log.Logger {
+	logger := log.GetLogger(name)
+	logger.SetProp("TENANT", string(tt.Schema))
+	return logger
+}
+
 func NewTenant(name string) *Tenant {
 	tt := &Tenant{Schema: schema.Schema(name)}
 	tt.settings = tt.getSettings()
@@ -29,12 +36,8 @@ func NewTenant(name string) *Tenant {
 	return tt
 }
 
-func IsMultiTenant() bool {
-	return schema.IsMultiTenant()
-}
-
 func GetSubdomain(c *xin.Context) (string, bool) {
-	if !IsMultiTenant() {
+	if !app.IsMultiTenant() {
 		return "", true
 	}
 
@@ -73,10 +76,10 @@ func FindAndSetTenant(c *xin.Context) (*Tenant, error) {
 	}
 
 	if s == "" {
-		s = schema.DefaultSchema()
+		s = app.DefaultSchema()
 	}
 
-	if IsMultiTenant() {
+	if app.IsMultiTenant() {
 		ok, err := CheckSchema(s)
 		if err != nil {
 			return nil, err
