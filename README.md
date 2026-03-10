@@ -428,3 +428,21 @@ POST xdemo_access/_delete_by_query
 
 golang cache problem, use the following command to revoke cache:
 > curl https://proxy.golang.org/github.com/askasoft/gogormx/@v/v1.0.9.info
+
+
+## k6
+```sh
+echo '
+import http from "k6/http";
+import { sleep } from "k6";
+
+export default function () {
+	http.get("http://xdemo.local/");
+	sleep(1);
+	http.get("http://xdemo.local/demos/pets/list");
+	sleep(1);
+}
+' > xdemo.k6.js
+
+k6 run --vus 1000 --duration 30s xdemo.k6.js
+```
