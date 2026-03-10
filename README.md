@@ -420,3 +420,11 @@ POST xdemo_access/_delete_by_query
 }
 ```
 
+## go mod
+
+### go mod not foud
+
+> github.com/askasoft/gogormx@v1.0.9: verifying go.mod: github.com/askasoft/gogormx@v1.0.9/go.mod: reading https://sum.golang.org/lookup/github.com/askasoft/gogormx@v1.0.9: 404 Not Found
+
+golang cache problem, use the following command to revoke cache:
+> curl https://proxy.golang.org/github.com/askasoft/gogormx/@v/v1.0.9.info
