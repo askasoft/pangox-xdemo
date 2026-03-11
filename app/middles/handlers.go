@@ -22,6 +22,7 @@ func H(c *xin.Context) xin.H {
 		"VER":     app.Version(),
 		"REV":     app.Revision(),
 		"Base":    app.Base(),
+		"Debug":   app.IsDebug(),
 		"Domain":  app.Domain(),
 		"Locales": app.Locales(),
 		"Now":     time.Now(),

@@ -41,15 +41,17 @@ func GetSubdomain(c *xin.Context) (string, bool) {
 		return "", true
 	}
 
-	domain := c.RequestHostname()
+	domain, hostname := app.Domain(), c.RequestHostname()
 
-	if domain == app.Domain() {
+	if hostname == domain {
 		return "", true
 	}
 
-	suffix := "." + app.Domain()
-	if str.EndsWith(domain, suffix) {
-		return domain[:len(domain)-len(suffix)], true
+	if str.EndsWith(hostname, domain) {
+		sub := hostname[:len(hostname)-len(domain)]
+		if str.EndsWithByte(sub, '.') {
+			return sub[:len(sub)-1], true
+		}
 	}
 
 	return "", false

@@ -18,6 +18,7 @@ func init() {
 	xtpls.Funcs = tpl.FuncMap{
 		"DATE":           app.FormatDate,
 		"TIME":           app.FormatTime,
+		"Ellapsed":       app.Ellapsed,
 		"SummernoteLang": summernote.Locale2Lang,
 	}
 	xfsws.ReloadTplsOnChange = reloadTemplatesOnChange

@@ -6,7 +6,7 @@
 	</div>
 	<div class="s-section-body">
 		<div class="s-menu">
-			{{if and .TT.IsDefault (eq .CFG.tenant.multiple "true")}}
+			{{if and .TT.IsDefault (Atob .CFG.tenant.multiple)}}
 			<a class="s-menu-item" href="{{.Base}}/s/tenants/">{{I "super.tenants"}}<div>{{T .Loc "menu.super.tenants"}}</div></a>
 			{{end}}
 			<a class="s-menu-item" href="{{.Base}}/s/configs/">{{I "super.configs"}}<div>{{T .Loc "menu.super.configs"}}</div></a>

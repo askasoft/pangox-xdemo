@@ -4,7 +4,7 @@
 		<span class="cpr">&copy; {{$.Now.Year}} {{$.Host}} All Rights Free.</span>
 		<span class="pwr">Powered by <a target="_blank" href="https://github.com/askasoft/pango">Pango</a>.</span>
 	</div>
-	<div class="ver">{{$.VER}}.{{$.REV}}</div>
+	<div class="ver">{{$.VER}}.{{$.REV}}{{if $.Debug}} ({{Ellapsed $.Ctx}}){{end}}</div>
 	<div totop="true" class="ui-corner ui-corner-br" style="display:none"><i class="fas fa-angle-up"> </i></div>
 </div>
 {{end}}
