@@ -22,6 +22,7 @@ func testsAddHandlers(rg *xin.RouterGroup) {
 
 	rg.GET("/", TestIndex)
 	rg.POST("/crash", TestCrash)
+	rg.GET("/panic", TestPanic)
 	rg.POST("/panic", TestPanic)
 	rg.POST("/outofmemory", TestOutOfMemory)
 	rg.POST("/stackoverflow", TestStackOverflow)
