@@ -225,36 +225,6 @@ body {
 	min-width: auto;
 }
 
-#sidenavi {
-	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-	padding: 50px 0 0 0;
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	height: 100%;
-	width: 250px;
-}
-#sidenavi > .ui-sidenavi {
-	padding: 1.5rem 1rem 0.5rem 0.5rem;
-}
-#sidenavi > .mainnavi {
-	overflow-y: auto;
-	margin-bottom: 1rem;
-}
-#sidenavi > .footnavi {
-	margin-top: auto;
-	margin-bottom: 0;
-	padding-top: 0;
-	padding-bottom: 0;
-}
-#sidenavi > .footnavi > .nav {
-	border-top: 1px solid var(--bs-border-color);
-	padding-bottom: 0.75rem;
-	min-height: 50px;
-}
-
 #content {
 	box-sizing: border-box;
 	min-width: 375px;
@@ -287,6 +257,36 @@ body {
 .footsite .cpr, .footsite .pwr {
 	font-size: 80%;
 	white-space: nowrap;
+}
+
+#sidenavi {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	padding: 50px 0 0 0;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 250px;
+}
+#sidenavi > .ui-sidenavi {
+	padding: 1.5rem 1rem 0.5rem 0.5rem;
+}
+#sidenavi > .mainnavi {
+	overflow-y: auto;
+	margin-bottom: 1rem;
+}
+#sidenavi > .footnavi {
+	margin-top: auto;
+	margin-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+#sidenavi > .footnavi > .nav {
+	border-top: 1px solid var(--bs-border-color);
+	padding-bottom: 0.75rem;
+	min-height: 50px;
 }
 
 #sidenavi, #content, #footer {
@@ -613,6 +613,29 @@ div.verr {
 	background-color: transparent;
 }
 
+/** error **/
+.s-error {
+	color: var(--bs-secondary);
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	font-family: var(--bs-font-monospace);
+	min-height: calc(100vh - 300px);
+}
+.s-error .icons {
+	font-size: 5vw;
+}
+
+/** login **/
+.s-login {
+	display: flex;
+	justify-content: center;
+}
+.s-login > .s-section {
+	max-width: 720px;
+	width: 90vw;
+}
+
 /** menu **/
 .s-menu-item {
 	background-color: #eee;
@@ -645,28 +668,3 @@ div.verr {
 	background-color: #393c3f;
 }
 
-/** login **/
-.s-login {
-	display: flex;
-	justify-content: center;
-}
-.s-login > .s-section {
-	max-width: 720px;
-	width: 90vw;
-}
-
-/** error **/
-.s-error {
-	color: var(--bs-secondary);
-	display: flex;
-	flex-wrap: nowrap;
-	align-items: center;
-	font-family: var(--bs-font-monospace);
-	height: calc(100vh - 150px);
-}
-.s-error .icons {
-	font-size: 10vw;
-}
-.s-error.e500 .icons {
-	font-size: 5vw;
-}

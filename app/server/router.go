@@ -97,7 +97,7 @@ func initHandlers() {
 
 	r := xxins.XIN
 
-	r.Use(xin.Recovery())
+	r.Use(xin.CustomRecovery(middles.InternalServerRecover))
 	r.Use(middles.SetCtxLogProp) // Set TENANT logger prop
 	r.Use(xmwas.XAL.Handle)
 	r.Use(xmwas.XSL.Handle)

@@ -8,6 +8,7 @@ import (
 	"github.com/askasoft/pango/tpl"
 	"github.com/askasoft/pangox-assets/html/summernote"
 	"github.com/askasoft/pangox-xdemo/app"
+	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/tpls"
 	"github.com/askasoft/pangox/xwa/xfsws"
 	"github.com/askasoft/pangox/xwa/xtpls"
@@ -18,7 +19,7 @@ func init() {
 	xtpls.Funcs = tpl.FuncMap{
 		"DATE":           app.FormatDate,
 		"TIME":           app.FormatTime,
-		"Ellapsed":       app.Ellapsed,
+		"Elapsed":        middles.Elapsed,
 		"SummernoteLang": summernote.Locale2Lang,
 	}
 	xfsws.ReloadTplsOnChange = reloadTemplatesOnChange

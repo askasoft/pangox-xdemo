@@ -12,7 +12,6 @@ import (
 	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pango/vad"
-	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pango/xin/middleware"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox/xwa"
@@ -171,8 +170,4 @@ func RandomPassword() string {
 
 func MakeFileID(prefix, name string) string {
 	return xwa.MakeFileID(prefix, name)
-}
-
-func Ellapsed(c *xin.Context) string {
-	return tmu.HumanDuration(time.Since(c.GetTime(middleware.AccessLogStartKey)))
 }

@@ -2,16 +2,14 @@
 
 <div class="s-error e403">
 	<div class="text-center w-100">
-		<div class="icons pb-4 border-bottom">
+		<div class="icons">
 			<i class="fas fa-4"></i><i class="fas fa-ban"></i><i class="fas fa-3"></i>
 		</div>
+		<hr>
 		<div class="fs-3 my-4 p-4">
-			{{if .Ctx.Errors}}
-				{{range $e := .Ctx.Errors}}
-				<p>{{$e}}</p>
-				{{end}}
-			{{else}}
-				<p>{{T .Loc "error.request.forbidden"}}</p>
+			<p>{{T .Loc "error.request.forbidden"}}</p>
+			{{range $e := .Ctx.Errors}}
+			<p>{{$e}}</p>
 			{{end}}
 		</div>
 	</div>

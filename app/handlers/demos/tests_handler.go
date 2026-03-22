@@ -50,7 +50,11 @@ func TestCrash(c *xin.Context) {
 }
 
 func TestPanic(c *xin.Context) {
-	panic("panic")
+	p := c.PostForm("p")
+	if p == "" {
+		p = c.Query("p", "panic")
+	}
+	panic(p)
 }
 
 func TestOutOfMemory(c *xin.Context) {

@@ -4,11 +4,13 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/askasoft/pango/tmu"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pango/xin/middleware"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox/xwa/xargs"
+	"github.com/askasoft/pangox/xwa/xerrs"
 )
 
 func H(c *xin.Context) xin.H {
@@ -38,6 +40,10 @@ func E(c *xin.Context) xin.H {
 	return xargs.E(c)
 }
 
+func Elapsed(c *xin.Context) string {
+	return tmu.HumanDuration(time.Since(c.GetTime(middleware.AccessLogStartKey)))
+}
+
 func NotFound(c *xin.Context) {
 	if xin.IsAjax(c) {
 		c.AbortWithStatus(http.StatusNotFound)
@@ -64,6 +70,21 @@ func InternalServerError(c *xin.Context) {
 		c.HTML(http.StatusInternalServerError, "500", H(c))
 	}
 	c.Abort()
+}
+
+func InternalServerRecover(c *xin.Context, r any) {
+	if xin.IsBrokenPipeError(r) {
+		c.Logger.Warnf("Broken (//%s%s): %v", c.Request.Host, c.Request.URL, r)
+
+		// connection is dead, we can't write a status to it.
+		c.Abort()
+		return
+	}
+
+	c.Logger.Errorf("Panic (//%s%s): %v", c.Request.Host, c.Request.URL, r)
+
+	c.AddError(xerrs.PanicError(r))
+	InternalServerError(c)
 }
 
 func RedirectToLogin(c *xin.Context) {
