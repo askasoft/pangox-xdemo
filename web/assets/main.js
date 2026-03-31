@@ -435,7 +435,7 @@ var main = {
 			$p.find('.msg').text(s.message);
 		}
 
-		$p.find('.icon').attr('class', 'icon ' + (s.icon.msg || 'far fa-3x fa-circle-question text-info'));
+		$p.find('.icon').attr('class', 'icon ' + (s.icon.msg || 'far fa-3x fa-circle-question text-primary'));
 		$p.find('.ok > i').attr('class', s.icon.ok || 'fas fa-check');
 		$p.find('.cancel > i').attr('class', s.icon.cancel || 'fas fa-xmark');
 		$p.find('.ok > span').text(s.text.ok || main.labels[main.lang].ok);
