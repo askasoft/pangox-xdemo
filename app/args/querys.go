@@ -162,8 +162,8 @@ type PetQueryArg struct {
 
 	ID       string    `json:"id,omitempty" form:"id,strip,ascii" validate:"uintegers"`
 	Name     string    `json:"name,omitempty" form:"name,strip"`
-	BornFr   time.Time `json:"born_fr,omitempty" form:"born_fr,strip"`
-	BornTo   time.Time `json:"born_to,omitempty" form:"born_to,strip"`
+	BornFr   time.Time `json:"born_fr,omitzero" form:"born_fr,strip"`
+	BornTo   time.Time `json:"born_to,omitzero" form:"born_to,strip"`
 	Gender   []string  `json:"gender,omitempty" form:"gender,strip"`
 	Origin   []string  `json:"origin,omitempty" form:"origin,strip"`
 	Habits   []string  `json:"habits,omitempty" form:"habits,strip"`

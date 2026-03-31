@@ -55,11 +55,10 @@ func NewPetGenerator(tt *tenant.Tenant, cat string) *PetGenerator {
 func (pg *PetGenerator) Create(logger log.Logger, db *sqlx.DB, js *jobs.JobState) error {
 	sfs := pg.tt.SFS(db)
 
-	bd, _ := time.Parse(time.RFC3339, "2000-01-01T10:04:05+09:00")
 	pet := &models.Pet{
 		Name:        pg.cat + " " + str.PadLeft(num.Itoa(js.Step), 2, "0") + " " + pg.randText(5),
 		Gender:      pg.pgs[rand.Intn(len(pg.pgs))], //nolint: gosec
-		BornAt:      bd.AddDate(0, 0, js.Step),
+		BornAt:      time.Now().AddDate(0, 0, -js.Step),
 		Origin:      pg.pos[rand.Intn(len(pg.pos))], //nolint: gosec
 		Temper:      pg.pts[rand.Intn(len(pg.pts))], //nolint: gosec
 		Habits:      pg.randHabits(),                //nolint: gosec
