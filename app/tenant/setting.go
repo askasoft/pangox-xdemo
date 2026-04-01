@@ -114,6 +114,10 @@ func (tt *Tenant) SD(key string, defs ...time.Duration) time.Duration {
 	return tmu.Atod(tt.SV(key), defs...)
 }
 
+func (tt *Tenant) SF(key string, defs ...float64) float64 {
+	return num.Atof(tt.SV(key), defs...)
+}
+
 func (tt *Tenant) SI(key string, defs ...int) int {
 	return num.Atoi(tt.SV(key), defs...)
 }
