@@ -336,6 +336,21 @@ var main = {
 		};
 	},
 
+	// popup info message box
+	popup_info: function(s, el) {
+		main.popup_message($.extend({ type: 'info', icon: 'fas fa-3x fa-circle-info' }, s), el);
+	},
+
+	// popup warn message box
+	popup_warn: function(s, el) {
+		main.popup_message($.extend({ type: 'warn', icon: 'fas fa-3x fa-triangle-exclamation' }, s), el);
+	},
+
+	// popup error message box
+	popup_error: function(s, el) {
+		main.popup_message($.extend({ type: 'error', icon: 'fas fa-3x fa-circle-exclamation' }, s), el);
+	},
+
 	// popup message box
 	popup_message: function(s, el) {
 		s = $.extend({ type: '', icon: '' }, s);
@@ -374,33 +389,22 @@ var main = {
 		$p.popup($.extend({ position: el ? 'auto' : 'center' }, s.popup)).popup('show', el);
 	},
 
-	// popup info message box
-	popup_info: function(s, el) {
-		main.popup_message($.extend({ type: 'info', icon: 'fas fa-3x fa-circle-info' }, s), el);
-	},
-
-	// popup warn message box
-	popup_warn: function(s, el) {
-		main.popup_message($.extend({ type: 'warn', icon: 'fas fa-3x fa-triangle-exclamation' }, s), el);
-	},
-
-	// popup error message box
-	popup_error: function(s, el) {
-		main.popup_message($.extend({ type: 'error', icon: 'fas fa-3x fa-circle-exclamation' }, s), el);
+	// popup warn confirm message box
+	popup_warn_confirm: function(s, el) {
+		main.popup_confirm($.extend({ type: 'warn', icon: { msg: 'fas fa-3x fa-triangle-exclamation' }}, s), el);
 	},
 
 	// popup confirm message box
 	popup_confirm: function(s, el) {
 		s = $.extend({
+			type: '',
 			icon: {},
-			text: {},
-			onok: function(){},
-			oncancel: function(){}
+			text: {}
 		}, s);
 
 		var $p = $('#main_popup_confirm');
 		if (!$p.length) {
-			$p = $('<div id="main_popup_confirm" class="ui-popup s-popup-msgbox">'
+			$p = $('<div id="main_popup_confirm">'
 				+ '<h5 class="ui-popup-header"></h5>'
 				+ '<div class="ui-popup-body">'
 					+ '<i class="icon"></i>'
@@ -413,12 +417,14 @@ var main = {
 			+ '</div>');
 
 			$p.on('hidden.popup', function() {
-				$p.data('popc')[$p.data('onok') ? 'onok' : 'oncancel']();
+				($p.data('popc')[$p.data('onok') ? 'onok' : 'oncancel'] || function() {})();
 			});
 			$p.find('.ok').on('click', function() {
 				$p.data('onok', true).popup('hide');
 			});
 		}
+
+		$p.attr('class', 'ui-popup s-popup-msgbox ' + s.type);
 
 		$p.data({ 'popc': s, 'onok': false });
 		
