@@ -3,19 +3,19 @@ module github.com/askasoft/pangox-xdemo
 go 1.25.0
 
 require (
-	github.com/askasoft/gogormx v1.0.9
-	github.com/askasoft/pango v1.2.14
-	github.com/askasoft/pangox v1.2.14
-	github.com/askasoft/pangox-assets v1.1.10
+	github.com/askasoft/gogormx v1.0.10
+	github.com/askasoft/pango v1.2.15
+	github.com/askasoft/pangox v1.2.15
+	github.com/askasoft/pangox-assets v1.1.11
 	github.com/crewjam/saml v0.5.1
-	github.com/go-ldap/ldap/v3 v3.4.12
+	github.com/go-ldap/ldap/v3 v3.4.13
 	github.com/go-sql-driver/mysql v1.9.3
-	github.com/jackc/pgx/v5 v5.8.0
+	github.com/jackc/pgx/v5 v5.9.2
 	github.com/liuzl/gocc v0.0.0-20231231122217-0372e1059ca5
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/xlzd/gotp v0.1.0
 	github.com/xuri/excelize/v2 v2.10.1
-	golang.org/x/net v0.51.0
+	golang.org/x/net v0.53.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.31.1
@@ -27,7 +27,7 @@ require (
 	github.com/adamzy/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
 	github.com/beevik/etree v1.6.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
-	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667 // indirect
+	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20260416181348-e7dc79048676 // indirect
 	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20250907135507-afb5586c32a6 // indirect
@@ -42,12 +42,12 @@ require (
 	github.com/mattermost/xml-roundtrip-validator v0.1.0 // indirect
 	github.com/richardlehane/mscfb v1.0.6 // indirect
 	github.com/richardlehane/msoleps v1.0.6 // indirect
-	github.com/russellhaering/goxmldsig v1.5.0 // indirect
+	github.com/russellhaering/goxmldsig v1.6.0 // indirect
 	github.com/tiendc/go-deepcopy v1.7.2 // indirect
 	github.com/xuri/efp v0.0.1 // indirect
 	github.com/xuri/nfp v0.0.2-0.20250530014748-2ddeb826f9a9 // indirect
-	golang.org/x/crypto v0.48.0 // indirect
+	golang.org/x/crypto v0.50.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/text v0.36.0 // indirect
 )
