@@ -95,7 +95,7 @@ func (ucij *UserCsvImportJob) Run() error {
 
 	ucij.Logger.Info(tbs.GetText(ucij.Locale(), "csv.info.importing"))
 
-	ctx := ucij.Running()
+	ctx := ucij.Start()
 	defer ctx.Cancel(nil)
 
 	err = ucij.doReadCsv(ctx, data, ucij.importRecord)
