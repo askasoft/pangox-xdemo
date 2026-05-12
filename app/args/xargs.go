@@ -48,13 +48,13 @@ func AddBindErrors(c *xin.Context, err error, ns string) {
 }
 
 func InvalidIDError(c *xin.Context) error {
-	return xargs.InvalidIDError(c)
+	return xargs.InvalidIDError(c.Locale)
 }
 
 func InvalidRequestError(c *xin.Context) error {
-	return xargs.InvalidRequestError(c)
+	return xargs.InvalidRequestError(c.Locale)
 }
 
 func InvalidFieldError(c *xin.Context, ns, field string) error {
-	return xargs.InvalidFieldError(c, ns, field)
+	return xargs.InvalidFieldError(c.Locale, ns, field)
 }

@@ -248,9 +248,6 @@ func (ucij *UserCsvImportJob) checkRecord(rec *csvUserRecord) error {
 }
 
 func (ucij *UserCsvImportJob) importRecord(rec *csvUserRecord) error {
-	ucij.Step++
-	ucij.Logger.Infof(tbs.GetText(ucij.Locale(), "user.import.csv.step.info"), ucij.Progress(), rec.ID, rec.Name, rec.Email)
-
 	user := &models.User{
 		ID:        num.Atol(rec.ID),
 		Name:      rec.Name,
@@ -262,6 +259,9 @@ func (ucij *UserCsvImportJob) importRecord(rec *csvUserRecord) error {
 		CreatedAt: time.Now(),
 	}
 	user.UpdatedAt = user.CreatedAt
+
+	ucij.Step++
+	ucij.Logger.Infof(tbs.GetText(ucij.Locale(), "user.import.csv.step.info"), ucij.Progress(), user.ID, user.Name, user.Email)
 
 	tt := ucij.Tenant
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
@@ -349,7 +349,7 @@ func (ucij *UserCsvImportJob) parseData(row []string) *csvUserRecord {
 	rec := &csvUserRecord{}
 	rec.ID = csvutil.GetString(row, h.IdxID)
 	rec.Name = csvutil.GetString(row, h.IdxName)
-	rec.Email = csvutil.GetColumn(row, h.IdxEmail)
+	rec.Email = csvutil.GetString(row, h.IdxEmail)
 	rec.Password = csvutil.GetString(row, h.IdxPassword)
 	rec.Role = csvutil.GetString(row, h.IdxRole)
 	rec.Status = csvutil.GetString(row, h.IdxStatus)
