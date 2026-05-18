@@ -22,6 +22,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/handlers/user"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
+	"github.com/askasoft/pangox-xdemo/app/utils/varutil"
 	"github.com/askasoft/pangox-xdemo/web"
 	"github.com/askasoft/pangox/xwa/xmwas"
 	"github.com/askasoft/pangox/xwa/xvads"
@@ -38,6 +39,7 @@ func initRouter() {
 	xxins.InitRouter()
 
 	app.VAD = xxins.XIN.Validator.Engine().(*vad.Validate)
+	app.VAD.RegisterValidationEx("vars", varutil.ValidateVars)
 	app.VAD.RegisterValidation("samlmeta", middles.ValidateSAMLMeta)
 	xvads.RegisterValidations(app.VAD)
 
