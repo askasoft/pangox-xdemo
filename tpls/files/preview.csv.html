@@ -11,6 +11,8 @@
 		<a class="btn btn-sm btn-outline-primary ms-4" href="{{$.DnloadURL}}">{{I "dnload"}}</a>
 	</div>
 	<div class="s-section-body">
+		<div id="csv_alert">{{template "alerts" .}}</div>
+
 		<div class="table-responsive">
 			{{if .Rows}}
 			<table class="table table-bordered table-striped" linkify>

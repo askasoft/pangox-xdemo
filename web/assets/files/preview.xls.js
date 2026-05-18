@@ -7,7 +7,7 @@
 		}
 	}
 
-	function xlx_preview() {
+	function xls_preview() {
 		$.ajax({
 			url: $('#xls_dnload').attr('href'),
 			xhr: function() {
@@ -62,5 +62,5 @@
 		});
 	}
 
-	$(window).on('load', xlx_preview);
+	$(window).on('load', xls_preview);
 })(jQuery);
