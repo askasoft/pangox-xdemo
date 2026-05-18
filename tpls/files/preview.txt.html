@@ -11,6 +11,8 @@
 		<a class="btn btn-sm btn-outline-primary ms-4" href="{{$.DnloadURL}}">{{I "dnload"}}</a>
 	</div>
 	<div class="s-section-body">
+		<div id="txt_alert">{{template "alerts" .}}</div>
+
 		<pre linkify>{{.Text}}</pre>
 	</div>
 </div>

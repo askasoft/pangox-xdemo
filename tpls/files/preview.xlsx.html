@@ -12,6 +12,8 @@
 		<a id="xlsx_dnload" class="btn btn-sm btn-outline-primary ms-4" href="{{$.DnloadURL}}">{{I "dnload"}}</a>
 	</div>
 	<div class="s-section-body" id="xlsx_preview">
+		<div id="xlsx_alert">{{template "alerts" .}}</div>
+
 		{{if .Sheets}}
 		<ul class="nav nav-tabs">
 			{{range $i, $s := .Sheets.Keys}}
