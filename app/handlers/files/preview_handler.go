@@ -7,13 +7,19 @@ import (
 	"path/filepath"
 
 	"github.com/askasoft/pango/cog/linkedhashmap"
+	"github.com/askasoft/pango/gog"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
+	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox-xdemo/app/utils/docutil"
+)
+
+const (
+	PREVIEW_MAX_RUNES = 50000
 )
 
 func Preview(c *xin.Context) {
@@ -58,9 +64,12 @@ func PreviewFile(c *xin.Context, fid, dnloadURL string) {
 	case ".xlsx":
 		xsm, err := readXlsx(tt, fid)
 		if err != nil {
-			c.AddError(err)
-			middles.InternalServerError(c)
-			return
+			if !errors.Is(err, docutil.ErrOverflow) {
+				c.AddError(err)
+				middles.InternalServerError(c)
+				return
+			}
+			h["Warning"] = tbs.GetText(c.Locale, "file.warning.overflow")
 		}
 		h["Sheets"] = xsm
 		c.HTML(http.StatusOK, "files/preview"+ext, h)
@@ -76,26 +85,23 @@ func PreviewFile(c *xin.Context, fid, dnloadURL string) {
 		text := docutil.ReadTextFromTextData(data)
 
 		switch ext {
-		case ".tsv":
+		case ".csv", ".tsv":
 			cr := csv.NewReader(str.NewReader(text))
-			cr.Comma = '\t'
-			rows, err := cr.ReadAll()
+			cr.Comma = gog.If(ext == ".tsv", '\t', ',')
+
+			data, err := cr.ReadAll()
 			if err == nil {
+				rows, total := docutil.LimitRows(data, 0, PREVIEW_MAX_RUNES)
+				if total > PREVIEW_MAX_RUNES {
+					h["Warning"] = tbs.GetText(c.Locale, "file.warning.overflow")
+				}
 				h["Rows"] = rows
 			} else {
-				h["Text"] = text
+				h["Text"] = str.Ellipsis(text, PREVIEW_MAX_RUNES)
 			}
 			ext = ".csv"
-		case ".csv":
-			cr := csv.NewReader(str.NewReader(text))
-			rows, err := cr.ReadAll()
-			if err == nil {
-				h["Rows"] = rows
-			} else {
-				h["Text"] = text
-			}
 		default:
-			h["Text"] = text
+			h["Text"] = str.Ellipsis(text, PREVIEW_MAX_RUNES)
 		}
 
 		c.HTML(http.StatusOK, "files/preview"+ext, h)
@@ -112,5 +118,5 @@ func readXlsx(tt *tenant.Tenant, fid string) (*linkedhashmap.LinkedHashMap[strin
 		return nil, err
 	}
 
-	return docutil.ReadXlsxDataToMap(data)
+	return docutil.ReadXlsxDataToMap(data, PREVIEW_MAX_RUNES)
 }
