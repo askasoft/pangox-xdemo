@@ -7,7 +7,6 @@ import (
 	"github.com/askasoft/pango/sqx"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/xin"
-	"github.com/askasoft/pangox/xwa/xargs"
 )
 
 type UpdatedAtArg struct {
@@ -52,7 +51,7 @@ func (uua *UserUpdatesArg) Bind(c *xin.Context) error {
 		return err
 	}
 	if uua.isEmpty() {
-		return xargs.ErrInvalidUpdates
+		return ErrInvalidRequest
 	}
 	return nil
 }
@@ -98,7 +97,7 @@ func (fua *FileUpdatesArg) Bind(c *xin.Context) error {
 		return err
 	}
 	if fua.isEmpty() {
-		return xargs.ErrInvalidUpdates
+		return ErrInvalidRequest
 	}
 	return nil
 }
@@ -136,7 +135,7 @@ func (pua *PetUpdatesArg) Bind(c *xin.Context) error {
 		return err
 	}
 	if pua.isEmpty() {
-		return xargs.ErrInvalidUpdates
+		return ErrInvalidRequest
 	}
 	return nil
 }

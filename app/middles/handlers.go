@@ -9,7 +9,6 @@ import (
 	"github.com/askasoft/pango/xin/middleware"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
-	"github.com/askasoft/pangox/xwa/xargs"
 	"github.com/askasoft/pangox/xwa/xerrs"
 )
 
@@ -37,7 +36,7 @@ func H(c *xin.Context) xin.H {
 }
 
 func E(c *xin.Context) xin.H {
-	return xargs.E(c)
+	return xerrs.E(c)
 }
 
 func Elapsed(c *xin.Context) string {

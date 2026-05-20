@@ -3,11 +3,11 @@ package args
 import (
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox/xwa/xargs"
+	"github.com/askasoft/pangox/xwa/xerrs"
 )
 
 type IDArg = xargs.IDArg
 type PKArg = xargs.PKArg
-type ParamError = xargs.ParamError
 
 type Integers = xargs.Integers
 type Decimals = xargs.Decimals
@@ -42,19 +42,31 @@ func ParseWildcards(val string) Wildcards {
 	return xargs.ParseWildcards(val)
 }
 
+type ParamError = xerrs.ParamError
+
+var (
+	ErrInvalidID      = xerrs.ErrInvalidID
+	ErrInvalidRequest = xerrs.ErrInvalidRequest
+)
+
+// FormatBindErrors translate bind or validate errors and merge it to a new error
+func FormatBindErrors(locale string, err error, ns string) error {
+	return xerrs.FormatBindErrors(locale, err, ns)
+}
+
 // AddBindErrors translate bind or validate errors and add it to context
 func AddBindErrors(c *xin.Context, err error, ns string) {
-	xargs.AddBindErrors(c, err, ns)
+	xerrs.AddBindErrors(c, err, ns)
 }
 
 func InvalidIDError(c *xin.Context) error {
-	return xargs.InvalidIDError(c.Locale)
+	return xerrs.InvalidIDError(c.Locale)
 }
 
 func InvalidRequestError(c *xin.Context) error {
-	return xargs.InvalidRequestError(c.Locale)
+	return xerrs.InvalidRequestError(c.Locale)
 }
 
 func InvalidFieldError(c *xin.Context, ns, field string) error {
-	return xargs.InvalidFieldError(c.Locale, ns, field)
+	return xerrs.InvalidParamError(c.Locale, ns, field)
 }
