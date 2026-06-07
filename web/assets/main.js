@@ -399,7 +399,8 @@ var main = {
 		s = $.extend({
 			type: '',
 			icon: {},
-			text: {}
+			text: {},
+			focus: ''
 		}, s);
 
 		var $p = $('#main_popup_confirm');
@@ -450,8 +451,9 @@ var main = {
 		$p.popup($.extend({
 			closer: false,
 			mask: true,
+			scroll: false,
 			position: el ? 'auto' : 'center',
-			scroll: false
+			focus: s.focus || '.ok'
 		}, s.popup)).popup('show', el);
 	},
 
