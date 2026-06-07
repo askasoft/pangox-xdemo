@@ -8,5 +8,5 @@ import (
 type AuditLog struct {
 	models.AuditLog
 
-	Params sqx.JSONArray `gorm:"type:json" json:"params,omitempty"`
+	Params sqx.JSONAnyArray `gorm:"type:json" json:"params,omitempty"`
 }

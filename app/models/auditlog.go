@@ -70,14 +70,14 @@ type AuditLogEx struct {
 }
 
 type AuditLog struct {
-	ID     int64         `gorm:"not null;primaryKey;autoIncrement" json:"id"`
-	Date   time.Time     `gorm:"not null;" json:"date"`
-	UID    int64         `gorm:"column:uid;not null" json:"uid"`
-	CIP    string        `gorm:"column:cip;size:40;not null" json:"cip"`
-	Role   string        `gorm:"size:1;not null" json:"role"`
-	Func   string        `gorm:"size:32;not null" json:"func"`
-	Action string        `gorm:"size:32;not null" json:"action"`
-	Params sqx.JSONArray `gorm:"type:jsonb" json:"params,omitempty"`
+	ID     int64            `gorm:"not null;primaryKey;autoIncrement" json:"id"`
+	Date   time.Time        `gorm:"not null;" json:"date"`
+	UID    int64            `gorm:"column:uid;not null" json:"uid"`
+	CIP    string           `gorm:"column:cip;size:40;not null" json:"cip"`
+	Role   string           `gorm:"size:1;not null" json:"role"`
+	Func   string           `gorm:"size:32;not null" json:"func"`
+	Action string           `gorm:"size:32;not null" json:"action"`
+	Params sqx.JSONAnyArray `gorm:"type:jsonb" json:"params,omitempty"`
 }
 
 func (al *AuditLog) String() string {

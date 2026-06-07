@@ -8,5 +8,5 @@ import (
 type Pet struct {
 	models.Pet
 
-	Habits sqx.JSONObject `gorm:"type:json" json:"habits" form:"habits,strip"`
+	Habits sqx.JSONAnyObject `gorm:"type:json" json:"habits" form:"habits,strip"`
 }
