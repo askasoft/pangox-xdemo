@@ -147,6 +147,11 @@ func (sm Schema) MigrateSuper() error {
 		return errors.New("missing [super] email settings")
 	}
 
+	pwd := suc.GetString("password")
+	if pwd == "" {
+		pwd = app.RandomPassword()
+	}
+
 	tb := sm.TableUsers()
 
 	log.Infof("Migrate Super %q", tb)
@@ -193,7 +198,7 @@ func (sm Schema) MigrateSuper() error {
 			user.ID = uid
 			user.Email = email
 			user.Name = str.SubstrBefore(email, "@")
-			user.SetPassword(suc.GetString("password", "changeme"))
+			user.SetPassword(pwd)
 			user.Role = models.RoleSuper
 			user.Status = models.UserActive
 			user.Secret = ran.RandInt63()
