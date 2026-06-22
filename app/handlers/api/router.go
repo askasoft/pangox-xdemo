@@ -23,4 +23,6 @@ func addMyApiHandlers(rg *xin.RouterGroup) {
 	rg.GET("/myheader", MyHeader)
 	rg.GET("/myget", MyGet)
 	rg.POST("/mypost", MyPost)
+
+	rg.GET("/mypets", MyPets)
 }
