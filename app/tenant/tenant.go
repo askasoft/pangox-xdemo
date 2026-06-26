@@ -24,6 +24,20 @@ func (tt *Tenant) Logger(name string) log.Logger {
 	return logger
 }
 
+func (tt *Tenant) FQDN() string {
+	return FQDN(string(tt.Schema))
+}
+
+func FQDN(schema string) string {
+	if schema == app.DefaultSchema() {
+		if d := app.DefaultTenant(); d != "" {
+			return d + "." + app.Domain()
+		}
+		return app.Domain()
+	}
+	return schema + "." + app.Domain()
+}
+
 func NewTenant(name string) *Tenant {
 	tt := &Tenant{Schema: schema.Schema(name)}
 	tt.settings = tt.getSettings()
