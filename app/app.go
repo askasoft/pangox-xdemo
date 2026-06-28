@@ -120,7 +120,7 @@ func Locales() []string {
 }
 
 func SDB() *sqlx.DB {
-	return xsqls.SDB
+	return xsqls.SDB()
 }
 
 func DBType() string {
