@@ -1,7 +1,6 @@
 package server
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/askasoft/pango/ini"
@@ -79,17 +78,13 @@ func configMiddleware() {
 	app.XCA.CookiePath = str.IfEmpty(app.Base(), "/")
 	app.XCA.CookieMaxAge = ini.GetDuration("login", "cookieMaxAge", time.Minute*30)
 	app.XCA.CookieSecure = ini.GetBool("login", "cookieSecure", true)
-	switch ini.GetString("login", "cookieSameSite", "strict") {
-	case "lax":
-		app.XCA.CookieSameSite = http.SameSiteLaxMode
-	default:
-		app.XCA.CookieSameSite = http.SameSiteStrictMode
-	}
+	app.XCA.SetCookieSameSite(ini.GetString("login", "cookieSameSite", "strict"))
 
-	app.XCN.SetSecret(app.Secret())
+	app.XCN.Cryptor = app.XCA.Cryptor
 	app.XCN.CookieMaxAge = app.XCA.CookieMaxAge
 	app.XCN.CookiePath = app.XCA.CookiePath
 	app.XCN.CookieSecure = app.XCA.CookieSecure
+	app.XCN.CookieSameSite = app.XCA.CookieSameSite
 
 	web.ConfigWebAssets()
 }
