@@ -2,11 +2,8 @@ package super
 
 import (
 	"context"
-	"io"
 	"net/http"
-	"os/exec"
 	"runtime"
-	"strings"
 	"time"
 
 	"github.com/askasoft/pango/cog"
@@ -59,50 +56,13 @@ func shellExec(c context.Context, command string, timeout time.Duration) (sr She
 		return
 	}
 
-	var (
-		exe   string
-		arg   []string
-		stdin io.Reader
-	)
-
-	if runtime.GOOS == "windows" {
-		exe = "cmd.exe"
-		command += "\r\nexit\r\n"
-		stdin = strings.NewReader(command)
-	} else {
-		exe = "sh"
-		command = str.RemoveByte(command, '\r')
-		arg = []string{"-e", "-x", "-c", command}
-	}
-
-	switch {
-	case timeout < time.Second:
-		timeout = time.Second
-	case timeout > 300*time.Second:
-		timeout = 300 * time.Second
-	}
+	timeout = min(300*time.Second, max(time.Second, timeout))
 
 	ctx, cancel := context.WithTimeout(c, timeout)
 	defer cancel()
 
 	start := time.Now()
-	stdout := &strings.Builder{}
-
-	cmd := exec.CommandContext(ctx, exe, arg...)
-	cmd.Stdin = stdin
-	cmd.Stdout = stdout
-	cmd.Stderr = stdout
-
-	if err := cmd.Run(); err != nil {
-		if exitErr, ok := err.(*exec.ExitError); ok { //nolint: errorlint
-			sr.Code = exitErr.ExitCode()
-		}
-		sr.Time = time.Since(start).String()
-		sr.Output = err.Error()
-		return
-	}
-
+	sr.Code, sr.Output = shellExecCommand(ctx, command)
 	sr.Time = time.Since(start).String()
-	sr.Output = str.Strip(stdout.String())
 	return
 }
