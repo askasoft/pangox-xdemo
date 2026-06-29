@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	xtxts.FSs = []fs.FS{txts.FS}
+	xtxts.FSs = []fs.FS{xtxts.FS, txts.FS}
 	xfsws.ReloadMsgsOnChange = reloadMessagesOnChange
 }
 
