@@ -251,7 +251,7 @@ func (ucij *UserCsvImportJob) importRecord(rec *csvUserRecord) error {
 	user := &models.User{
 		ID:        num.Atol(rec.ID),
 		Name:      rec.Name,
-		Email:     rec.Email,
+		Email:     str.ToLower(rec.Email),
 		Role:      ucij.roleRevMap.SafeGet(rec.Role, models.RoleViewer),
 		Status:    ucij.statusRevMap.SafeGet(rec.Status, models.UserActive),
 		LoginMFA:  ucij.loginMFARevMap.SafeGet(rec.LoginMFA, app.LOGIN_MFA_UNSET),
