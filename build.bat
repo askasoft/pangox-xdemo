@@ -5,7 +5,6 @@ SET GOOS=windows
 SET GO111MODULE=on
 
 SET COMPANY=Askasoft LLC.
-SET PRODUCT=Pangox Xdemo
 SET VER_MAJOR=1
 SET VER_MINOR=2
 SET VER_PATCH=0
@@ -22,7 +21,7 @@ FOR /F "tokens=* USEBACKQ" %%i IN (`git rev-parse --short HEAD`) DO (
 
 SET /A VER_BUILD=0x%REVISION:~0,4%
 
-call :build .     xdemo    web/favicon.ico
+call :build .    xdemo    "Pangox Xdemo"    web/favicon.ico
 
 go test ./...
 
@@ -30,9 +29,10 @@ EXIT /B %ERRORLEVEL%
 
 
 :build
-pushd %1
+SET DIR=%1
 SET EXE=%2.exe
-SET ICON=%3
+SET PROD=%3
+SET ICON=%4
 (
 echo {
 echo 	"FixedFileInfo": {
@@ -51,14 +51,14 @@ echo 	},
 echo 	"StringFileInfo": {
 echo 		"Comments": "",
 echo 		"CompanyName": "%COMPANY%",
-echo 		"FileDescription": "%PRODUCT% %VERSION%.%REVISION%",
+echo 		"FileDescription": "%PROD% %VERSION%.%REVISION%",
 echo 		"FileVersion": "",
 echo 		"InternalName": "",
 echo 		"LegalCopyright": "Copyright (c) %YEAR% %COMPANY%, All Rights Reserved",
 echo 		"LegalTrademarks": "",
 echo 		"OriginalFilename": "%EXE%",
 echo 		"PrivateBuild": "",
-echo 		"ProductName": "%PRODUCT%",
+echo 		"ProductName": "%PROD%",
 echo 		"ProductVersion": "%VERSION%.%REVISION%",
 echo 		"SpecialBuild": ""
 echo 	},
@@ -78,6 +78,5 @@ go generate
 SET PKG=github.com/askasoft/pangox/xwa
 SET LDF=-X %PKG%.Version=%VERSION% -X %PKG%.Revision=%REVISION% -X %PKG%.Buildtime=%BUILD_TIME%
 
-go build -ldflags "%LDF%" -o %EXE%
-popd
+go build -ldflags "%LDF%" -o %EXE% %DIR%
 :EXIT /B 0
