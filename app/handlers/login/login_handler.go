@@ -97,7 +97,7 @@ func loginFailed(c *xin.Context, reason string) {
 }
 
 func loginPassed(c *xin.Context, au *models.User) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	if err := tt.Schema.AddAuditLog(app.SDB(), au.ID, c.ClientIP(), au.Role, models.AL_LOGIN_LOGIN, au.Email); err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
@@ -123,7 +123,7 @@ func loginMFASecret(c *xin.Context, au *models.User) string {
 func loginMFACheck(c *xin.Context, au *models.User, up *UserPass) bool {
 	mfa := au.LoginMFA
 	if mfa == app.LOGIN_MFA_UNSET {
-		tt := tenant.FromCtx(c)
+		tt := tenant.Get(c)
 		mfa = tt.SV("secure_login_mfa")
 	}
 
@@ -194,7 +194,7 @@ func LoginMFAEnroll(c *xin.Context) {
 
 	au.Secret = ran.RandInt63()
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	_, err := tt.UpdateUserSecret(app.SDB(), au.ID, au.Secret)
 	if err != nil {

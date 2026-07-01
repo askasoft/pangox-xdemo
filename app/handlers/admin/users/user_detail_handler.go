@@ -52,7 +52,7 @@ func userDetail(c *xin.Context, action string) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	user, err := tt.GetUser(app.SDB(), uid)
 	if errors.Is(err, sqlx.ErrNoRows) {
@@ -109,7 +109,7 @@ func userValidateLoginMFA(c *xin.Context, status string) {
 
 func userValidatePassword(c *xin.Context, password string) {
 	if password != "" {
-		tt := tenant.FromCtx(c)
+		tt := tenant.Get(c)
 
 		if vs := tt.ValidatePassword(c.Locale, password); len(vs) > 0 {
 			for _, v := range vs {
@@ -164,7 +164,7 @@ func UserCreate(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	user.ID = 0
 	if user.Password == "" {
@@ -205,7 +205,7 @@ func UserUpdate(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	au := tenant.AuthUser(c)
 
 	var cnt int64

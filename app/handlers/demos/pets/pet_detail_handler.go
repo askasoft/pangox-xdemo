@@ -51,7 +51,7 @@ func petDetail(c *xin.Context, action string) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	pet, err := tt.GetPet(app.SDB(), pid)
 	if err != nil {
@@ -133,7 +133,7 @@ func PetCreate(c *xin.Context) {
 	pet.CreatedAt = time.Now()
 	pet.UpdatedAt = pet.CreatedAt
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
 		err := tt.CreatePet(tx, &pet.Pet)
@@ -178,7 +178,7 @@ func PetUpdate(c *xin.Context) {
 
 	pet.UpdatedAt = time.Now()
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	var cnt int64
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {

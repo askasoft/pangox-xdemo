@@ -60,7 +60,7 @@ func SAMLProtect(c *xin.Context) {
 			return
 		}
 
-		tt := tenant.FromCtx(c)
+		tt := tenant.Get(c)
 
 		au, err := tt.FindAuthUser(email)
 		if err != nil {
@@ -118,7 +118,7 @@ func samlUserName(attrs samlsp.Attributes) string {
 }
 
 func SamlServiceProvider(c *xin.Context) *samlsp.Middleware {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	idpMetadata, err := samlsp.ParseMetadata(str.UnsafeBytes(tt.SV("secure_saml_idpmeta")))
 	if err != nil {
@@ -145,7 +145,7 @@ func SamlServiceProvider(c *xin.Context) *samlsp.Middleware {
 }
 
 func SamlServeMetadata(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	if tt.IsSAMLLogin() {
 		samlSP := SamlServiceProvider(c)
@@ -158,7 +158,7 @@ func SamlServeMetadata(c *xin.Context) {
 }
 
 func SamlServeACS(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	if tt.IsSAMLLogin() {
 		samlSP := SamlServiceProvider(c)
@@ -179,7 +179,7 @@ func SamlServeSLO(c *xin.Context) {
 }
 
 func SamlServeSLI(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	if tt.IsSAMLLogin() {
 		if _, ok := c.Get(app.XCA.AuthUserKey); ok {

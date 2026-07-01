@@ -27,7 +27,7 @@ import (
 )
 
 func loadSettingList(c *xin.Context, actor string) []*models.Setting {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	au := tenant.AuthUser(c)
 
 	settings, err := tt.ListSettingsByRole(app.SDB(), actor, au.Role)
@@ -115,7 +115,7 @@ func SettingIndex(c *xin.Context) {
 }
 
 func SettingSave(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	settings := loadSettingList(c, "editor")
 
@@ -295,7 +295,7 @@ func checkPostSettings(c *xin.Context, settings []*models.Setting) (usettings []
 }
 
 func saveSettings(c *xin.Context, settings []*models.Setting, action string, detail string) bool {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	au := tenant.AuthUser(c)
 
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
@@ -394,7 +394,7 @@ func SettingImport(c *xin.Context) {
 			return
 		}
 
-		tenant.FromCtx(c).PurgeSettings()
+		tenant.Get(c).PurgeSettings()
 	}
 
 	c.JSON(http.StatusOK, xin.H{"success": tbs.GetText(c.Locale, "success.imported")})

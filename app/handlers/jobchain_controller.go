@@ -71,7 +71,7 @@ func (jcc *JobChainController) Index(c *xin.Context) {
 }
 
 func (jcc *JobChainController) List(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	tjc := tt.JC()
 
 	skip := num.Atoi(c.Query("skip"))
@@ -105,7 +105,7 @@ func (jcc *JobChainController) Status(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	tjc := tt.JC()
 
 	jc, err := tjc.GetJobChain(cid)
@@ -171,7 +171,7 @@ func (jcc *JobChainController) Start(c *xin.Context) {
 }
 
 func (jcc *JobChainController) StartJob(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	tjc := tt.JC()
 	jc, err := tjc.FindJobChain(jcc.ChainName, false, xjm.JobUndoneStatus...)
@@ -215,7 +215,7 @@ func (jcc *JobChainController) Cancel(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	tjc := tt.JC()
 	tjm := tt.JM()
 

@@ -124,7 +124,7 @@ func IsClientBlocked(c *xin.Context) bool {
 func CheckUserClientIP(c *xin.Context, u *models.User) bool {
 	cidrs := u.CIDRs()
 	if len(cidrs) == 0 {
-		tt := FromCtx(c)
+		tt := Get(c)
 		cidrs = tt.SecureClientCIDRs()
 	}
 	return CheckClientIP(c, cidrs...)
@@ -154,7 +154,7 @@ func CheckClientIP(c *xin.Context, cidrs ...*net.IPNet) bool {
 // Auth
 
 func findAuthUser(c *xin.Context, username, password string) (middleware.AuthUser, error) {
-	tt := FromCtx(c)
+	tt := Get(c)
 
 	au, err := tt.FindAuthUser(username)
 	if err != nil || au == nil || au.GetPassword() != password {
@@ -165,7 +165,7 @@ func findAuthUser(c *xin.Context, username, password string) (middleware.AuthUse
 }
 
 func ldapAuthencate(c *xin.Context, username, password string) (*models.User, error) {
-	tt := FromCtx(c)
+	tt := Get(c)
 
 	con, err := ldap.DialURL(tt.SV("secure_ldap_server"))
 	if err != nil {
@@ -203,7 +203,7 @@ func ldapAuthencate(c *xin.Context, username, password string) (*models.User, er
 }
 
 func Authenticate(c *xin.Context, username, password string) (middleware.AuthUser, error) {
-	tt := FromCtx(c)
+	tt := Get(c)
 
 	if tt.IsLDAPLogin() {
 		au, err := ldapAuthencate(c, username, password)
@@ -234,7 +234,7 @@ func AuthFailed(c *xin.Context) {
 }
 
 func AuthCookieMaxAge(c *xin.Context) time.Duration {
-	tt := FromCtx(c)
+	tt := Get(c)
 	ma := tt.SD("secure_session_timeout")
 	if ma <= 0 {
 		ma = app.XCA.CookieMaxAge

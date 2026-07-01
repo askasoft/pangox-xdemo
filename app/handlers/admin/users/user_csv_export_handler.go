@@ -24,7 +24,7 @@ func UserCsvExport(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	au := tenant.AuthUser(c)
 
 	rm := tbsutil.GetUserRoleMap(c.Locale, au.Role)

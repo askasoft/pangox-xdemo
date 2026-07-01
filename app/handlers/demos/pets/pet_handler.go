@@ -62,7 +62,7 @@ func PetList(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	pqa.Total, err = tt.CountPets(app.SDB(), pqa)
 	if err != nil {

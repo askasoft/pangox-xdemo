@@ -38,7 +38,7 @@ func MyPets(c *xin.Context) {
 	pqa := &args.PetQueryArg{Name: q}
 	pqa.Limit = 20
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	pets, err := tt.FindPets(app.SDB(), pqa)
 	if err != nil {
 		c.AddError(err)

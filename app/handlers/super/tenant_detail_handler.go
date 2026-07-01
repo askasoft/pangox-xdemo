@@ -20,17 +20,19 @@ func TenantCreate(c *xin.Context) {
 		return
 	}
 
-	if ok, err := schema.ExistsSchema(ti.Name); err != nil {
+	ok, err := schema.ExistsSchema(ti.Name)
+	if err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
-	} else if ok {
+	}
+	if ok {
 		c.AddError(tbs.Errorf(c.Locale, "tenant.error.duplicate", ti.Name))
 		c.JSON(http.StatusBadRequest, middles.E(c))
 		return
 	}
 
-	if err := tenant.Create(ti.Name, ti.Comment); err != nil {
+	if err := tenant.CreateSchema(ti.Name, ti.Comment); err != nil {
 		c.AddError(err)
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
@@ -55,7 +57,7 @@ func TenantUpdate(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	if te.Oname != te.Name && (te.Oname == string(tt.Schema) || te.Oname == app.DefaultSchema()) {
 		c.AddError(tbs.Errorf(c.Locale, "tenant.error.unrename", te.Oname))
 		c.JSON(http.StatusBadRequest, middles.E(c))
@@ -110,7 +112,7 @@ func TenantDelete(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	if ti.Name == string(tt.Schema) || ti.Name == app.DefaultSchema() {
 		c.AddError(tbs.Errorf(c.Locale, "tenant.error.undelete", ti.Name))
 		c.JSON(http.StatusBadRequest, middles.E(c))

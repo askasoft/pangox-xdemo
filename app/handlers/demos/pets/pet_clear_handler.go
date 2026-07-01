@@ -35,7 +35,7 @@ type PetClearJobController struct {
 }
 
 func bindPetClearJobCtx(c *xin.Context, h xin.H) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	h["Arg"] = pets.NewPetClearArg(tt)
 	h["PetResetSequenceMap"] = tbsutil.GetBoolMap(c.Locale)

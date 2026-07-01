@@ -54,7 +54,7 @@ func PasswordResetSend(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	user, err := tt.FindAuthUser(arg.Email)
 	if err != nil {
@@ -136,7 +136,7 @@ func PasswordResetExecute(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	user, err := tt.FindAuthUser(token.Email)
 	if err != nil {

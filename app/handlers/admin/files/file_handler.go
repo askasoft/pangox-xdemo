@@ -52,7 +52,7 @@ func FileList(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	fqa.Total, err = tt.CountFiles(app.SDB(), fqa)
 	if err != nil {

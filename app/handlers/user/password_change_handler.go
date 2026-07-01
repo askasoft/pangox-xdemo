@@ -27,7 +27,7 @@ type PwdChgArg struct {
 
 func pwdchgValidatePassword(c *xin.Context, password string) {
 	if password != "" {
-		tt := tenant.FromCtx(c)
+		tt := tenant.Get(c)
 
 		if vs := tt.ValidatePassword(c.Locale, password); len(vs) > 0 {
 			for _, v := range vs {
@@ -68,7 +68,7 @@ func PasswordChangeChange(c *xin.Context) {
 	}
 	nu.SetPassword(pca.Newpwd)
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	var cnt int64
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {

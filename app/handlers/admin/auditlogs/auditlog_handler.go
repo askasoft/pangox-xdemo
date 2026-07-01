@@ -51,7 +51,7 @@ func AuditLogList(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	au := tenant.AuthUser(c)
 
 	alqa.Total, err = tt.CountAuditLogs(app.SDB(), alqa, au.Role, c.Locale)

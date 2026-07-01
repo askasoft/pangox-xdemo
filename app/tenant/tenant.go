@@ -73,19 +73,23 @@ func GetSubdomain(c *xin.Context) (string, bool) {
 
 const TENANT_CTXKEY = "TENANT"
 
-func FromCtx(c *xin.Context) *Tenant {
+func Find(c *xin.Context) (*Tenant, bool) {
 	tt, ok := c.Get(TENANT_CTXKEY)
+	if ok {
+		return tt.(*Tenant), true
+	}
+	return nil, false
+}
+
+func Get(c *xin.Context) *Tenant {
+	tt, ok := Find(c)
 	if !ok {
 		panic("Invalid Tenant!")
 	}
-	return tt.(*Tenant)
+	return tt
 }
 
-func FindAndSetTenant(c *xin.Context) (*Tenant, error) {
-	if tt, ok := c.Get(TENANT_CTXKEY); ok {
-		return tt.(*Tenant), nil
-	}
-
+func Build(c *xin.Context) (*Tenant, error) {
 	s, ok := GetSubdomain(c)
 	if !ok {
 		return nil, xerrs.NewHostnameError(c.Request.Host)
@@ -108,26 +112,6 @@ func FindAndSetTenant(c *xin.Context) (*Tenant, error) {
 	tt := NewTenant(s)
 	c.Set(TENANT_CTXKEY, tt)
 	return tt, nil
-}
-
-func Iterate(itf func(tt *Tenant) error) error {
-	return schema.Iterate(func(sm schema.Schema) error {
-		tt := NewTenant(string(sm))
-		return itf(tt)
-	})
-}
-
-func Create(name string, comment string) error {
-	if err := schema.CreateSchema(name, comment); err != nil {
-		return err
-	}
-
-	if err := schema.Schema(name).InitSchema(); err != nil {
-		_ = schema.DeleteSchema(name)
-		return err
-	}
-
-	return nil
 }
 
 // ---------------------------
@@ -153,4 +137,24 @@ func CheckSchema(name string) (bool, error) {
 
 	app.SCMAS.Set(name, exists)
 	return exists, nil
+}
+
+func CreateSchema(name string, comment string) error {
+	if err := schema.CreateSchema(name, comment); err != nil {
+		return err
+	}
+
+	if err := schema.Schema(name).InitSchema(); err != nil {
+		_ = schema.DeleteSchema(name)
+		return err
+	}
+
+	return nil
+}
+
+func Iterate(itf func(tt *Tenant) error) error {
+	return schema.Iterate(func(sm schema.Schema) error {
+		tt := NewTenant(string(sm))
+		return itf(tt)
+	})
 }

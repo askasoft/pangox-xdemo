@@ -56,7 +56,7 @@ func UserList(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	au := tenant.AuthUser(c)
 
 	uqa.Total, err = tt.CountUsers(app.SDB(), au.Role, uqa)

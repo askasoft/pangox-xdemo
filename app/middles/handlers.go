@@ -13,7 +13,7 @@ import (
 )
 
 func H(c *xin.Context) xin.H {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	au := tenant.GetAuthUser(c)
 
 	h := xin.H{
@@ -64,10 +64,16 @@ func Forbidden(c *xin.Context) {
 
 func InternalServerError(c *xin.Context) {
 	if xin.IsAjax(c) {
-		c.JSON(http.StatusInternalServerError, E(c))
-	} else {
-		c.HTML(http.StatusInternalServerError, "500", H(c))
+		c.AbortWithStatusJSON(http.StatusInternalServerError, E(c))
+		return
 	}
+
+	if _, ok := tenant.Find(c); !ok {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	c.HTML(http.StatusInternalServerError, "500", H(c))
 	c.Abort()
 }
 

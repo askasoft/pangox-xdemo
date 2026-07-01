@@ -22,7 +22,7 @@ func Uploads(c *xin.Context) {
 func SaveUploadedFile(c *xin.Context, mfh *multipart.FileHeader, tag string) (*xfs.File, error) {
 	fid := app.MakeFileID(tag, mfh.Filename)
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	tfs := tt.FS()
 	return xfs.SaveUploadedFile(tfs, fid, mfh, tag)
 }

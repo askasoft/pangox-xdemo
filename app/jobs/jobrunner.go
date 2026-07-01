@@ -70,7 +70,7 @@ func (cfa *CsvFileArg) BindFile(c *xin.Context) error {
 		return tbs.Error(c.Locale, "csv.error.required")
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	if err = cfa.SetFile(tt, mfh); err != nil {
 		return tbs.Errorf(c.Locale, "csv.error.read", err)
 	}

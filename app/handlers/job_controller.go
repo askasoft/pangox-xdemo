@@ -47,7 +47,7 @@ func (jc *JobController) Index(c *xin.Context) {
 }
 
 func (jc *JobController) List(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	tjm := tt.JM()
 
 	skip := num.Atoi(c.Query("skip"))
@@ -75,7 +75,7 @@ func (jc *JobController) Logs(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	tjm := tt.JM()
 
 	logs, err := jc.logs(c, tjm)
@@ -126,7 +126,7 @@ func (jc *JobController) Status(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	tjm := tt.JM()
 
 	job, err := tjm.GetJob(jid)
@@ -156,7 +156,7 @@ func (jc *JobController) Status(c *xin.Context) {
 }
 
 func (jc *JobController) Start(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	var jid int64
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
@@ -214,7 +214,7 @@ func (jc *JobController) Cancel(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	reason := tbs.GetText(c.Locale, "job.error.usercancel", "User canceled.")
 

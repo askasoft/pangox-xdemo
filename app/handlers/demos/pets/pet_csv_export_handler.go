@@ -25,7 +25,7 @@ func PetCsvExport(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	pgm := tbsutil.GetPetGenderMap(c.Locale)
 	pom := tbsutil.GetPetOriginMap(c.Locale)

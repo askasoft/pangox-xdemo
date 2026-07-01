@@ -20,13 +20,17 @@ func SetCtxLogProp(c *xin.Context) {
 
 // TenantHFS tenant http file system
 func TenantHFS(c *xin.Context) http.FileSystem {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 	return xfs.HFS(tt.FS())
 }
 
 // TenantProtect only allow access for known tenant
 func TenantProtect(c *xin.Context) {
-	if _, err := tenant.FindAndSetTenant(c); err != nil {
+	if _, ok := tenant.Find(c); ok {
+		return
+	}
+
+	if _, err := tenant.Build(c); err != nil {
 		if xerrs.IsHostnameError(err) {
 			c.Logger.Warn(err)
 			c.AbortWithStatus(http.StatusNotFound)
@@ -44,7 +48,7 @@ func TenantProtect(c *xin.Context) {
 
 // AppAuth use Cookie Auth or SAML Auth middleware
 func AppAuth(c *xin.Context) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	if tt.IsSAMLLogin() {
 		SAMLProtect(c)
@@ -92,7 +96,7 @@ func RoleProtect(c *xin.Context, role string) {
 
 func RoleRootProtect(c *xin.Context) {
 	if app.IsMultiTenant() {
-		tt := tenant.FromCtx(c)
+		tt := tenant.Get(c)
 		au := tenant.AuthUser(c)
 
 		if !tt.IsDefault() || !au.IsSuper() {
@@ -130,7 +134,7 @@ func RoleViewerProtect(c *xin.Context) {
 
 func RoleCustomProtector(s string) xin.HandlerFunc {
 	return func(c *xin.Context) {
-		tt := tenant.FromCtx(c)
+		tt := tenant.Get(c)
 		role := tt.SV(s)
 		RoleProtect(c, role)
 	}

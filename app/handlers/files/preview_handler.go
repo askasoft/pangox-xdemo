@@ -35,7 +35,7 @@ func PreviewFile(c *xin.Context, fid, dnloadURL string) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	file, err := tt.FS().FindFile(fid)
 	if errors.Is(err, sqlx.ErrNoRows) {

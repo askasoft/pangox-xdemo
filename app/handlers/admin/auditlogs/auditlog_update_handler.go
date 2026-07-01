@@ -20,7 +20,7 @@ func AuditLogDeletes(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	var cnt int64
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {
@@ -52,7 +52,7 @@ func AuditLogDeleteBatch(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	var cnt int64
 	err = app.SDB().Transaction(func(tx *sqlx.Tx) (err error) {

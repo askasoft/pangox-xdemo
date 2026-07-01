@@ -47,7 +47,7 @@ type PetGenerateJobController struct {
 }
 
 func bindPetGenerateJobCtx(c *xin.Context, h xin.H, kind string) {
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	h["Arg"] = pets.NewPetGenerateArg(tt)
 	h["Kind"] = kind

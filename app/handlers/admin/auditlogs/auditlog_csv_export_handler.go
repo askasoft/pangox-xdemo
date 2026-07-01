@@ -24,7 +24,7 @@ func AuditLogCsvExport(c *xin.Context) {
 		return
 	}
 
-	tt := tenant.FromCtx(c)
+	tt := tenant.Get(c)
 
 	fm := tbsutil.GetAudioLogFuncMap(c.Locale)
 

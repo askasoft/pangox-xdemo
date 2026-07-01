@@ -73,7 +73,7 @@ func TenantList(c *xin.Context) {
 			return
 		}
 
-		tt := tenant.FromCtx(c)
+		tt := tenant.Get(c)
 		ds := app.DefaultSchema()
 
 		tenants := make([]*TenantInfo, len(schemas))
