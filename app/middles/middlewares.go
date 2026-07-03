@@ -95,13 +95,13 @@ func RoleProtect(c *xin.Context, role string) {
 }
 
 func RoleRootProtect(c *xin.Context) {
+	au := tenant.AuthUser(c)
+
 	if app.IsMultiTenant() {
 		tt := tenant.Get(c)
-		au := tenant.AuthUser(c)
 
 		if !tt.IsDefault() || !au.IsSuper() {
-			c.AddError(tbs.Error(c.Locale, "error.forbidden.function"))
-			Forbidden(c)
+			NotFound(c)
 			return
 		}
 
@@ -109,7 +109,12 @@ func RoleRootProtect(c *xin.Context) {
 		return
 	}
 
-	RoleSuperProtect(c)
+	if !au.IsSuper() {
+		NotFound(c)
+		return
+	}
+
+	c.Next()
 }
 
 func RoleSuperProtect(c *xin.Context) {
