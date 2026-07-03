@@ -37,7 +37,7 @@ func initRouter() {
 
 	xxins.InitRouter()
 
-	app.VAD = xxins.XIN.Validator.Engine().(*vad.Validate)
+	app.VAD = xxins.Router().Validator.Engine().(*vad.Validate)
 	app.VAD.RegisterValidationEx("vars", varutil.ValidateVars)
 	app.VAD.RegisterValidation("samlmeta", middles.ValidateSAMLMeta)
 	xvads.RegisterValidations(app.VAD)
@@ -92,7 +92,7 @@ func configMiddleware() {
 func initHandlers() {
 	log.Infof("Context Path: %s", app.Base())
 
-	r := xxins.XIN
+	r := xxins.Router()
 
 	r.Use(xin.CustomRecovery(middles.InternalServerRecover))
 	r.Use(middles.SetCtxLogProp) // Set TENANT logger prop
