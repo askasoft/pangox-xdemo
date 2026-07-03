@@ -50,9 +50,9 @@ type PetGenerateJobController struct {
 func bindPetGenerateJobCtx(c *xin.Context, h xin.H, kind string) {
 	tt := tenant.Get(c)
 
-	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
 	h["Arg"] = pets.NewPetGenerateArg(tt)
 	h["Kind"] = kind
+	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
 }
 
 func (pgjc *PetGenerateJobController) Index(c *xin.Context) {
