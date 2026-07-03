@@ -16,6 +16,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/jobs"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
+	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
 	"github.com/askasoft/pangox/xjm"
 )
 
@@ -43,6 +44,7 @@ func NewJobController(name, tpl string) *JobController {
 
 func (jc *JobController) Index(c *xin.Context) {
 	h := middles.H(c)
+	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
 	c.HTML(http.StatusOK, jc.Template, h)
 }
 

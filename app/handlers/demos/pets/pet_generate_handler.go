@@ -10,6 +10,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/jobs/pets"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
+	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
 )
 
 var PetCatGenJobHandler = handlers.NewJobHandler(newPetCatGenJobController)
@@ -49,6 +50,7 @@ type PetGenerateJobController struct {
 func bindPetGenerateJobCtx(c *xin.Context, h xin.H, kind string) {
 	tt := tenant.Get(c)
 
+	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
 	h["Arg"] = pets.NewPetGenerateArg(tt)
 	h["Kind"] = kind
 }

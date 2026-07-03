@@ -1,4 +1,6 @@
 (function($) {
+	var LEVELS = $('#job_labels').data('levels') || {};
+
 	function job_start() {
 		$('#job_start').prop('disabled', true);
 
@@ -159,7 +161,7 @@
 		tr.className = lg.level;
 		tr.setAttribute('data-lid', lg.id);
 		td1.textContent = main.format_time(lg.time);
-		td2.textContent = '[' + lg.level + ']';
+		td2.textContent = '[' + (LEVELS[lg.level] || lg.level) + ']';
 		td3.textContent = lg.message;
 		tr.append(td1, td2, td3);
 		return tr;

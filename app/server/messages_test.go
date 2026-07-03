@@ -10,7 +10,5 @@ import (
 
 func TestLoadMessages(t *testing.T) {
 	tb := tbs.NewTextBundles()
-	for _, fs := range xtxts.FSs {
-		require.NoError(t, tb.LoadFS(fs, "."))
-	}
+	require.NoError(t, tb.LoadFS(xtxts.FSs...))
 }

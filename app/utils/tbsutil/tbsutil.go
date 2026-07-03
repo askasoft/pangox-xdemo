@@ -36,6 +36,10 @@ func GetBoolMap(locale string) *linkedhashmap.LinkedHashMap[string, string] {
 	return GetLinkedHashMap(locale, "map.bool")
 }
 
+func GetJobLogLevelMap(locale string) *linkedhashmap.LinkedHashMap[string, string] {
+	return GetLinkedHashMap(locale, "job.log.levels")
+}
+
 func GetUserStatusMap(locale string) *linkedhashmap.LinkedHashMap[string, string] {
 	return GetLinkedHashMap(locale, "user.map.status")
 }
