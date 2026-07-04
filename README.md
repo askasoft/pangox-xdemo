@@ -216,7 +216,7 @@ openssl req -x509 -newkey rsa:2048 -keyout xdemo.key -out xdemo.cer -days 3650 -
 
 ### Directory
 ```ini
-[server]
+[router]
 prefix = /xdemo
 ```
 
@@ -282,13 +282,15 @@ server {
 [app]
 debug = true
 reloadable = true
+domain = xdemo.local
 messages = txts
 templates = tpls
 webassets = web
 
 [server]
 listen = 127.0.0.1:6060
-domain = xdemo.local
+
+[router]
 httpsRedirect = false
 ```
 
