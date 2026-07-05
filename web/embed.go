@@ -55,9 +55,9 @@ var (
 
 func AddWebAssetsHandlers(rg *xin.RouterGroup) {
 	xmwas.AddStaticsHandlers(rg.Group("/static/"+app.Revision()), Statics)
-	xmwas.AddStaticSubFolderHandlers(rg.Group(""), WAS, app.Revision())
-	xmwas.AddStaticSubFileHandlers(rg.Group(""), WAS)
-	xmwas.AddStaticSubFolderHandlers(rg.Group(""), LDS)
+	_ = xmwas.AddStaticSubFileHandlers(rg.Group(""), WAS)
+	_ = xmwas.AddStaticSubFolderHandlers(rg.Group(""), WAS, app.Revision())
+	_ = xmwas.AddStaticSubFolderHandlers(rg.Group(""), LDS)
 }
 
 func ConfigWebAssets() {
