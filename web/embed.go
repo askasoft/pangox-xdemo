@@ -49,8 +49,8 @@ var Statics = map[string]fs.FS{
 var FS embed.FS
 
 var (
-	WAS = fsu.ProxyFS{FS: FS}
-	LDS = fsu.ProxyFS{}
+	WAS = &fsu.ProxyFS{FS: FS}
+	LDS = &fsu.ProxyFS{}
 )
 
 func AddWebAssetsHandlers(rg *xin.RouterGroup) {

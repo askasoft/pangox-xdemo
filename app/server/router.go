@@ -108,6 +108,7 @@ func initHandlers() {
 	rg := r.Group(app.Base())
 	rg.HEAD("/healthcheck", handlers.HealthCheck)
 	rg.GET("/healthcheck", handlers.HealthCheck)
+	web.AddWebAssetsHandlers(rg)
 
 	rg.Use(xmwas.XSR.Handle)      // https redirect
 	rg.Use(middles.TenantProtect) // schema protect
@@ -123,8 +124,6 @@ func initHandlers() {
 	admin.Router(rg.Group("/a"))
 	super.Router(rg.Group("/s"))
 	user.Router(rg.Group("/u"))
-
-	web.AddWebAssetsHandlers(rg)
 
 	r.NoRoute(middles.TenantProtect, app.XCN.Handle, middles.NotFound)
 }
