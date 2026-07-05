@@ -32,10 +32,6 @@ func GetPagerLimits(locale string) []int {
 	return GetInts(locale, "pager.limits.list", "20 50 100")
 }
 
-func GetBoolMap(locale string) *linkedhashmap.LinkedHashMap[string, string] {
-	return GetLinkedHashMap(locale, "map.bool")
-}
-
 func GetJobLogLevelMap(locale string) *linkedhashmap.LinkedHashMap[string, string] {
 	return GetLinkedHashMap(locale, "job.log.levels")
 }
@@ -104,4 +100,8 @@ func GetPetTemperMap(locale string) *linkedhashmap.LinkedHashMap[string, string]
 
 func GetPetHabitsMap(locale string) *linkedhashmap.LinkedHashMap[string, string] {
 	return GetLinkedHashMap(locale, "pet.map.habits")
+}
+
+func GetPetResetSequenceMap(locale string) *linkedhashmap.LinkedHashMap[string, string] {
+	return GetLinkedHashMap(locale, "pet.map.bool")
 }

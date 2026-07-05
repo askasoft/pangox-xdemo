@@ -38,7 +38,7 @@ func bindPetClearJobCtx(c *xin.Context, h xin.H) {
 	tt := tenant.Get(c)
 
 	h["Arg"] = pets.NewPetClearArg(tt)
-	h["PetResetSequenceMap"] = tbsutil.GetBoolMap(c.Locale)
+	h["PetResetSequenceMap"] = tbsutil.GetPetResetSequenceMap(c.Locale)
 	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
 }
 
