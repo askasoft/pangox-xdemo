@@ -10,7 +10,6 @@ import (
 
 	"github.com/askasoft/pango/cog/hashmap"
 	"github.com/askasoft/pango/iox"
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/ran"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/str"
@@ -21,7 +20,6 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 	"github.com/askasoft/pangox-xdemo/app/utils/csvutil"
-	"github.com/askasoft/pangox-xdemo/app/utils/sqlutil"
 	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
 	"github.com/askasoft/pangox/xjm"
 	"github.com/askasoft/pangox/xwa/xerrs"
@@ -118,7 +116,6 @@ type csvUserHeader struct {
 
 func (cuh *csvUserHeader) init() {
 	cuh.Locales = app.Locales()
-	cuh.AddColumn("user.id", &cuh.IdxID)
 	cuh.AddColumn("user.name", &cuh.IdxName)
 	cuh.AddColumn("user.email", &cuh.IdxEmail)
 	cuh.AddColumn("user.password", &cuh.IdxPassword)
@@ -130,7 +127,6 @@ func (cuh *csvUserHeader) init() {
 
 type csvUserRecord struct {
 	Line     int
-	ID       string
 	Name     string
 	Email    string
 	Password string
@@ -211,14 +207,6 @@ func (ucij *UserCsvImportJob) doCheckCsv(data []byte) (cnt int, err error) {
 func (ucij *UserCsvImportJob) checkRecord(rec *csvUserRecord) error {
 	var errs []string
 
-	sid := models.UserStartID
-	if ucij.Arg.Role == models.RoleSuper {
-		sid = 1
-	}
-	if rec.ID != "" && num.Atol(rec.ID) < sid {
-		errs = append(errs, tbs.GetText(ucij.Locale(), "user.id", "ID")+":"+tbs.Format(ucij.Locale(), "error.param.gte", num.Ltoa(sid)))
-	}
-
 	if rec.Name == "" {
 		errs = append(errs, tbs.GetText(ucij.Locale(), "user.name"))
 	}
@@ -249,7 +237,6 @@ func (ucij *UserCsvImportJob) checkRecord(rec *csvUserRecord) error {
 
 func (ucij *UserCsvImportJob) importRecord(rec *csvUserRecord) error {
 	user := &models.User{
-		ID:        num.Atol(rec.ID),
 		Name:      rec.Name,
 		Email:     str.ToLower(rec.Email),
 		Role:      ucij.roleRevMap.SafeGet(rec.Role, models.RoleViewer),
@@ -261,44 +248,37 @@ func (ucij *UserCsvImportJob) importRecord(rec *csvUserRecord) error {
 	user.UpdatedAt = user.CreatedAt
 
 	ucij.Step++
-	ucij.Logger.Infof(tbs.GetText(ucij.Locale(), "user.import.csv.step.info"), ucij.Progress(), user.ID, user.Name, user.Email)
+	ucij.Logger.Infof(tbs.GetText(ucij.Locale(), "user.import.csv.step.info"), ucij.Progress(), user.Name, user.Email)
 
 	tt := ucij.Tenant
 	err := app.SDB().Transaction(func(tx *sqlx.Tx) error {
-		uid := user.ID
-		if user.ID != 0 {
-			eu, err := tt.GetUser(tx, user.ID)
-			if err == nil {
-				if rec.Password == "" {
-					// NOTE: we need re-encrypt password, because password is encrypted by email
-					user.SetPassword(eu.GetPassword())
-				} else {
-					user.SetPassword(rec.Password)
-				}
+		eu, err := tt.GetUserByEmail(tx, user.Email)
+		if err == nil {
+			user.ID = eu.ID
 
-				cnt, err := tt.UpdateUser(tx, ucij.Arg.Role, user)
-				if err != nil {
-					if sqlutil.IsUniqueViolationError(err) {
-						ucij.IncFailure()
-						ucij.Logger.Warnf(tbs.GetText(ucij.Locale(), "user.import.csv.step.duplicated"), ucij.Progress(), user.ID, user.Name, user.Email)
-						return jobs.ErrItemSkip
-					}
-					return err
-				}
-
-				if cnt > 0 {
-					ucij.IncSuccess()
-					ucij.Logger.Infof(tbs.GetText(ucij.Locale(), "user.import.csv.step.updated"), ucij.Progress(), user.ID, user.Name, user.Email)
-				} else {
-					ucij.IncFailure()
-					ucij.Logger.Warnf(tbs.GetText(ucij.Locale(), "user.import.csv.step.ufailed"), ucij.Progress(), user.ID, user.Name, user.Email)
-				}
-				return nil
+			if rec.Password == "" {
+				user.Password = eu.Password
+			} else {
+				user.SetPassword(rec.Password)
 			}
 
-			if !errors.Is(err, sqlx.ErrNoRows) {
+			cnt, err := tt.UpdateUser(tx, ucij.Arg.Role, user)
+			if err != nil {
 				return err
 			}
+
+			if cnt > 0 {
+				ucij.IncSuccess()
+				ucij.Logger.Infof(tbs.GetText(ucij.Locale(), "user.import.csv.step.updated"), ucij.Progress(), user.ID, user.Name, user.Email)
+			} else {
+				ucij.IncFailure()
+				ucij.Logger.Warnf(tbs.GetText(ucij.Locale(), "user.import.csv.step.ufailed"), ucij.Progress(), user.ID, user.Name, user.Email)
+			}
+			return nil
+		}
+
+		if !errors.Is(err, sqlx.ErrNoRows) {
+			return err
 		}
 
 		pwd := rec.Password
@@ -308,25 +288,13 @@ func (ucij *UserCsvImportJob) importRecord(rec *csvUserRecord) error {
 		user.SetPassword(pwd)
 		user.Secret = ran.RandInt63()
 
-		err := tt.CreateUser(tx, user)
-		if err != nil {
-			if sqlutil.IsUniqueViolationError(err) {
-				ucij.IncFailure()
-				ucij.Logger.Warnf(tbs.GetText(ucij.Locale(), "user.import.csv.step.duplicated"), ucij.Progress(), user.ID, user.Name, user.Email)
-				return jobs.ErrItemSkip
-			}
+		if err := tt.CreateUser(tx, user); err != nil {
 			return err
 		}
 
 		ucij.IncSuccess()
 		ucij.Logger.Infof(tbs.GetText(ucij.Locale(), "user.import.csv.step.created"), ucij.Progress(), user.ID, user.Name, user.Email)
 
-		if uid != 0 {
-			// reset sequence if create with ID
-			if err := ucij.Tenant.ResetUsersAutoIncrement(tx); err != nil {
-				return err
-			}
-		}
 		return nil
 	})
 	return err
@@ -347,7 +315,6 @@ func (ucij *UserCsvImportJob) parseData(row []string) *csvUserRecord {
 	h := &ucij.head
 
 	rec := &csvUserRecord{}
-	rec.ID = csvutil.GetString(row, h.IdxID)
 	rec.Name = csvutil.GetString(row, h.IdxName)
 	rec.Email = csvutil.GetString(row, h.IdxEmail)
 	rec.Password = csvutil.GetString(row, h.IdxPassword)

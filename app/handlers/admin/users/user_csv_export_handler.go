@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/askasoft/pango/iox"
-	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
@@ -42,7 +41,6 @@ func UserCsvExport(c *xin.Context) {
 			_, _ = c.Writer.WriteString(string(iox.BOM))
 
 			cols = append(cols,
-				tbs.GetText(c.Locale, "user.id"),
 				tbs.GetText(c.Locale, "user.name"),
 				tbs.GetText(c.Locale, "user.email"),
 				tbs.GetText(c.Locale, "user.password"),
@@ -60,7 +58,6 @@ func UserCsvExport(c *xin.Context) {
 
 		cols = cols[:0]
 		cols = append(cols,
-			num.Ltoa(user.ID),
 			user.Name,
 			user.Email,
 			"",

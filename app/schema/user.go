@@ -86,6 +86,18 @@ func (sm Schema) GetUser(tx sqlx.Sqlx, uid int64) (*models.User, error) {
 	return GetByKey(tx, &models.User{}, sm.TableUsers(), "id", uid)
 }
 
+func (sm Schema) GetUserByEmail(tx sqlx.Sqlx, email string) (user *models.User, err error) {
+	sqb := tx.Builder()
+
+	sqb.Select().From(sm.TableUsers())
+	sqb.Eq("email", email)
+	sql, args := sqb.Build()
+
+	user = &models.User{}
+	err = tx.Get(user, sql, args...)
+	return
+}
+
 func (sm Schema) GetActiveUserByEmail(tx sqlx.Sqlx, email string) (user *models.User, err error) {
 	sqb := tx.Builder()
 

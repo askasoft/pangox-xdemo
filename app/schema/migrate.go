@@ -36,6 +36,10 @@ func (sm Schema) InitSchema() error {
 		return err
 	}
 
+	if err := sm.ResetUsersAutoIncrement(app.SDB()); err != nil {
+		return err
+	}
+
 	if err := sm.MigrateSuper(); err != nil {
 		return err
 	}
@@ -209,7 +213,11 @@ func (sm Schema) MigrateSuper() error {
 
 			sqb.Reset()
 			sqb.Insert(tb)
-			sqb.StructNames(user)
+			if uid < models.UserStartID {
+				sqb.StructNames(user)
+			} else {
+				sqb.StructNames(user, "id")
+			}
 			sql = sqb.SQL()
 
 			_, err = tx.NamedExec(sql, user)
@@ -218,7 +226,7 @@ func (sm Schema) MigrateSuper() error {
 			}
 		}
 
-		return sm.ResetUsersAutoIncrement(tx)
+		return nil
 	})
 
 	return err
