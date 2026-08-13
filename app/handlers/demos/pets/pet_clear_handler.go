@@ -39,11 +39,10 @@ func bindPetClearJobCtx(c *xin.Context, h xin.H) {
 
 	h["Arg"] = pets.NewPetClearArg(tt)
 	h["PetResetSequenceMap"] = tbsutil.GetPetResetSequenceMap(c.Locale)
-	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
 }
 
 func (pcjc *PetClearJobController) Index(c *xin.Context) {
-	h := middles.H(c)
+	h := pcjc.H(c)
 
 	bindPetClearJobCtx(c, h)
 

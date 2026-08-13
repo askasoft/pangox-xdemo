@@ -10,7 +10,6 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/jobs/pets"
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
-	"github.com/askasoft/pangox-xdemo/app/utils/tbsutil"
 )
 
 var PetCatGenJobHandler = handlers.NewJobHandler(newPetCatGenJobController)
@@ -52,11 +51,10 @@ func bindPetGenerateJobCtx(c *xin.Context, h xin.H, kind string) {
 
 	h["Arg"] = pets.NewPetGenerateArg(tt)
 	h["Kind"] = kind
-	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
 }
 
 func (pgjc *PetGenerateJobController) Index(c *xin.Context) {
-	h := middles.H(c)
+	h := pgjc.H(c)
 
 	bindPetGenerateJobCtx(c, h, pgjc.kind)
 

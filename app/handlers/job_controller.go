@@ -42,9 +42,14 @@ func NewJobController(name, tpl string) *JobController {
 	return jc
 }
 
-func (jc *JobController) Index(c *xin.Context) {
+func (jc *JobController) H(c *xin.Context) xin.H {
 	h := middles.H(c)
 	h["JobLogLevelMap"] = tbsutil.GetJobLogLevelMap(c.Locale)
+	return h
+}
+
+func (jc *JobController) Index(c *xin.Context) {
+	h := jc.H(c)
 	c.HTML(http.StatusOK, jc.Template, h)
 }
 
