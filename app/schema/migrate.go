@@ -36,24 +36,28 @@ func (sm Schema) InitSchema() error {
 		return err
 	}
 
+	if err := sm.InitUsers(); err != nil {
+		return err
+	}
+
+	return sm.InitSettings()
+}
+
+func (sm Schema) InitUsers() error {
 	if err := sm.ResetUsersAutoIncrement(app.SDB()); err != nil {
 		return err
 	}
 
-	if err := sm.MigrateSuper(); err != nil {
-		return err
-	}
+	return sm.MigrateSuper()
+}
 
+func (sm Schema) InitSettings() error {
 	settings, err := ReadSettingsFile()
 	if err != nil {
 		return err
 	}
 
-	if err := sm.MigrateSettings(settings); err != nil {
-		return err
-	}
-
-	return nil
+	return sm.MigrateSettings(settings)
 }
 
 func (sm Schema) ExecSchemaSQL() error {
