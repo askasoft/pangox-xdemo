@@ -1,0 +1,54 @@
+name: Snapshot Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.26"
+
+      - name: Build
+        run: |
+          mkdir -p dist
+          GOOS=linux GOARCH=amd64 go build -o dist/xdemo-linux-amd64 .
+          GOOS=linux GOARCH=arm64 go build -o dist/xdemo-linux-arm64 .
+
+      - name: Delete Existing Snapshot Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete snapshot --yes || true
+
+      - name: Delete Existing Snapshot Tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push origin :refs/tags/snapshot || true
+
+      - name: Create Snapshot Tag
+        run: |
+          git tag -f snapshot
+          git push origin snapshot --force
+
+      - name: Create Snapshot Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create snapshot \
+            dist/* \
+            --title "Snapshot Build" \
+            --notes "Latest build from master branch"

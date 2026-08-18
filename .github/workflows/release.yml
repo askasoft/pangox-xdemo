@@ -18,6 +18,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v7
 
+      - name: Setup
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.26"
+
+      - name: Build
+        run: |
+          mkdir dist
+          GOOS=linux GOARCH=amd64 go build -o dist/xdemo-linux-amd64 .
+          GOOS=linux GOARCH=arm64 go build -o dist/xdemo-linux-arm64 .
+
       - name: Generate Release Notes and Publish
         id: generate_release_notes
         uses: release-drafter/release-drafter@v7
@@ -29,3 +40,9 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*
