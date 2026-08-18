@@ -8,13 +8,16 @@ import (
 )
 
 func ResetAutoIncrement(tx sqlx.Sqlx, table string, starts ...int64) error {
+	_, err := tx.Exec(ResetAutoIncrementSQL(table, starts...))
+	return err
+}
+
+func ResetAutoIncrementSQL(table string, starts ...int64) string {
 	switch app.DBType() {
 	case "mysql":
-		_, err := tx.Exec(mysqlx.ResetAutoIncrementSQL(table, starts...))
-		return err
+		return mysqlx.ResetAutoIncrementSQL(table, starts...)
 	default:
-		_, err := tx.Exec(pgsqlx.ResetSequenceSQL(table, "id", starts...))
-		return err
+		return pgsqlx.ResetSequenceSQL(table, "id", starts...)
 	}
 }
 
