@@ -11,19 +11,33 @@ permissions:
 jobs:
   snapshot:
     runs-on: ubuntu-latest
+    environment: build
+    env:
+      GO111MODULE: on
+      GOPROXY: https://proxy.golang.org
+      XTEST: FALSE
 
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Go
-        uses: actions/setup-go@v6
+      - name: Setup
+        uses: actions/setup-go@v7
         with:
-          go-version: "1.26"
+          go-version-file: './go.mod'
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: latest
+          args: --verbose
+
+      - name: Test
+        run: go test -covermode=atomic -coverprofile=coverage.out $(go list ./...)
 
       - name: Build
         run: |
-          mkdir -p dist
+          mkdir dist
           GOOS=linux GOARCH=amd64 go build -o dist/xdemo-linux-amd64 .
           GOOS=linux GOARCH=arm64 go build -o dist/xdemo-linux-arm64 .
 

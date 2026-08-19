@@ -7,7 +7,7 @@ NAME="xdemo"
 TAG=$1
 ARCH=$2
 if [ -z $ARCH ]; then
-  ARCH=arm64
+  ARCH=$(dpkg --print-architecture)
 fi
 ASSET_NAME=${NAME}-linux-$ARCH
 
