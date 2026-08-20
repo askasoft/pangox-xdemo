@@ -101,7 +101,7 @@ CREATE TABLE `SCHEMA`.`pets` (
 	`temper` varchar(1) NOT NULL,
 	`habits` json,
 	`amount` bigint NOT NULL,
-	`price` decimal(10, 2) NOT NULL,
+	`price` decimal(10,2) NOT NULL,
 	`shop_name` varchar(200) NOT NULL,
 	`shop_address` varchar(200) NOT NULL,
 	`shop_telephone` varchar(20) NOT NULL,

@@ -34,7 +34,7 @@ GRANT ALL ON DATABASE xdemo TO xdemo;
 ### install mariadb server (if you want to use mysql)
 ```sh
 sudo apt update
-sudo apt install postgresql postgresql-contrib libpq-dev
+sudo apt install mariadb-server
 ```
 
 ```sh

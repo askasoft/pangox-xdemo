@@ -1,6 +1,7 @@
 package gormdb
 
 import (
+	"bufio"
 	"path/filepath"
 
 	"github.com/askasoft/gogormx/gormx"
@@ -54,5 +55,59 @@ func GenerateDDL(outdir string) error {
 	sql = str.ReplaceAll(sql, "idx_build_", "idx_")
 	sql = str.ReplaceAll(sql, qte.Quote("build"), qte.Quote("SCHEMA"))
 
-	return fsu.WriteString(outfile, sql, 0660)
+	// format sql
+	var sb str.Builder
+	sc := bufio.NewScanner(str.NewReader(sql))
+	for sc.Scan() {
+		line := sc.Text()
+
+		if !str.StartsWith(line, "CREATE TABLE") {
+			sb.WriteString(line)
+			sb.WriteByte('\n')
+			continue
+		}
+
+		i := str.IndexByte(line, '(')
+		if i >= 0 {
+			sb.WriteString(line[:i+1])
+
+			var keys []string
+			line = line[i+1:]
+			if i = str.LastIndexByte(line, ')'); i >= 0 {
+				line = line[:i]
+				if i = str.Index(line, "PRIMARY KEY"); i >= 0 {
+					keys = str.FieldsByte(line[i:], ',')
+					line = line[:i]
+				}
+			}
+
+			ss := str.Strips(str.FieldsByte(line, ','))
+			for i, s := range ss {
+				if '0' <= s[0] && s[0] <= '9' {
+					sb.WriteByte(',')
+					sb.WriteString(s)
+					continue
+				}
+
+				if i > 0 {
+					sb.WriteByte(',')
+				}
+				sb.WriteString("\n\t")
+				sb.WriteString(s)
+			}
+
+			for _, k := range keys {
+				if k[0] == '"' || k[0] == '`' {
+					sb.WriteByte(',')
+					sb.WriteString(k)
+					continue
+				}
+				sb.WriteString(",\n\t")
+				sb.WriteString(k)
+			}
+			sb.WriteString("\n);\n")
+		}
+	}
+
+	return fsu.WriteString(outfile, sb.String(), 0660)
 }

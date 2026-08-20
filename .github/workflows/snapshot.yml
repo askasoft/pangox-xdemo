@@ -38,8 +38,8 @@ jobs:
       - name: Build
         run: |
           mkdir dist
-          GOOS=linux GOARCH=amd64 go build -o dist/xdemo-linux-amd64 .
-          GOOS=linux GOARCH=arm64 go build -o dist/xdemo-linux-arm64 .
+          GOOS=linux GOARCH=amd64 ./build.sh dist/xdemo-linux-amd64
+          GOOS=linux GOARCH=arm64 ./build.sh dist/xdemo-linux-arm64
 
       - name: Delete Existing Snapshot Release
         env:
