@@ -32,7 +32,7 @@ func (pts *PwdRstToken) String() string {
 }
 
 type PwdRstSendArg struct {
-	Email string `form:"email,strip" validate:"required,email"`
+	Email string `form:"email,strip,lower" validate:"required,email"`
 }
 
 type PwdRstExecArg struct {

@@ -5,6 +5,7 @@ SET GOOS=windows
 SET GO111MODULE=on
 
 SET COMPANY=Askasoft LLC.
+SET PRODUCT=Pangox Xdemo
 SET VER_MAJOR=1
 SET VER_MINOR=2
 SET VER_PATCH=0
@@ -21,7 +22,7 @@ FOR /F "tokens=* USEBACKQ" %%i IN (`git rev-parse --short HEAD`) DO (
 
 SET /A VER_BUILD=0x%REVISION:~0,4%
 
-call :build .    xdemo    "Pangox Xdemo"    web/favicon.ico
+call :build .    xdemo    "%PRODUCT%"    web/favicon.ico
 
 go test ./...
 

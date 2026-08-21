@@ -32,7 +32,7 @@ func Index(c *xin.Context) {
 }
 
 type UserPass struct {
-	Username string  `form:"username" validate:"required"`
+	Username string  `form:"username,strip,lower" validate:"required"`
 	Password string  `form:"password" validate:"required"`
 	Passcode *string `form:"passcode"`
 }
