@@ -5,7 +5,7 @@ go 1.26
 require (
 	github.com/askasoft/gogormx v1.0.11
 	github.com/askasoft/pango v1.2.17
-	github.com/askasoft/pangox v1.2.17
+	github.com/askasoft/pangox v1.2.18
 	github.com/askasoft/pangox-assets v1.1.13
 	github.com/crewjam/saml v0.5.1
 	github.com/go-ldap/ldap/v3 v3.4.14
@@ -40,7 +40,7 @@ require (
 	github.com/liuzl/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
 	github.com/liuzl/da v0.0.0-20180704015230-14771aad5b1d // indirect
 	github.com/mattermost/xml-roundtrip-validator v0.1.0 // indirect
-	github.com/richardlehane/mscfb v1.0.7 // indirect
+	github.com/richardlehane/mscfb v1.0.8 // indirect
 	github.com/richardlehane/msoleps v1.0.6 // indirect
 	github.com/russellhaering/goxmldsig v1.6.1 // indirect
 	github.com/tiendc/go-deepcopy v1.7.2 // indirect

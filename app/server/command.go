@@ -36,14 +36,14 @@ func (s *service) Usage() {
 	fmt.Println("  <command>:")
 	srv.PrintDefaultCommand(os.Stdout)
 	fmt.Println("    migrate <target> [schema]...")
-	fmt.Println("      target=schema      migrate database schema.")
+	fmt.Println("      target=schema      migrate database schemas.")
 	fmt.Println("      target=settings    migrate database settings.")
 	fmt.Println("      target=super       migrate database super users.")
 	fmt.Println("        [schema]...      specify schemas to migrate.")
 	fmt.Println("    schema <action> [schema]...")
 	fmt.Println("      action=init        initialize the schema.")
 	fmt.Println("      action=check       check schema tables.")
-	fmt.Println("      action=update      apply schema update scripts.")
+	fmt.Println("      action=automg      gorm automatically migrate schemas.")
 	fmt.Println("      action=vacuum      vacuum schema tables (postgresql only).")
 	fmt.Println("        [schema]...      specify schemas to execute.")
 	fmt.Println("      action=genddl      generate schema DDL script.")
@@ -114,8 +114,10 @@ func (s *service) doMigrate() {
 	switch sub {
 	case "schema":
 		initConfigs()
-		if err := gormdb.MigrateSchemas(args...); err != nil {
-			log.Fatal(app.ExitErrDB, err)
+		initDatabase()
+		if err := dbSchemaMigrate(args...); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(app.ExitErrDB)
 		}
 	case "settings":
 		initConfigs()
@@ -163,12 +165,10 @@ func (s *service) doSchemas() {
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(app.ExitErrDB)
 		}
-	case "update":
+	case "automg":
 		initConfigs()
-		initDatabase()
-		if err := dbSchemaUpdate(args...); err != nil {
-			fmt.Fprintln(os.Stderr, err)
-			os.Exit(app.ExitErrDB)
+		if err := gormdb.MigrateSchemas(args...); err != nil {
+			log.Fatal(app.ExitErrDB, err)
 		}
 	case "vacuum":
 		initConfigs()

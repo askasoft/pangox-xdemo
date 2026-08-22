@@ -165,9 +165,9 @@ func dbSchemaCheck(schemas ...string) error {
 	}, schemas...)
 }
 
-func dbSchemaUpdate(schemas ...string) error {
+func dbSchemaMigrate(schemas ...string) error {
 	return dbIterateSchemas(func(sm schema.Schema) error {
-		return sm.UpdateSchema(app.SDB())
+		return sm.MigrateSchema(app.SDB())
 	}, schemas...)
 }
 

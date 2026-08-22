@@ -37,7 +37,7 @@ func (sm Schema) InitSchema() error {
 		return err
 	}
 
-	if err := sm.InitSchemaChanges(); err != nil {
+	if err := sm.InitMigrations(); err != nil {
 		return err
 	}
 
@@ -48,8 +48,8 @@ func (sm Schema) InitSchema() error {
 	return sm.InitSettings()
 }
 
-func (sm Schema) InitSchemaChanges() error {
-	return xsqls.InitSchemaChanges(app.SDB(), string(sm), data.FS, "sqls/"+app.DBType())
+func (sm Schema) InitMigrations() error {
+	return xsqls.InitMigrations(app.SDB(), string(sm), "migrations", data.FS, "sqls/"+app.DBType())
 }
 
 func (sm Schema) InitUsers() error {

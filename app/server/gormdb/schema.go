@@ -19,6 +19,7 @@ import (
 )
 
 var pgModels = []any{
+	&xsqls.Migration{},
 	&xfs.File{},
 	&xjm.Job{},
 	&xjm.JobLog{},
@@ -27,10 +28,10 @@ var pgModels = []any{
 	&models.Setting{},
 	&models.AuditLog{},
 	&models.Pet{},
-	&xsqls.SchemaChange{},
 }
 
 var myModels = []any{
+	&xsqls.Migration{},
 	&xfs.File{},
 	&xjm.Job{},
 	&xjm.JobLog{},
@@ -39,7 +40,6 @@ var myModels = []any{
 	&models.Setting{},
 	&mymodels.AuditLog{},
 	&mymodels.Pet{},
-	&xsqls.SchemaChange{},
 }
 
 func dbmodels(dbt string) []any {

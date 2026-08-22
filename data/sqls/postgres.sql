@@ -1,4 +1,10 @@
 ---------------------------------;
+CREATE TABLE "SCHEMA"."migrations" (
+	"script" varchar(255) NOT NULL,
+	"applied_at" timestamptz NOT NULL,
+	PRIMARY KEY ("script")
+);
+---------------------------------;
 CREATE TABLE "SCHEMA"."files" (
 	"id" varchar(255) NOT NULL,
 	"name" text NOT NULL,
@@ -110,10 +116,4 @@ CREATE TABLE "SCHEMA"."pets" (
 	"created_at" timestamptz NOT NULL,
 	"updated_at" timestamptz NOT NULL,
 	PRIMARY KEY ("id")
-);
----------------------------------;
-CREATE TABLE "SCHEMA"."schema_changes" (
-	"script" varchar(255) NOT NULL,
-	"applied_at" timestamptz NOT NULL,
-	PRIMARY KEY ("script")
 );

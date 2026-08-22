@@ -43,11 +43,11 @@ func (sm Schema) CheckSchema(db *sqlx.DB) {
 	}
 }
 
-func (sm Schema) UpdateSchema(db *sqlx.DB) error {
+func (sm Schema) MigrateSchema(db *sqlx.DB) error {
 	logger := log.GetLogger("SQL")
 	logger.Info(str.PadCenter(" "+string(sm)+" ", 60, "="))
 
-	return xsqls.ApplySchemaChanges(db, string(sm), data.FS, "sqls/"+app.DBType(), logger)
+	return xsqls.ApplyMigrations(db, string(sm), "migrations", data.FS, "sqls/"+app.DBType(), logger)
 }
 
 func (sm Schema) VacuumSchema(db *sqlx.DB) error {
