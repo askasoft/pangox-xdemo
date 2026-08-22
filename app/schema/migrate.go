@@ -14,6 +14,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/data"
+	"github.com/askasoft/pangox/xwa/xsqls"
 )
 
 func ReadSettingsFile() ([]*models.Setting, error) {
@@ -36,11 +37,19 @@ func (sm Schema) InitSchema() error {
 		return err
 	}
 
+	if err := sm.InitSchemaChanges(); err != nil {
+		return err
+	}
+
 	if err := sm.InitUsers(); err != nil {
 		return err
 	}
 
 	return sm.InitSettings()
+}
+
+func (sm Schema) InitSchemaChanges() error {
+	return xsqls.InitSchemaChanges(app.SDB(), string(sm), data.FS, "sqls/"+app.DBType())
 }
 
 func (sm Schema) InitUsers() error {

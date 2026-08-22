@@ -33,6 +33,14 @@ func (sm Schema) Table(s string) string {
 	return sm.Prefix() + s
 }
 
+func (sm Schema) TableSchemaChanges() string {
+	return sm.Table("schema_changes")
+}
+
+func (sm Schema) TableSettings() string {
+	return sm.Table("settings")
+}
+
 func (sm Schema) TableFiles() string {
 	return sm.Table("files")
 }
@@ -49,16 +57,12 @@ func (sm Schema) TableJobChains() string {
 	return sm.Table("job_chains")
 }
 
-func (sm Schema) TableUsers() string {
-	return sm.Table("users")
-}
-
-func (sm Schema) TableSettings() string {
-	return sm.Table("settings")
-}
-
 func (sm Schema) TableAuditLogs() string {
 	return sm.Table("audit_logs")
+}
+
+func (sm Schema) TableUsers() string {
+	return sm.Table("users")
 }
 
 func (sm Schema) TablePets() string {
