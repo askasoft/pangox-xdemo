@@ -391,37 +391,66 @@ var main = {
 
 	// popup warn confirm message box
 	popup_warn_confirm: function(s, el) {
-		main.popup_confirm($.extend({ type: 'warn', icon: { msg: 'fas fa-3x fa-triangle-exclamation' }}, s), el);
+		main.popup_confirm($.extend({
+			type: 'warn',
+			icon: 'fas fa-3x fa-triangle-exclamation',
+		}, s), el);
+	},
+
+	// popup danger confirm message box
+	popup_danger_confirm: function(s, el) {
+		main.popup_confirm($.extend({
+			type: 'danger',
+			icon: 'fas fa-3x fa-triangle-exclamation',
+			btns: { ok: { style: 'btn-danger' } },
+		}, s), el);
+	},
+
+	// popup fatal confirm message box
+	popup_fatal_confirm: function(s, el) {
+		main.popup_confirm($.extend({
+			type: 'fatal',
+			icon: 'fas fa-3x fa-triangle-exclamation',
+			btns: { ok: { style: 'btn-danger'} },
+			confirm: {
+				label: '続行するには「DELETE」と入力してください',
+				input: 'DELETE'
+			}
+		}, s), el);
 	},
 
 	// popup confirm message box
 	popup_confirm: function(s, el) {
 		s = $.extend({
 			type: '',
-			icon: {},
-			text: {},
+			icon: '',
+			btns: {},
 			focus: ''
 		}, s);
 
 		var $p = $('#main_popup_confirm');
 		if (!$p.length) {
-			$p = $('<div id="main_popup_confirm">'
+			$p = $('<form id="main_popup_confirm">'
 				+ '<h5 class="ui-popup-header"></h5>'
 				+ '<div class="ui-popup-body">'
 					+ '<i class="icon"></i>'
 					+ '<div class="msg"></div>'
 				+ '</div>'
 				+ '<div class="ui-popup-footer">'
-					+ '<button class="btn btn-primary ok"><i></i> <span></span></button>\n'
-					+ '<button class="btn btn-secondary cancel" popup-dismiss="true"><i></i> <span></span></button>'
+					+ '<button class="btn ok" type="submit"><i></i> <span></span></button>\n'
+					+ '<button class="btn cancel" popup-dismiss="true"><i></i> <span></span></button>'
 				+ '</div>'
-			+ '</div>');
+			+ '</form>');
 
+			$p.on('submit', function() {
+				$p.data('onok', true).popup('hide');
+				return false;
+			});
 			$p.on('hidden.popup', function() {
 				($p.data('popc')[$p.data('onok') ? 'onok' : 'oncancel'] || function() {})();
 			});
-			$p.find('.ok').on('click', function() {
-				$p.data('onok', true).popup('hide');
+			$p.on('input', 'input[name=confirm]', function() {
+				$p.find('.ok').prop('disabled', $(this).val() !== $(this).attr('placeholder'));
 			});
 		}
 
@@ -436,24 +465,38 @@ var main = {
 			$ph.hide();
 		}
 
+		var $m = $p.find('.msg');
 		if (s.content) {
-			$p.find('.msg').html(s.content);
+			$m.html(s.content);
 		} else {
-			$p.find('.msg').text(s.message);
+			$m.text(s.message);
 		}
 
-		$p.find('.icon').attr('class', 'icon ' + (s.icon.msg || 'far fa-3x fa-circle-question text-primary'));
-		$p.find('.ok > i').attr('class', s.icon.ok || 'fas fa-check');
-		$p.find('.cancel > i').attr('class', s.icon.cancel || 'fas fa-xmark');
-		$p.find('.ok > span').text(s.text.ok || main.labels[main.lang].ok);
-		$p.find('.cancel > span').text(s.text.cancel || main.labels[main.lang].cancel);
+		if (s.confirm) {
+			$m.append($('<div class="confirm">').append(
+				$('<label class="form-label small text-muted">').text(s.confirm.label || '続行するには「DELETE」と入力してください'),
+				$('<input type="text" class="form-control" name="confirm" autocomplete="off">').attr('placeholder', s.confirm.input || 'DELETE')
+			));
+		}
+
+		$p.find('.icon').attr('class', 'icon ' + (s.icon || 'far fa-3x fa-circle-question text-primary'));
+
+		var ok = s.btns.ok || {};
+		$p.find('.ok').addClass(ok.style || 'btn-primary').prop('disabled', !!s.confirm)
+			.find('i').attr('class', ok.icon || 'fas fa-check').end()
+			.find('span').text(ok.text || main.labels[main.lang].ok);
+
+		var cancel = s.btns.cancel || {};
+		$p.find('.cancel').addClass(cancel.style || 'btn-secondary')
+			.find('i').attr('class', cancel.icon || 'fas fa-xmark').end()
+			.find('span').text(cancel.text || main.labels[main.lang].cancel);
 	
 		$p.popup($.extend({
 			closer: false,
 			mask: true,
 			scroll: false,
 			position: el ? 'auto' : 'center',
-			focus: s.focus || '.ok'
+			focus: s.focus || (s.confirm ? '.confirm input' : '.ok')
 		}, s.popup)).popup('show', el);
 	},
 
@@ -557,7 +600,7 @@ var main = {
 				continue;
 			}
 
-			var $c = $td.children('a, p, pre, button');
+			var $c = $td.children('a, s, p, pre, button');
 			if (typeof(v) == 'undefined') {
 				v = '';
 			}

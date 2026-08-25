@@ -460,7 +460,7 @@ div.verr {
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
 }
-.s-popup-msgbox.error .ui-popup-body {
+.s-popup-msgbox.error .ui-popup-body, .s-popup-msgbox.danger .ui-popup-body {
 	color: var(--bs-danger, #dc3545);
 }
 .s-popup-msgbox.warn .ui-popup-body {
@@ -497,6 +497,9 @@ div.verr {
 }
 .s-popup-detail.xlarge {
 	max-width: 90vw;
+}
+.s-popup-detail.xlarge .ui-popup-body {
+	min-height: calc(100vh - 200px);
 }
 
 .s-popup-detail > .prev, .s-popup-detail > .next {

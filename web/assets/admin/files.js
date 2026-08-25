@@ -35,7 +35,6 @@
 	// deletes (selected / all)
 	//
 	function files_deletes(all) {
-		var $p = $(all ? '#files_deleteall_popup' : '#files_deletesel_popup').popup('update', { keyboard: false });
 		var ids = all ? '*' : main.get_table_checked_ids($('#files_table')).join(',');
 
 		$.ajax({
@@ -45,10 +44,8 @@
 				id: ids
 			},
 			dataType: 'json',
-			beforeSend: main.form_ajax_start($p),
+			beforeSend: main.loadmask,
 			success: function(data) {
-				$p.popup('hide');
-
 				$.toast({
 					icon: 'success',
 					text: data.success
@@ -57,9 +54,7 @@
 				(all ? files_reset : files_search)();
 			},
 			error: main.ajax_error,
-			complete: function() {
-				$p.unloadmask().popup('update', { keyboard: true });
-			}
+			complete: main.unloadmask
 		});
 		return false;
 	}
@@ -68,8 +63,21 @@
 	//----------------------------------------------------
 	// deletes (batch)
 	//
+	function files_deletes_all() {
+		main.popup_danger_confirm({
+			message: $(this).data('confirm'),
+			onok: files_deletes.callback(true)
+		}, this);
+	}
+
+	function files_deletes_sel() {
+		main.popup_danger_confirm({
+			message: $(this).data('confirm'),
+			onok: files_deletes.callback(false)
+		}, this);
+	}
+
 	function files_deletebat() {
-		var $p = $('#files_deletebat_popup').popup('update', { keyboard: false });
 		var vs = main.form_input_values($p.find('form'));
 
 		$.ajax({
@@ -77,10 +85,8 @@
 			method: 'POST',
 			data: $.param(vs, true),
 			dataType: 'json',
-			beforeSend: main.form_ajax_start($p),
+			beforeSend: main.loadmask,
 			success: function(data) {
-				$p.popup('hide');
-
 				$.toast({
 					icon: 'success',
 					text: data.success
@@ -89,9 +95,7 @@
 				files_search();
 			},
 			error: main.form_ajax_error($p),
-			complete: function() {
-				$p.unloadmask().popup('update', { keyboard: true });
-			}
+			complete: main.unloadmask
 		});
 		return false;
 	}
@@ -144,8 +148,8 @@
 			.submit();
 
 
-		$('#files_deletesel_popup form').on('submit', files_deletes.callback(false));
-		$('#files_deleteall_popup form').on('submit', files_deletes.callback(true));
+		$('#files_deletesel').on('click', files_deletes_sel);
+		$('#files_deleteall').on('click', files_deletes_all);
 
 		$('#files_deletebat_popup')
 			.on('submit', 'form', files_deletebat)

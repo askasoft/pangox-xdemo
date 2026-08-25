@@ -150,7 +150,7 @@
 	//----------------------------------------------------
 	// update
 	//
-	var LABELS = $('#pet_labels').data();
+	var LABELS = $('#pets_labels').data();
 
 	function pet_set_tr_values($tr, pet) {
 		main.set_table_tr_values($tr, pet, LABELS);
@@ -236,8 +236,21 @@
 	//----------------------------------------------------
 	// deletes (selected / all)
 	//
+	function pets_deletes_all() {
+		main.popup_danger_confirm({
+			message: $(this).data('confirm'),
+			onok: pets_deletes.callback(true)
+		}, this);
+	}
+
+	function pets_deletes_sel() {
+		main.popup_danger_confirm({
+			message: $(this).data('confirm'),
+			onok: pets_deletes.callback(false)
+		}, this);
+	}
+
 	function pets_deletes(all) {
-		var $p = $(all ? '#pets_deleteall_popup' : '#pets_deletesel_popup').popup('update', { keyboard: false });
 		var ids = all ? '*' : main.get_table_checked_ids($('#pets_table')).join(',');
 
 		$.ajax({
@@ -247,10 +260,8 @@
 				id: ids
 			},
 			dataType: 'json',
-			beforeSend: main.form_ajax_start($p),
+			beforeSend: main.loadmask,
 			success: function(data) {
-				$p.popup('hide');
-
 				$.toast({
 					icon: 'success',
 					text: data.success
@@ -259,9 +270,7 @@
 				(all ? pets_reset : pets_search)();
 			},
 			error: main.ajax_error,
-			complete: function() {
-				$p.unloadmask().popup('update', { keyboard: true });
-			}
+			complete: main.unloadmask
 		});
 		return false;
 	}
@@ -362,8 +371,8 @@
 			.on('submit', 'form', pet_detail_submit)
 			.on('click', '.ui-popup-footer button[type=submit]', pet_detail_submit);
 
-		$('#pets_deletesel_popup form').on('submit', pets_deletes.callback(false));
-		$('#pets_deleteall_popup form').on('submit', pets_deletes.callback(true));
+		$('#pets_deletesel').on('click', pets_deletes_sel);
+		$('#pets_deleteall').on('click', pets_deletes_all);
 
 		$('#pets_deletebat_popup')
 			.on('submit', 'form', pets_deletebat)

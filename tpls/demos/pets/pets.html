@@ -13,14 +13,14 @@
 	</div>
 	<div class="s-section-body">
 		<div class="s-toolbar">
-			<button class="btn btn-sm btn-outline-danger" popup-target="#pets_deletesel_popup" enableby="#pets_list td.check input">
+			<button class="btn btn-sm btn-outline-danger" id="pets_deletesel" enableby="#pets_list td.check input" data-confirm="{{T .Loc "pet.confirm.deletesel"}}">
 				{{I "deletesel"}} {{T .Loc "button.deletesel"}}
+			</button>
+			<button class="btn btn-sm btn-outline-danger" id="pets_deleteall" data-confirm="{{T .Loc "pet.confirm.deleteall"}}">
+				{{I "deleteall"}} {{T .Loc "button.deleteall"}}
 			</button>
 			<button class="btn btn-sm btn-outline-danger" popup-target="#pets_deletebat_popup">
 				{{I "deletebat"}} {{T .Loc "button.deletebat"}}
-			</button>
-			<button class="btn btn-sm btn-outline-danger" popup-target="#pets_deleteall_popup">
-				{{I "deleteall"}} {{T .Loc "button.deleteall"}}
 			</button>
 			<button class="btn btn-sm btn-outline-primary" id="pets_editsel" enableby="#pets_list td.check input">
 				{{I "editsel"}} {{T .Loc "button.editsel"}}
@@ -104,40 +104,12 @@
 	</div>
 </div>
 
-<div id="pet_labels" class="hidden"
+<div id="pets_labels" class="hidden"
 	data-gender="{{JSON .PetGenderMap}}"
 	data-origin="{{JSON .PetOriginMap}}"
 	data-temper="{{JSON .PetTemperMap}}"
 	data-habits="{{JSON .PetHabitsMap}}"
 ></div>
-
-<div id="pets_deletesel_popup" class="ui-popup s-popup-msgbox" data-spy="popup" tabindex="-1"
-	popup-mask="true" popup-scroll="false" popup-mouse="false">
-	<form>
-		<div class="ui-popup-body">
-			<i class="icon fas fa-3x fa-fw fa-triangle-exclamation text-danger"></i>
-			<div class="msg">{{T .Loc "pet.confirm.deletesel"}}</div>
-		</div>
-		<div class="ui-popup-footer">
-			<button type="submit" class="btn btn-danger">{{I "ok"}} {{T .Loc "button.ok"}}</button>
-			<button type="button" class="btn btn-secondary" popup-dismiss="true">{{I "cancel"}} {{T .Loc "button.cancel"}}</button>
-		</div>
-	</form>
-</div>
-
-<div id="pets_deleteall_popup" class="ui-popup s-popup-msgbox" data-spy="popup" tabindex="-1"
-	popup-mask="true" popup-scroll="false" popup-mouse="false">
-	<form>
-		<div class="ui-popup-body">
-			<i class="icon fas fa-3x fa-fw fa-triangle-exclamation text-danger"></i>
-			<div class="msg">{{T .Loc "pet.confirm.deleteall"}}</div>
-		</div>
-		<div class="ui-popup-footer">
-			<button type="submit" class="btn btn-danger">{{I "ok"}} {{T .Loc "button.ok"}}</button>
-			<button type="button" class="btn btn-secondary" popup-dismiss="true">{{I "cancel"}} {{T .Loc "button.cancel"}}</button>
-		</div>
-	</form>
-</div>
 
 <div id="pets_deletebat_popup" class="ui-popup s-popup-detail large" data-spy="popup" tabindex="-1"
 	popup-position="center" popup-mask="true" popup-scroll="false" popup-mouse="false" popup-closer="true"

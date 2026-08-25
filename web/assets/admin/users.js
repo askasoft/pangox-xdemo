@@ -150,7 +150,7 @@
 	//----------------------------------------------------
 	// update
 	//
-	var LABELS = $('#user_labels').data();
+	var LABELS = $('#users_labels').data();
 
 	function user_set_tr_values($tr, user) {
 		main.set_table_tr_values($tr, user, LABELS);
@@ -230,8 +230,21 @@
 	//----------------------------------------------------
 	// deletes (selected / all)
 	//
+	function users_deletes_all() {
+		main.popup_danger_confirm({
+			message: $(this).data('confirm'),
+			onok: users_deletes.callback(true)
+		}, this);
+	}
+
+	function users_deletes_sel() {
+		main.popup_danger_confirm({
+			message: $(this).data('confirm'),
+			onok: users_deletes.callback(false)
+		}, this);
+	}
+
 	function users_deletes(all) {
-		var $p = $(all ? '#users_deleteall_popup' : '#users_deletesel_popup').popup('update', { keyboard: false });
 		var ids = all ? '*' : main.get_table_checked_ids($('#users_table')).join(',');
 
 		$.ajax({
@@ -241,10 +254,8 @@
 				id: ids
 			},
 			dataType: 'json',
-			beforeSend: main.form_ajax_start($p),
+			beforeSend: main.loadmask,
 			success: function(data) {
-				$p.popup('hide');
-
 				$.toast({
 					icon: 'success',
 					text: data.success
@@ -253,9 +264,7 @@
 				(all ? users_reset : users_search)();
 			},
 			error: main.ajax_error,
-			complete: function() {
-				$p.unloadmask().popup('update', { keyboard: true });
-			}
+			complete: main.unloadmask
 		});
 		return false;
 	}
@@ -358,8 +367,8 @@
 			.on('submit', 'form', user_detail_submit)
 			.on('click', '.ui-popup-footer button[type=submit]', user_detail_submit);
 
-		$('#users_deletesel_popup form').on('submit', users_deletes.callback(false));
-		$('#users_deleteall_popup form').on('submit', users_deletes.callback(true));
+		$('#users_deletesel').on('click', users_deletes_sel);
+		$('#users_deleteall').on('click', users_deletes_all);
 
 		$('#users_deletebat_popup')
 			.on('submit', 'form', users_deletebat)
