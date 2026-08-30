@@ -78,6 +78,7 @@
 	}
 
 	function files_deletebat() {
+		var $p = $('#files_deletebat_popup').popup('update', { keyboard: false });
 		var vs = main.form_input_values($p.find('form'));
 
 		$.ajax({
@@ -87,6 +88,8 @@
 			dataType: 'json',
 			beforeSend: main.loadmask,
 			success: function(data) {
+				$p.popup('hide');
+
 				$.toast({
 					icon: 'success',
 					text: data.success
