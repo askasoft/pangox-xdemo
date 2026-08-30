@@ -139,6 +139,9 @@ func Shutdown() {
 	// gracefully shutdown the http servers with timeout '[server] shutdownTimeout'.
 	xhsvs.Shutdowns()
 
+	// wait for jobs
+	jobs.Waits()
+
 	log.Info("EXIT.")
 
 	// close log

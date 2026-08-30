@@ -38,5 +38,9 @@ func reloadFileWatch() {
 }
 
 func closeFileWatch() {
-	_ = xfsws.CloseFileWatch()
+	log.Info("Closing file watch ...")
+
+	if err := xfsws.CloseFileWatch(); err != nil {
+		log.Error(err)
+	}
 }

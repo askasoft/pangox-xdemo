@@ -115,9 +115,28 @@ func runJob(tt *tenant.Tenant, job *xjm.Job) {
 
 	ttJobRuns.AddJob(string(tt.Schema), job)
 
-	defer ttJobRuns.DelJob(string(tt.Schema), job)
+	defer func() {
+		ttJobRuns.DelJob(string(tt.Schema), job)
+		ttJobRuns.Clean()
+	}()
 
 	xjobs.RunJob(run)
+}
+
+func Waits() {
+	log.Info("Waiting for jobs done ...")
+
+	d := time.Millisecond * 100
+	t := time.NewTimer(d)
+	defer t.Stop()
+
+	for {
+		<-t.C
+		if ttJobRuns.Total() == 0 {
+			return
+		}
+		t.Reset(d)
+	}
 }
 
 func Stats() string {

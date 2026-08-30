@@ -30,5 +30,6 @@ func reScheduler() {
 }
 
 func stopScheduler() {
+	log.Info("Stop scheduler ...")
 	sch.Stop()
 }
