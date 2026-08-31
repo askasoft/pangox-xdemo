@@ -172,7 +172,7 @@ func StatsCacheSettings(c *xin.Context) {
 
 func StatsCacheWorkers(c *xin.Context) {
 	statsCacheStats(c, app.WORKS, func(v *gwp.WorkerPool) string {
-		return num.Itoa(v.CurWorks()) + "/" + num.Itoa(v.MaxWorks())
+		return fmt.Sprintf("Waiting: %d, Working: %d / %d", v.Waiting(), v.Working(), v.MaxWorks())
 	})
 }
 
