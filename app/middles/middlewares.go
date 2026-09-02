@@ -3,6 +3,8 @@ package middles
 import (
 	"net/http"
 
+	"github.com/askasoft/pango/gog"
+	"github.com/askasoft/pango/net/netx"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
@@ -11,6 +13,10 @@ import (
 	"github.com/askasoft/pangox/xfs"
 	"github.com/askasoft/pangox/xwa/xerrs"
 	"github.com/askasoft/pangox/xwa/xmwas"
+)
+
+var (
+	intranetCIDRs = gog.Must(netx.ParseCIDRs(netx.IntranetCIDRs))
 )
 
 func SetCtxLogProp(c *xin.Context) {
@@ -71,6 +77,17 @@ func IPProtect(c *xin.Context) {
 	au := tenant.AuthUser(c)
 
 	if !tenant.CheckUserClientIP(c, au) {
+		c.AddError(tbs.Error(c.Locale, "error.forbidden.ip"))
+		Forbidden(c)
+		return
+	}
+
+	c.Next()
+}
+
+// IntranetProtect allow access of intranet
+func IntranetProtect(c *xin.Context) {
+	if !tenant.CheckClientIP(c, intranetCIDRs...) {
 		c.AddError(tbs.Error(c.Locale, "error.forbidden.ip"))
 		Forbidden(c)
 		return
