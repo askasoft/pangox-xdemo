@@ -139,6 +139,10 @@ func Waits() {
 	}
 }
 
+func Running() int {
+	return ttJobRuns.Total()
+}
+
 func Stats() string {
 	total, stats := ttJobRuns.Stats()
 	return fmt.Sprintf("INSTANCE ID: 0x%04x, JOB RUNNING: %d\n%s", app.InstanceID(), total, stats)

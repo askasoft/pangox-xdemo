@@ -137,14 +137,12 @@ func CheckClientIP(c *xin.Context, cidrs ...*net.IPNet) bool {
 	}
 
 	if len(cidrs) > 0 {
-		trusted := false
 		for _, cidr := range cidrs {
 			if cidr.Contains(ip) {
-				trusted = true
-				break
+				return true
 			}
 		}
-		return trusted
+		return false
 	}
 
 	return true

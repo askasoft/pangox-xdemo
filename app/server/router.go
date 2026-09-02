@@ -108,6 +108,7 @@ func initHandlers() {
 	rg := r.Group(app.Base())
 	rg.HEAD("/healthcheck", handlers.HealthCheck)
 	rg.GET("/healthcheck", handlers.HealthCheck)
+	rg.GET("/serverstats", middles.IntranetProtect, handlers.ServerStats)
 	web.AddWebAssetsHandlers(rg)
 
 	rg.Use(xmwas.XSR.Handle)      // https redirect

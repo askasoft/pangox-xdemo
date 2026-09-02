@@ -110,6 +110,7 @@ OnFailure = slack-alert@%n.service
 
 [Service]
 Type = simple
+Environment = "GOMEMLIMIT=1GiB"
 WorkingDirectory = /app/xdemo
 ExecStart = /app/xdemo/xdemo
 ExecReload = /bin/kill -HUP $MAINPID
