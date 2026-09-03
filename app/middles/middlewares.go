@@ -2,6 +2,7 @@ package middles
 
 import (
 	"net/http"
+	"sync/atomic"
 
 	"github.com/askasoft/pango/gog"
 	"github.com/askasoft/pango/net/netx"
@@ -17,6 +18,8 @@ import (
 
 var (
 	intranetCIDRs = gog.Must(netx.ParseCIDRs(netx.IntranetCIDRs))
+
+	Handling int64
 )
 
 func SetCtxLogProp(c *xin.Context) {
@@ -92,6 +95,14 @@ func IntranetProtect(c *xin.Context) {
 		c.AbortWithStatusJSON(http.StatusForbidden, E(c))
 		return
 	}
+
+	c.Next()
+}
+
+func RequestCount(c *xin.Context) {
+	atomic.AddInt64(&Handling, 1)
+
+	defer atomic.AddInt64(&Handling, -1)
 
 	c.Next()
 }

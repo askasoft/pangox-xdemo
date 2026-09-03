@@ -31,6 +31,7 @@ func ServerStats(c *xin.Context) {
 	runtime.ReadMemStats(&ms)
 	h["memory"] = ms.Alloc
 
+	h["handling"] = middles.Handling
 	h["dbstats"] = app.SDB().Stats()
 	h["jobs"] = jobs.Running()
 
