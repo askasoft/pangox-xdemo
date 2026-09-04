@@ -8,8 +8,8 @@ github.com/alexbrainman/sspi v0.0.0-20250919150558-7d374ff0d59e h1:4dAU9FXIyQktp
 github.com/alexbrainman/sspi v0.0.0-20250919150558-7d374ff0d59e/go.mod h1:cEWa1LVoE5KvSD9ONXsZrj0z6KqySlCCNKHlLzbqAt4=
 github.com/askasoft/gogormx v1.0.11 h1:p2DNGIXARustCN1sGvmlUUfoNnfomqAN7V8cwUxUxE0=
 github.com/askasoft/gogormx v1.0.11/go.mod h1:SqauUm4mYDkUlg9ecjRjC/gHG6yjYM7YS4CXd9d/uNM=
-github.com/askasoft/pango v1.2.18 h1:yFTH6rEojh8IiJ/oCl5ZFQMLtVexYf1BOjv5Qiploh0=
-github.com/askasoft/pango v1.2.18/go.mod h1:CmYDK6Q9fefQMk4WHmVLTB1ay5nXrolZK3je4wU8xro=
+github.com/askasoft/pango v1.2.19 h1:7vB8D+M3VmKsfvffoBw+jkY3zi17ntHOc8R6bCpvccw=
+github.com/askasoft/pango v1.2.19/go.mod h1:CmYDK6Q9fefQMk4WHmVLTB1ay5nXrolZK3je4wU8xro=
 github.com/askasoft/pangox v1.2.18 h1:LnjpMeBjcgVkJGY8S5nWdV52+OXKpRtXBUgknlWbDeU=
 github.com/askasoft/pangox v1.2.18/go.mod h1:96Bw8aMSM6/FxJPhj82a1dVRs0UC8waIOF2H7cwzkXQ=
 github.com/askasoft/pangox-assets v1.1.13 h1:AnxhuKEJQuBN3r5gRurcoER6It+kmSaYbwFdVDj8KJ0=

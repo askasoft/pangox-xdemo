@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"runtime"
 
+	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/jobs"
@@ -29,7 +30,7 @@ func ServerStats(c *xin.Context) {
 
 	var ms runtime.MemStats
 	runtime.ReadMemStats(&ms)
-	h["memory"] = ms.Alloc
+	h["memory"] = num.HumanSize(ms.Alloc)
 
 	h["handling"] = middles.Handling
 	h["dbstats"] = app.SDB().Stats()

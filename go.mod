@@ -4,7 +4,7 @@ go 1.26
 
 require (
 	github.com/askasoft/gogormx v1.0.11
-	github.com/askasoft/pango v1.2.18
+	github.com/askasoft/pango v1.2.19
 	github.com/askasoft/pangox v1.2.18
 	github.com/askasoft/pangox-assets v1.1.13
 	github.com/crewjam/saml v0.5.1
