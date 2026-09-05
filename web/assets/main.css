@@ -460,11 +460,14 @@ div.verr {
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
 }
-.s-popup-msgbox.error .ui-popup-body, .s-popup-msgbox.danger .ui-popup-body {
+.s-popup-msgbox .confirm {
+	margin: 1em 0;
+}
+.s-popup-msgbox.error .ui-popup-body, .s-popup-msgbox.danger .ui-popup-body, .s-popup-msgbox.fatal .ui-popup-body {
 	color: var(--bs-danger, #dc3545);
 }
 .s-popup-msgbox.warn .ui-popup-body {
-	color: var(--bs-warning, #8a6d3b);
+	color: var(--bs-warning, #e95420);
 }
 .s-popup-msgbox.info .ui-popup-body {
 	color: var(--bs-info, #337ab7);
