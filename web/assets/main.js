@@ -394,6 +394,7 @@ var main = {
 		main.popup_confirm($.extend({
 			type: 'warn',
 			icon: 'fas fa-3x fa-triangle-exclamation',
+			btns: { ok: { style: 'btn-warning' } },
 		}, s), el);
 	},
 
@@ -437,8 +438,8 @@ var main = {
 					+ '<div class="msg"></div>'
 				+ '</div>'
 				+ '<div class="ui-popup-footer">'
-					+ '<button class="btn ok" type="submit"><i></i> <span></span></button>\n'
-					+ '<button class="btn cancel" popup-dismiss="true"><i></i> <span></span></button>'
+					+ '<button class="ok" type="submit"><i></i> <span></span></button>\n'
+					+ '<button class="cancel" popup-dismiss="true"><i></i> <span></span></button>'
 				+ '</div>'
 			+ '</form>');
 
@@ -482,12 +483,12 @@ var main = {
 		$p.find('.icon').attr('class', 'icon ' + (s.icon || 'far fa-3x fa-circle-question text-primary'));
 
 		var ok = s.btns.ok || {};
-		$p.find('.ok').addClass(ok.style || 'btn-primary').prop('disabled', !!s.confirm)
+		$p.find('.ok').attr('class', 'ok btn ' + (ok.style || 'btn-primary')).prop('disabled', !!s.confirm)
 			.find('i').attr('class', ok.icon || 'fas fa-check').end()
 			.find('span').text(ok.text || main.labels[main.lang].ok);
 
 		var cancel = s.btns.cancel || {};
-		$p.find('.cancel').addClass(cancel.style || 'btn-secondary')
+		$p.find('.cancel').attr('class', 'cancel btn ' + (cancel.style || 'btn-secondary'))
 			.find('i').attr('class', cancel.icon || 'fas fa-xmark').end()
 			.find('span').text(cancel.text || main.labels[main.lang].cancel);
 	
