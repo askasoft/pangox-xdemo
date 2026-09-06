@@ -10,9 +10,6 @@ import (
 	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-assets/html/bootstrap5"
-	"github.com/askasoft/pangox-assets/html/bootswatch5/cosmo"
-	"github.com/askasoft/pangox-assets/html/bootswatch5/flatly"
-	"github.com/askasoft/pangox-assets/html/bootswatch5/pulse"
 	"github.com/askasoft/pangox-assets/html/corejs"
 	"github.com/askasoft/pangox-assets/html/docxjs"
 	"github.com/askasoft/pangox-assets/html/flagicons"
@@ -30,9 +27,6 @@ import (
 // Static embed static folder
 var Statics = map[string]fs.FS{
 	"bootstrap5":         bootstrap5.FS,
-	"bootswatch5/cosmo":  cosmo.FS,
-	"bootswatch5/flatly": flatly.FS,
-	"bootswatch5/pulse":  pulse.FS,
 	"corejs":             corejs.FS,
 	"flagicons":          flagicons.FS,
 	"fontawesome7":       fontawesome7.FS,
