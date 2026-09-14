@@ -324,6 +324,8 @@ var main = {
 		$l.html(data);
 
 		$l.find('[checkall]').checkall();
+		$l.find('[enableby]').enableby();
+		$l.find('[hiddenby]').hiddenby();
 		$l.find('[data-spy="pager"]').pager();
 		$l.find('[data-spy="sortable"]').sortable();
 	},

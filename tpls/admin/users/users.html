@@ -16,17 +16,18 @@
 	</div>
 	<div class="s-section-body">
 		<div class="s-toolbar">
-			<button class="btn btn-sm btn-outline-danger" id="users_deletesel" enableby="#users_list td.check input" data-confirm="{{T .Loc "user.confirm.deletesel"}}">
+			<button class="btn btn-sm btn-outline-danger hidden" id="users_deletesel" hiddenby="#users_list td.check input" data-confirm="{{T .Loc "user.confirm.deletesel"}}">
 				{{I "deletesel"}} {{T .Loc "button.deletesel"}}
 			</button>
-			<button class="btn btn-sm btn-outline-danger" id="users_deleteall" data-confirm="{{T .Loc "user.confirm.deleteall"}}">
-				{{I "deleteall"}} {{T .Loc "button.deleteall"}}
+			<button class="btn btn-sm btn-outline-primary hidden" id="users_editsel" hiddenby="#users_list td.check input">
+				{{I "editsel"}} {{T .Loc "button.editsel"}}
 			</button>
+			<div class="ms-auto"></div>
 			<button class="btn btn-sm btn-outline-danger" popup-target="#users_deletebat_popup">
 				{{I "deletebat"}} {{T .Loc "button.deletebat"}}
 			</button>
-			<button class="btn btn-sm btn-outline-primary" id="users_editsel" enableby="#users_list td.check input">
-				{{I "editsel"}} {{T .Loc "button.editsel"}}
+			<button class="btn btn-sm btn-outline-danger" id="users_deleteall" data-confirm="{{T .Loc "user.confirm.deleteall"}}">
+				{{I "deleteall"}} {{T .Loc "button.deleteall"}}
 			</button>
 			<button class="btn btn-sm btn-outline-primary" id="users_editall">
 				{{I "editall"}} {{T .Loc "button.editall"}}
