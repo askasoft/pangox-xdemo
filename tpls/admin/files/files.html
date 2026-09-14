@@ -9,17 +9,18 @@
 	</div>
 	<div class="s-section-body">
 		<div class="s-toolbar">
-			<button class="btn btn-sm btn-outline-danger" id="files_deletesel" enableby="#files_list td.check input" data-confirm="{{T .Loc "file.confirm.deletesel"}}">
+			<button class="btn btn-sm btn-outline-danger hidden" id="files_deletesel" toggleby="#files_list td.check input" data-confirm="{{T .Loc "file.confirm.deletesel"}}">
 				{{I "deletesel"}} {{T .Loc "button.deletesel"}}
 			</button>
-			<button class="btn btn-sm btn-outline-danger" id="files_deleteall" data-confirm="{{T .Loc "file.confirm.deleteall"}}">
-				{{I "deleteall"}} {{T .Loc "button.deleteall"}}
+			<button class="btn btn-sm btn-outline-primary hidden" id="files_editsel" toggleby="#files_list td.check input">
+				{{I "editsel"}} {{T .Loc "button.editsel"}}
 			</button>
+			<div class="ms-auto"></div>
 			<button class="btn btn-sm btn-outline-danger" popup-target="#files_deletebat_popup">
 				{{I "deletebat"}} {{T .Loc "button.deletebat"}}
 			</button>
-			<button class="btn btn-sm btn-outline-primary" id="files_editsel" enableby="#files_list td.check input">
-				{{I "editsel"}} {{T .Loc "button.editsel"}}
+			<button class="btn btn-sm btn-outline-danger" id="files_deleteall" data-confirm="{{T .Loc "file.confirm.deleteall"}}">
+				{{I "deleteall"}} {{T .Loc "button.deleteall"}}
 			</button>
 			<button class="btn btn-sm btn-outline-primary" id="files_editall">
 				{{I "editall"}} {{T .Loc "button.editall"}}
