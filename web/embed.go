@@ -26,17 +26,17 @@ import (
 
 // Static embed static folder
 var Statics = map[string]fs.FS{
-	"bootstrap5":         bootstrap5.FS,
-	"corejs":             corejs.FS,
-	"flagicons":          flagicons.FS,
-	"fontawesome7":       fontawesome7.FS,
-	"jquery3":            jquery3.FS,
-	"jszip":              jszip.FS,
-	"docxjs":             docxjs.FS,
-	"pdfjs":              pdfjs.FS,
-	"pdfviewer":          pdfviewer.FS,
-	"plugins":            plugins.FS,
-	"summernote":         summernote.FS,
+	"bootstrap5":   bootstrap5.FS,
+	"corejs":       corejs.FS,
+	"flagicons":    flagicons.FS,
+	"fontawesome7": fontawesome7.FS,
+	"jquery3":      jquery3.FS,
+	"jszip":        jszip.FS,
+	"docxjs":       docxjs.FS,
+	"pdfjs":        pdfjs.FS,
+	"pdfviewer":    pdfviewer.FS,
+	"plugins":      plugins.FS,
+	"summernote":   summernote.FS,
 }
 
 //go:embed assets favicon.ico robots.txt

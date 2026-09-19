@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"mime/multipart"
 
+	"github.com/askasoft/pango/asg"
 	"github.com/askasoft/pango/log"
+	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pango/tbs"
 	"github.com/askasoft/pango/xin"
 	"github.com/askasoft/pangox-xdemo/app"
@@ -14,6 +16,10 @@ import (
 	"github.com/askasoft/pangox/xfs"
 	"github.com/askasoft/pangox/xjm"
 	"github.com/askasoft/pangox/xwa/xjobs"
+)
+
+const (
+	MaxFindTargetsCount = 10
 )
 
 var (
@@ -135,4 +141,10 @@ func NewJobRunner[A any](tt *tenant.Tenant, job *xjm.Job) *JobRunner[A] {
 
 func (jr *JobRunner[A]) jobChainContinue(next *xjobs.JobRunState) error {
 	return JobChainAppendJob(jr.Tenant, next.Name, jr.Locale(), jr.ChainID(), jr.ChainSeq+1, jr.ChainData)
+}
+
+func (jr *JobRunner[A]) AddChainIDFilter(sqb *sqlx.Builder, col ...string) {
+	if jr.ShouldChainData() {
+		sqb.Eq(asg.First(col, "chain_id"), jr.ChainID())
+	}
 }

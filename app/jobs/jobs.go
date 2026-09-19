@@ -65,6 +65,23 @@ func Starts() {
 	log.Info(Stats())
 }
 
+// AppendJob append job
+func AppendJob(tt *tenant.Tenant, name, locale string) error {
+	arg, err := CreateJobArg(tt, name)
+	if err != nil {
+		return err
+	}
+
+	param := xjm.MustEncode(arg)
+	if _, err := tt.JM().AppendJob(0, name, locale, param); err != nil {
+		return err
+	}
+
+	go StartJobs(tt) //nolint: errcheck
+
+	return nil
+}
+
 // StartJobs start tenant jobs
 func StartJobs(tt *tenant.Tenant) error {
 	ttJobLock.Lock()
