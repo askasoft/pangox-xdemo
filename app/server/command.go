@@ -61,6 +61,8 @@ func (s *service) Usage() {
 	fmt.Println("        <source>         specify setting files ({schema}.csv) directory to import.")
 	fmt.Println("    encrypt [key] <str>  encrypt string.")
 	fmt.Println("    decrypt [key] <str>  decrypt string.")
+	fmt.Println("    fix <target> [schema]...")
+	fmt.Println("      target=userpass    fix user password (CBC -> GCM).")
 	fmt.Println("  [options]:")
 	srv.PrintDefaultOptions(os.Stdout)
 	fmt.Println("    -out                 specify the output directory.")
@@ -94,6 +96,8 @@ func (s *service) Exec(cmd string) {
 		s.doExport()
 	case "import":
 		s.doImport()
+	case "fix":
+		s.doFix()
 	default:
 		flag.CommandLine.SetOutput(os.Stdout)
 		fmt.Fprintf(os.Stderr, "Invalid command %q\n\n", cmd)
@@ -343,4 +347,33 @@ func cryptFlags() (k, v string) {
 		k, v = app.Secret(), k
 	}
 	return
+}
+
+func (s *service) doFix() {
+	sub := flag.Arg(1)
+	if sub == "" {
+		fmt.Fprintln(os.Stderr, "Missing fix <target>.")
+		os.Exit(app.ExitErrARG)
+	}
+
+	args := flag.Args()[2:]
+
+	switch sub {
+	case "userpass":
+		initConfigs()
+		initDatabase()
+		exec := flag.Arg(2) == "-exec"
+		if exec {
+			args = args[1:]
+		}
+		if err := dbFixUserPasswords(exec, args...); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(app.ExitErrDB)
+		}
+	default:
+		fmt.Fprintf(os.Stderr, "Invalid fix <target>: %q", sub)
+		os.Exit(app.ExitErrARG)
+	}
+
+	log.Info("DONE.")
 }

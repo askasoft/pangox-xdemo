@@ -115,7 +115,7 @@ func (sm Schema) MigrateSettings(settings []*models.Setting) error {
 	sqbu.Where("name = :name")
 	sqlu := sqbu.SQL()
 
-	stmu, err := db.PrepareNamed(sqlu)
+	stmu, err := db.NamedPrepare(sqlu)
 	if err != nil {
 		return err
 	}
@@ -125,7 +125,7 @@ func (sm Schema) MigrateSettings(settings []*models.Setting) error {
 	sqbc.Insert(tb)
 	sqbc.StructNames(&models.Setting{})
 	sqlc := sqbc.SQL()
-	stmc, err := db.PrepareNamed(sqlc)
+	stmc, err := db.NamedPrepare(sqlc)
 	if err != nil {
 		return err
 	}
