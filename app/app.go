@@ -15,6 +15,7 @@ import (
 	"github.com/askasoft/pango/xin/middleware"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox/xwa"
+	"github.com/askasoft/pangox/xwa/xcpts"
 	"github.com/askasoft/pangox/xwa/xpwds"
 	"github.com/askasoft/pangox/xwa/xsqls"
 )
@@ -113,6 +114,22 @@ func Domain() string {
 
 func Secret() string {
 	return xwa.Secret
+}
+
+func Encrypt(s string) (string, error) {
+	return xcpts.Encrypt(Secret(), s)
+}
+
+func Decrypt(s string) (string, error) {
+	return xcpts.Decrypt(Secret(), s)
+}
+
+func MustEncrypt(s string) string {
+	return xcpts.MustEncrypt(Secret(), s)
+}
+
+func MustDecrypt(s string) string {
+	return xcpts.MustDecrypt(Secret(), s)
 }
 
 func Locales() []string {
