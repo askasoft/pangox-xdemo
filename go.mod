@@ -17,7 +17,7 @@ require (
 	github.com/xuri/excelize/v2 v2.11.0
 	golang.org/x/net v0.58.0
 	gorm.io/driver/mysql v1.6.0
-	gorm.io/driver/postgres v1.6.2
+	gorm.io/driver/postgres v1.6.3
 	gorm.io/gorm v1.31.2
 )
 
