@@ -43,9 +43,9 @@ func fixUserPasswords(tx sqlx.Sqlx, sm schema.Schema, exec bool) error {
 			return err
 		}
 
-		log.Warnf("Fix [%s] #%d: %s (%s -> %s)", sm, user.ID, user.Email, user.Password, pwd)
-
 		user.SetPassword(pwd)
+
+		log.Warnf("Fix [%s] #%d: %s (%s -> %s)", sm, user.ID, user.Email, pwd, user.Password)
 
 		if _, err := stmu.Exec(user); err != nil {
 			return err

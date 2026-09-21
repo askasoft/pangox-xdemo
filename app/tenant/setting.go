@@ -47,12 +47,8 @@ func (tt *Tenant) getSettings() map[string]string {
 }
 
 func (tt *Tenant) loadSettings(tx sqlx.Sqlx) (map[string]string, error) {
-	sqb := tx.Builder()
-	sqb.Select().From(tt.TableSettings())
-	sql, args := sqb.Build()
-
-	settings := []*models.Setting{}
-	if err := tx.Select(&settings, sql, args...); err != nil {
+	settings, err := tt.SelectSettings(tx)
+	if err != nil {
 		return nil, err
 	}
 
