@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/askasoft/pango/log"
 	"github.com/askasoft/pango/sqx/sqlx"
+	"github.com/askasoft/pango/str"
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/args"
 	"github.com/askasoft/pangox-xdemo/app/models"
@@ -45,10 +46,12 @@ func fixUserPasswords(tx sqlx.Sqlx, sm schema.Schema, exec bool) error {
 
 		user.SetPassword(pwd)
 
-		log.Warnf("Fix [%s] #%d: %s (%s -> %s)", sm, user.ID, user.Email, pwd, user.Password)
+		log.Warnf("%s [%s] #%d <%s> : (%s -> %s)", str.If(exec, "Fix", "Try"), sm, user.ID, user.Email, pwd, user.Password)
 
-		if _, err := stmu.Exec(user); err != nil {
-			return err
+		if exec {
+			if _, err := stmu.Exec(user); err != nil {
+				return err
+			}
 		}
 	}
 

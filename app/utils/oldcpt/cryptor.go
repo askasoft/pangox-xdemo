@@ -2,11 +2,17 @@ package oldcpt
 
 import (
 	"crypto/cipher"
+	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"fmt"
 
 	"github.com/askasoft/pango/cpt"
 	"github.com/askasoft/pango/str"
+)
+
+var (
+	ErrCipherBytesTooShort = errors.New("cipher bytes too short")
 )
 
 type (
@@ -75,6 +81,34 @@ func (c *cryptor) DecryptBytes(src []byte) (dst []byte, err error) {
 		dst, err = c.padder.Unpad(dst)
 	}
 	return
+}
+
+type aeadBlocker struct {
+	aeader cipher.AEAD
+}
+
+func (ab aeadBlocker) EncryptBlocks(src []byte) ([]byte, error) {
+	nonce := make([]byte, ab.aeader.NonceSize())
+	_, err := rand.Read(nonce)
+	if err != nil {
+		return nil, err
+	}
+
+	dst := ab.aeader.Seal(nil, nonce, src, nil)
+	dst = append(nonce, dst...)
+	return dst, nil
+}
+
+func (ab aeadBlocker) DecryptBlocks(src []byte) ([]byte, error) {
+	nonceSize := ab.aeader.NonceSize()
+
+	if len(src) < nonceSize {
+		return nil, ErrCipherBytesTooShort
+	}
+
+	nonce, data := src[:nonceSize], src[nonceSize:]
+
+	return ab.aeader.Open(nil, nonce, data, nil)
 }
 
 type cbcBlocker struct {
