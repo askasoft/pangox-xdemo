@@ -10,6 +10,17 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/models"
 )
 
+func (sm Schema) SelectSecretSettings(tx sqlx.Sqlx) (settings []*models.Setting, err error) {
+	sqb := tx.Builder()
+	sqb.Select().From(sm.TableSettings())
+	sqb.Eq("secret", true)
+	sqb.Order("name")
+	sql, args := sqb.Build()
+
+	err = tx.Select(&settings, sql, args...)
+	return
+}
+
 func (sm Schema) SelectSettings(tx sqlx.Sqlx, items ...string) (settings []*models.Setting, err error) {
 	sqb := tx.Builder()
 	sqb.Select().From(sm.TableSettings())

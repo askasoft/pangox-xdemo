@@ -13,6 +13,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/jobs"
 	"github.com/askasoft/pangox-xdemo/app/models"
+	"github.com/askasoft/pangox-xdemo/app/utils/cptutil"
 	"github.com/askasoft/pangox/xwa"
 	"github.com/askasoft/pangox/xwa/xhsvs"
 	"github.com/askasoft/pangox/xwa/xxins"
@@ -161,6 +162,10 @@ func initConfigs() {
 	if err := xwa.InitConfigs(); err != nil {
 		log.Fatal(app.ExitErrCFG, err)
 	}
+
+	if err := cptutil.Init(app.Secret()); err != nil {
+		log.Fatal(app.ExitErrCFG, err)
+	}
 }
 
 func initCaches() {
@@ -193,6 +198,11 @@ func reloadServers() {
 
 func reloadConfigs() {
 	if err := xwa.InitConfigs(); err != nil {
+		log.Error(err)
+		return
+	}
+
+	if err := cptutil.Init(app.Secret()); err != nil {
 		log.Error(err)
 		return
 	}

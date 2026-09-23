@@ -5,6 +5,7 @@ import (
 
 	"github.com/askasoft/pango/num"
 	"github.com/askasoft/pango/str"
+	"github.com/askasoft/pangox-xdemo/app/utils/cptutil"
 )
 
 const (
@@ -106,4 +107,30 @@ func (s *Setting) IsSameMeta(n *Setting) bool {
 		s.Required == n.Required && s.Secret == n.Secret &&
 		s.Viewer == n.Viewer && s.Editor == n.Editor &&
 		s.Validation == n.Validation
+}
+
+func (s *Setting) IsSecretEncrypted() bool {
+	return s.Secret && cptutil.IsEncrypted(s.Value)
+}
+
+func (s *Setting) EncryptSecretValue() error {
+	if s.Secret {
+		val, err := cptutil.Encrypt(s.Value)
+		if err != nil {
+			return err
+		}
+		s.Value = val
+	}
+	return nil
+}
+
+func (s *Setting) DecryptSecretValue() error {
+	if s.Secret {
+		val, err := cptutil.Decrypt(s.Value)
+		if err != nil {
+			return err
+		}
+		s.Value = val
+	}
+	return nil
 }

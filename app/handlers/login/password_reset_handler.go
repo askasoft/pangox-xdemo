@@ -18,6 +18,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
+	"github.com/askasoft/pangox-xdemo/app/utils/cptutil"
 	"github.com/askasoft/pangox/xwa/xmail"
 )
 
@@ -71,7 +72,7 @@ func PasswordResetSend(c *xin.Context) {
 	}
 
 	token := &PwdRstToken{Email: arg.Email, Timestamp: time.Now().UnixMilli()}
-	tkenc := app.MustEncrypt(token.String())
+	tkenc := cptutil.MustEncrypt(token.String())
 	rsurl := fmt.Sprintf("%s://%s%s/login/pwdrst/reset/%s", str.If(c.IsSecure(), "https", "http"), c.RequestHostname(), app.Base(), tkenc)
 
 	tkexp := num.Itoa(int(ini.GetDuration("login", "passwordResetTokenExpires", time.Minute*10).Minutes()))
@@ -95,7 +96,7 @@ func PasswordResetSend(c *xin.Context) {
 
 func passwordResetToken(c *xin.Context) *PwdRstToken {
 	tkenc := c.Param("token")
-	tkstr, err := app.Decrypt(tkenc)
+	tkstr, err := cptutil.Decrypt(tkenc)
 	if tkenc == "" || err != nil {
 		c.AddError(tbs.Error(c.Locale, "pwdrst.error.invalid"))
 		return nil

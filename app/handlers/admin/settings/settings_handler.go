@@ -35,6 +35,9 @@ func loadSettingList(c *xin.Context, actor string) []*models.Setting {
 		panic(err)
 	}
 
+	for _, stg := range settings {
+		_ = stg.DecryptSecretValue()
+	}
 	return settings
 }
 
@@ -336,7 +339,7 @@ func exportSettings(w io.Writer, locale string, scs []*models.SettingCategory) e
 			sgn := tbs.GetText(locale, "setting.group.label."+sg.Name)
 			for _, ci := range sg.Items {
 				disp := fmt.Sprintf("%s / %s / %s", scn, sgn, tbs.GetText(locale, "setting."+ci.Name, ci.Name))
-				if err := cw.Write([]string{ci.Name, ci.DisplayValue(), disp}); err != nil {
+				if err := cw.Write([]string{ci.Name, ci.Value, disp}); err != nil {
 					return err
 				}
 			}

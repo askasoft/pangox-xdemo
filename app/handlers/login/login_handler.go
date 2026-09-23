@@ -16,6 +16,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/middles"
 	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
+	"github.com/askasoft/pangox-xdemo/app/utils/cptutil"
 	"github.com/askasoft/pangox-xdemo/app/utils/otputil"
 	"github.com/askasoft/pangox/xwa/xmail"
 	"github.com/skip2/go-qrcode"
@@ -116,7 +117,7 @@ func loginPassed(c *xin.Context, au *models.User) {
 }
 
 func loginMFASecret(c *xin.Context, au *models.User) string {
-	return app.MustEncrypt(c.RequestHostname() + "/" + au.Email + "/" + num.Ltoa(au.Secret))
+	return cptutil.MustEncrypt(c.RequestHostname() + "/" + au.Email + "/" + num.Ltoa(au.Secret))
 }
 
 func loginMFACheck(c *xin.Context, au *models.User, up *UserPass) bool {

@@ -61,8 +61,11 @@ func (s *service) Usage() {
 	fmt.Println("        <source>         specify setting files ({schema}.csv) directory to import.")
 	fmt.Println("    encrypt [key] <str>  encrypt string.")
 	fmt.Println("    decrypt [key] <str>  decrypt string.")
-	fmt.Println("    fix <target> [schema]...")
+	fmt.Println("    fix <target> -exec [schema]...")
 	fmt.Println("      target=userpass    fix user password (CBC -> GCM).")
+	fmt.Println("      target=sencrypt    encrypt secret setting values.")
+	fmt.Println("      target=sdecrypt    decrypt secret setting values.")
+	fmt.Println("        -exec            apply changes (default: dry-run).")
 	fmt.Println("  [options]:")
 	srv.PrintDefaultOptions(os.Stdout)
 	fmt.Println("    -out                 specify the output directory.")
@@ -359,6 +362,17 @@ func (s *service) doFix() {
 	args := flag.Args()[2:]
 
 	switch sub {
+	case "sencrypt", "sdecrypt":
+		initConfigs()
+		initDatabase()
+		exec := flag.Arg(2) == "-exec"
+		if exec {
+			args = args[1:]
+		}
+		if err := dbFixSettingCrypt(sub == "sencrypt", exec, args...); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(app.ExitErrDB)
+		}
 	case "userpass":
 		initConfigs()
 		initDatabase()

@@ -68,11 +68,15 @@ func (tt *Tenant) loadSettings(tx sqlx.Sqlx) (map[string]string, error) {
 	}
 
 	for _, stg := range settings {
-		cv := stg.Value
-		if sr != nil && stg.Validation == "" && (stg.Style == models.SettingStyleDefault || stg.Style == models.SettingStyleTextarea) {
-			cv = sr.Replace(cv)
+		if err := stg.DecryptSecretValue(); err != nil {
+			return nil, err
 		}
-		stgs[stg.Name] = cv
+
+		sv := stg.Value
+		if sr != nil && stg.Validation == "" && (stg.Style == models.SettingStyleDefault || stg.Style == models.SettingStyleTextarea) {
+			sv = sr.Replace(sv)
+		}
+		stgs[stg.Name] = sv
 	}
 
 	return stgs, nil

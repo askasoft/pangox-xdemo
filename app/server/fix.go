@@ -11,7 +11,90 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/utils/oldcpt"
 )
 
+func dbFixSettingCrypt(encrypt, exec bool, schemas ...string) error {
+	if !exec {
+		log.Info("DRY-RUN: no changes will be made (add -exec to apply)")
+	}
+
+	return dbIterateSchemas(func(sm schema.Schema) error {
+		return app.SDB().Transaction(func(tx *sqlx.Tx) error {
+			return fixSettingSecretValues(sm, tx, encrypt, exec)
+		})
+	}, schemas...)
+}
+
+func fixSettingSecretValues(sm schema.Schema, tx sqlx.Sqlx, encrypt, exec bool) error {
+	stgs, err := sm.SelectSecretSettings(tx)
+	if err != nil {
+		return err
+	}
+
+	var done, skip int
+	for _, stg := range stgs {
+		plain := stg.DisplayValue()
+
+		ok, err := fixSettingSecretValue(stg, encrypt)
+		if err != nil {
+			return err
+		}
+		if !ok {
+			skip++
+			continue
+		}
+
+		log.Infof("  [%s] %s: %s -> %s", sm, stg.Name, plain, stg.Value)
+
+		if exec {
+			if err := updateSettingSecretValue(sm, tx, stg); err != nil {
+				return err
+			}
+		}
+		done++
+	}
+
+	if done > 0 || skip > 0 {
+		log.Infof("[%s]: %d %s, %d skipped", sm, done, map[bool]string{true: "encrypted", false: "decrypted"}[encrypt], skip)
+	}
+
+	return nil
+}
+
+func fixSettingSecretValue(stg *models.Setting, encrypt bool) (bool, error) {
+	if stg.Value == "" {
+		return false, nil
+	}
+
+	if encrypt {
+		if stg.IsSecretEncrypted() {
+			return false, nil
+		}
+		return true, stg.EncryptSecretValue()
+	}
+
+	if !stg.IsSecretEncrypted() {
+		return false, nil
+	}
+	return true, stg.DecryptSecretValue()
+}
+
+func updateSettingSecretValue(sm schema.Schema, tx sqlx.Sqlx, stg *models.Setting) error {
+	sqb := tx.Builder()
+
+	sqb.Update(sm.TableSettings())
+	sqb.Setc("value", stg.Value)
+	sqb.Eq("name", stg.Name)
+
+	sql, args := sqb.Build()
+
+	_, err := tx.Update(sql, args...)
+	return err
+}
+
 func dbFixUserPasswords(exec bool, schemas ...string) error {
+	if !exec {
+		log.Info("DRY-RUN: no changes will be made (add -exec to apply)")
+	}
+
 	return dbIterateSchemas(func(sm schema.Schema) error {
 		return app.SDB().Transaction(func(tx *sqlx.Tx) error {
 			return fixUserPasswords(tx, sm, exec)
