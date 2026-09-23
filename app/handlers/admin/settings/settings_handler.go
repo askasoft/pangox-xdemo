@@ -38,16 +38,6 @@ func loadSettingList(c *xin.Context, actor string) []*models.Setting {
 	return settings
 }
 
-func disableSettingSuperSecret(c *xin.Context, settings []*models.Setting) {
-	au := tenant.AuthUser(c)
-
-	if au.IsSuper() {
-		for _, stg := range settings {
-			stg.Secret = false
-		}
-	}
-}
-
 func buildSettingCategories(locale string, settings []*models.Setting) []*models.SettingCategory {
 	scs := []*models.SettingCategory{}
 
@@ -102,8 +92,6 @@ func bindSettingLists(c *xin.Context, h xin.H, settings []*models.Setting) {
 
 func SettingIndex(c *xin.Context) {
 	settings := loadSettingList(c, "viewer")
-
-	disableSettingSuperSecret(c, settings)
 
 	scs := buildSettingCategories(c.Locale, settings)
 
@@ -283,6 +271,11 @@ func checkPostSettings(c *xin.Context, settings []*models.Setting) (usettings []
 			continue
 		}
 
+		if stg.Secret && str.IsMasked(v) {
+			// skip masked secret
+			continue
+		}
+
 		stg.Value = v
 		usettings = append(usettings, stg)
 	}
@@ -317,8 +310,6 @@ func saveSettings(c *xin.Context, settings []*models.Setting, action string, det
 
 func SettingExport(c *xin.Context) {
 	settings := loadSettingList(c, "editor")
-
-	disableSettingSuperSecret(c, settings)
 
 	scs := buildSettingCategories(c.Locale, settings)
 
@@ -382,7 +373,7 @@ func SettingImport(c *xin.Context) {
 
 	settings := loadSettingList(c, "editor")
 
-	usettings := checkCsvSettings(c, settings, csvstgs)
+	usettings, skipped := checkCsvSettings(c, settings, csvstgs)
 	if len(c.Errors) > 0 {
 		c.JSON(http.StatusBadRequest, middles.E(c))
 		return
@@ -397,10 +388,15 @@ func SettingImport(c *xin.Context) {
 		tenant.Get(c).PurgeSettings()
 	}
 
-	c.JSON(http.StatusOK, xin.H{"success": tbs.GetText(c.Locale, "success.imported")})
+	msg := tbs.GetText(c.Locale, "success.imported")
+	if len(skipped) > 0 {
+		msg += "\n" + tbs.Format(c.Locale, "setting.import.skipped", str.Join(skipped, ", "))
+	}
+
+	c.JSON(http.StatusOK, xin.H{"success": msg})
 }
 
-func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*models.SettingItem) (usettings []*models.Setting) {
+func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*models.SettingItem) (usettings []*models.Setting, skipped []string) {
 	stgmaps := map[string]*models.Setting{}
 	for _, stg := range settings {
 		stgmaps[stg.Name] = stg
@@ -420,6 +416,12 @@ func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*mod
 
 		if ci.Value == stg.Value || ci.Value == stg.DisplayValue() {
 			// skip unmodified value
+			continue
+		}
+
+		if stg.Secret && str.IsMasked(ci.Value) {
+			// skip masked secret
+			skipped = append(skipped, stg.Name)
 			continue
 		}
 
