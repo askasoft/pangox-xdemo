@@ -14,6 +14,7 @@ secure_auditlog_retention,3,N,41,TRUE,FALSE,A,A,btw=1 ~ 100
 password_policy_minlen,8,N,1,TRUE,FALSE,A,A,btw=8 ~ 64
 password_policy_strength,,CV,2,FALSE,FALSE,A,A,
 schedule_pets_reset,d 0 3,H,1,FALSE,FALSE,A,A,periodic
+sample_secret,,,10,FALSE,TRUE,A,A,
 sample_checks,,C,11,FALSE,FALSE,A,A,
 sample_checks_v,,CV,12,FALSE,FALSE,A,A,
 sample_checks_o,,CO,13,FALSE,FALSE,A,A,

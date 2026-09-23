@@ -119,7 +119,7 @@ func SettingSave(c *xin.Context) {
 
 	settings := loadSettingList(c, "editor")
 
-	usettings := checkPostSettings(c, settings)
+	usettings, skipped := checkPostSettings(c, settings)
 	if len(c.Errors) > 0 {
 		c.JSON(http.StatusBadRequest, middles.E(c))
 		return
@@ -133,7 +133,12 @@ func SettingSave(c *xin.Context) {
 		tt.PurgeSettings()
 	}
 
-	c.JSON(http.StatusOK, xin.H{"success": tbs.GetText(c.Locale, "success.saved")})
+	msg := tbs.GetText(c.Locale, "success.saved")
+	if len(skipped) > 0 {
+		msg += "\n" + tbs.Format(c.Locale, "setting.import.skipped", str.Join(skipped, ", "))
+	}
+
+	c.JSON(http.StatusOK, xin.H{"success": msg})
 }
 
 func buildSettingDetails(c *xin.Context, settings []*models.Setting, usettings []*models.Setting) string {
@@ -262,7 +267,7 @@ func validateSetting(c *xin.Context, stg *models.Setting) bool {
 	return true
 }
 
-func checkPostSettings(c *xin.Context, settings []*models.Setting) (usettings []*models.Setting) {
+func checkPostSettings(c *xin.Context, settings []*models.Setting) (usettings []*models.Setting, skipped []string) {
 	var vs []string
 	var v string
 	var ok bool
@@ -280,6 +285,12 @@ func checkPostSettings(c *xin.Context, settings []*models.Setting) (usettings []
 
 		if !ok || v == stg.Value || v == stg.DisplayValue() {
 			// skip unknown or unmodified value
+			continue
+		}
+
+		if stg.Secret && str.IsMasked(v) {
+			// skip masked secret
+			skipped = append(skipped, tbs.GetText(c.Locale, "setting."+stg.Name, stg.Name))
 			continue
 		}
 
@@ -382,7 +393,7 @@ func SettingImport(c *xin.Context) {
 
 	settings := loadSettingList(c, "editor")
 
-	usettings := checkCsvSettings(c, settings, csvstgs)
+	usettings, skipped := checkCsvSettings(c, settings, csvstgs)
 	if len(c.Errors) > 0 {
 		c.JSON(http.StatusBadRequest, middles.E(c))
 		return
@@ -397,10 +408,15 @@ func SettingImport(c *xin.Context) {
 		tenant.Get(c).PurgeSettings()
 	}
 
-	c.JSON(http.StatusOK, xin.H{"success": tbs.GetText(c.Locale, "success.imported")})
+	msg := tbs.GetText(c.Locale, "success.imported")
+	if len(skipped) > 0 {
+		msg += "\n" + tbs.Format(c.Locale, "setting.import.skipped", str.Join(skipped, ", "))
+	}
+
+	c.JSON(http.StatusOK, xin.H{"success": msg})
 }
 
-func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*models.SettingItem) (usettings []*models.Setting) {
+func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*models.SettingItem) (usettings []*models.Setting, skipped []string) {
 	stgmaps := map[string]*models.Setting{}
 	for _, stg := range settings {
 		stgmaps[stg.Name] = stg
@@ -420,6 +436,12 @@ func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*mod
 
 		if ci.Value == stg.Value || ci.Value == stg.DisplayValue() {
 			// skip unmodified value
+			continue
+		}
+
+		if stg.Secret && str.IsMasked(ci.Value) {
+			// skip masked secret
+			skipped = append(skipped, tbs.GetText(c.Locale, "setting."+stg.Name, stg.Name))
 			continue
 		}
 
