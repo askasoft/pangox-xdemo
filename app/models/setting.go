@@ -134,3 +134,13 @@ func (s *Setting) DecryptSecretValue() error {
 	}
 	return nil
 }
+
+func (s *Setting) CheckSecretValue() bool {
+	if s.Secret {
+		_, err := cptutil.Decrypt(s.Value)
+		if err != nil {
+			return false
+		}
+	}
+	return true
+}

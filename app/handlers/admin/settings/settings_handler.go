@@ -26,7 +26,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 )
 
-func loadSettingList(c *xin.Context, actor string) []*models.Setting {
+func loadSettings(c *xin.Context, actor string) []*models.Setting {
 	tt := tenant.Get(c)
 	au := tenant.AuthUser(c)
 
@@ -35,6 +35,10 @@ func loadSettingList(c *xin.Context, actor string) []*models.Setting {
 		panic(err)
 	}
 
+	return settings
+}
+
+func decryptSettings(settings []*models.Setting) []*models.Setting {
 	for _, stg := range settings {
 		_ = stg.DecryptSecretValue()
 	}
@@ -94,7 +98,7 @@ func bindSettingLists(c *xin.Context, h xin.H, settings []*models.Setting) {
 }
 
 func SettingIndex(c *xin.Context) {
-	settings := loadSettingList(c, "viewer")
+	settings := decryptSettings(loadSettings(c, "viewer"))
 
 	scs := buildSettingCategories(c.Locale, settings)
 
@@ -108,7 +112,7 @@ func SettingIndex(c *xin.Context) {
 func SettingSave(c *xin.Context) {
 	tt := tenant.Get(c)
 
-	settings := loadSettingList(c, "editor")
+	settings := decryptSettings(loadSettings(c, "editor"))
 
 	usettings := checkPostSettings(c, settings)
 	if len(c.Errors) > 0 {
@@ -169,6 +173,18 @@ func buildSettingDetails(c *xin.Context, settings []*models.Setting, usettings [
 	}
 
 	return jsonx.Stringify(ads)
+}
+
+func validateSecret(c *xin.Context, stg *models.Setting) bool {
+	if !stg.CheckSecretValue() {
+		c.AddError(&args.ParamError{
+			Param:   stg.Name,
+			Label:   tbs.GetText(c.Locale, "setting."+stg.Name, stg.Name),
+			Message: tbs.GetText(c.Locale, "error.param.invalid"),
+		})
+		return false
+	}
+	return true
 }
 
 func validateSetting(c *xin.Context, stg *models.Setting) bool {
@@ -312,7 +328,7 @@ func saveSettings(c *xin.Context, settings []*models.Setting, action string, det
 }
 
 func SettingExport(c *xin.Context) {
-	settings := loadSettingList(c, "editor")
+	settings := loadSettings(c, "editor")
 
 	scs := buildSettingCategories(c.Locale, settings)
 
@@ -374,9 +390,9 @@ func SettingImport(c *xin.Context) {
 		return
 	}
 
-	settings := loadSettingList(c, "editor")
+	settings := loadSettings(c, "editor")
 
-	usettings, skipped := checkCsvSettings(c, settings, csvstgs)
+	usettings := checkCsvSettings(c, settings, csvstgs)
 	if len(c.Errors) > 0 {
 		c.JSON(http.StatusBadRequest, middles.E(c))
 		return
@@ -391,15 +407,10 @@ func SettingImport(c *xin.Context) {
 		tenant.Get(c).PurgeSettings()
 	}
 
-	msg := tbs.GetText(c.Locale, "success.imported")
-	if len(skipped) > 0 {
-		msg += "\n" + tbs.Format(c.Locale, "setting.import.skipped", str.Join(skipped, ", "))
-	}
-
-	c.JSON(http.StatusOK, xin.H{"success": msg})
+	c.JSON(http.StatusOK, xin.H{"success": tbs.GetText(c.Locale, "success.imported")})
 }
 
-func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*models.SettingItem) (usettings []*models.Setting, skipped []string) {
+func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*models.SettingItem) (usettings []*models.Setting) {
 	stgmaps := map[string]*models.Setting{}
 	for _, stg := range settings {
 		stgmaps[stg.Name] = stg
@@ -422,18 +433,14 @@ func checkCsvSettings(c *xin.Context, settings []*models.Setting, csvstgs []*mod
 			continue
 		}
 
-		if stg.Secret && str.IsMasked(ci.Value) {
-			// skip masked secret
-			skipped = append(skipped, stg.Name)
-			continue
-		}
-
 		stg.Value = ci.Value
 		usettings = append(usettings, stg)
 	}
 
 	for _, ustg := range usettings {
-		validateSetting(c, ustg)
+		if validateSetting(c, ustg) {
+			validateSecret(c, ustg)
+		}
 	}
 
 	return
