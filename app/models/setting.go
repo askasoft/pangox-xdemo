@@ -110,12 +110,12 @@ func (s *Setting) IsSameMeta(n *Setting) bool {
 }
 
 func (s *Setting) IsSecretEncrypted() bool {
-	return s.Secret && cptutil.IsEncrypted(s.Value)
+	return s.Secret && cptutil.SettingCryptor.IsEncryptedString(s.Value)
 }
 
 func (s *Setting) EncryptSecretValue() error {
 	if s.Secret {
-		val, err := cptutil.Encrypt(s.Value)
+		val, err := cptutil.SettingCryptor.EncryptString(s.Value)
 		if err != nil {
 			return err
 		}
@@ -126,7 +126,7 @@ func (s *Setting) EncryptSecretValue() error {
 
 func (s *Setting) DecryptSecretValue() error {
 	if s.Secret {
-		val, err := cptutil.Decrypt(s.Value)
+		val, err := cptutil.SettingCryptor.DecryptString(s.Value)
 		if err != nil {
 			return err
 		}
@@ -137,7 +137,7 @@ func (s *Setting) DecryptSecretValue() error {
 
 func (s *Setting) CheckSecretValue() bool {
 	if s.Secret {
-		_, err := cptutil.Decrypt(s.Value)
+		_, err := cptutil.SettingCryptor.DecryptString(s.Value)
 		if err != nil {
 			return false
 		}

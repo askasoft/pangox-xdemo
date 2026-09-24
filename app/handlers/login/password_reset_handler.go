@@ -72,7 +72,7 @@ func PasswordResetSend(c *xin.Context) {
 	}
 
 	token := &PwdRstToken{Email: arg.Email, Timestamp: time.Now().UnixMilli()}
-	tkenc := cptutil.MustEncrypt(token.String())
+	tkenc := cptutil.TokenCryptor.MustEncryptString(token.String())
 	rsurl := fmt.Sprintf("%s://%s%s/login/pwdrst/reset/%s", str.If(c.IsSecure(), "https", "http"), c.RequestHostname(), app.Base(), tkenc)
 
 	tkexp := num.Itoa(int(ini.GetDuration("login", "passwordResetTokenExpires", time.Minute*10).Minutes()))
@@ -96,7 +96,7 @@ func PasswordResetSend(c *xin.Context) {
 
 func passwordResetToken(c *xin.Context) *PwdRstToken {
 	tkenc := c.Param("token")
-	tkstr, err := cptutil.Decrypt(tkenc)
+	tkstr, err := cptutil.TokenCryptor.DecryptString(tkenc)
 	if tkenc == "" || err != nil {
 		c.AddError(tbs.Error(c.Locale, "pwdrst.error.invalid"))
 		return nil

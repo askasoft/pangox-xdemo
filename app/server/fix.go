@@ -121,6 +121,10 @@ func fixUserPasswords(tx sqlx.Sqlx, sm schema.Schema, exec bool) error {
 	defer stmu.Close()
 
 	for _, user := range users {
+		if str.StartsWith(user.Password, "enc:") {
+			continue
+		}
+
 		oldCryptor := oldcpt.NewAes128CBCCryptor(user.Email)
 		pwd, err := oldCryptor.DecryptString(user.Password)
 		if err != nil {

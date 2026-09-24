@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/askasoft/pango/str"
-	"github.com/askasoft/pangox/xwa/xcpts"
+	"github.com/askasoft/pangox/xwa/xpwds"
 )
 
 const (
@@ -28,7 +28,7 @@ type User struct {
 	ID        int64     `gorm:"not null;primaryKey;autoIncrement" json:"id" form:"id"`
 	Name      string    `gorm:"size:100;not null" json:"name" form:"name,strip" validate:"required,maxlen=100"`
 	Email     string    `gorm:"size:200;not null;uniqueIndex:idx_users_email" json:"email" form:"email,strip,lower" validate:"required,maxlen=200,email"`
-	Password  string    `gorm:"size:200;not null" json:"password" form:"password,strip" validate:"omitempty,printascii"`
+	Password  string    `gorm:"size:255;not null" json:"password" form:"password,strip" validate:"omitempty,printascii"`
 	Role      string    `gorm:"size:1;not null" json:"role" form:"role,strip" validate:"required"`
 	Status    string    `gorm:"size:1;not null" json:"status" form:"status,strip" validate:"required"`
 	Secret    int64     `gorm:"not null" json:"secret" form:"secret"`
@@ -94,7 +94,7 @@ func (u *User) IsApiOnly() bool {
 }
 
 func (u *User) SetPassword(password string) {
-	u.Password = xcpts.MustEncrypt(u.Email, password)
+	u.Password, _ = xpwds.Encrypt(u.Email, password)
 }
 
 //-------------------------------------
@@ -105,5 +105,6 @@ func (u *User) GetUsername() string {
 }
 
 func (u *User) GetPassword() string {
-	return xcpts.MustDecrypt(u.Email, u.Password)
+	pass, _ := xpwds.Decrypt(u.Email, u.Password)
+	return pass
 }

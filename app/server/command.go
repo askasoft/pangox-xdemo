@@ -59,8 +59,8 @@ func (s *service) Usage() {
 	fmt.Println("    import <target> <source>")
 	fmt.Println("      target=settings    import settings to database.")
 	fmt.Println("        <source>         specify setting files ({schema}.csv) directory to import.")
-	fmt.Println("    encrypt [key] <str>  encrypt string.")
-	fmt.Println("    decrypt [key] <str>  decrypt string.")
+	fmt.Println("    encrypt [key] [info] <str>  encrypt string.")
+	fmt.Println("    decrypt [key] [info] <str>  decrypt string.")
 	fmt.Println("    fix <target> -exec [schema]...")
 	fmt.Println("      target=userpass    fix user password (CBC -> GCM).")
 	fmt.Println("      target=sencrypt    encrypt secret setting values.")
@@ -326,8 +326,8 @@ func (s *service) doImport() {
 }
 
 func (s *service) doEncrypt() {
-	k, v := cryptFlags()
-	if es, err := xcpts.Encrypt(k, v); err != nil {
+	k, i, v := cryptFlags()
+	if es, err := xcpts.EncryptString(k, i, v); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	} else {
 		fmt.Println(es)
@@ -335,19 +335,22 @@ func (s *service) doEncrypt() {
 }
 
 func (s *service) doDecrypt() {
-	k, v := cryptFlags()
-	if ds, err := xcpts.Decrypt(k, v); err != nil {
+	k, i, v := cryptFlags()
+	if ds, err := xcpts.DecryptString(k, i, v); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	} else {
 		fmt.Println(ds)
 	}
 }
 
-func cryptFlags() (k, v string) {
-	k, v = flag.Arg(1), flag.Arg(2)
-	if v == "" {
+func cryptFlags() (k, i, v string) {
+	k, i, v = flag.Arg(1), flag.Arg(2), flag.Arg(3)
+	switch {
+	case i == "" && v == "": // <str> only
 		initConfigs()
 		k, v = app.Secret(), k
+	case v == "": // [key] <str>
+		v, i = i, ""
 	}
 	return
 }
