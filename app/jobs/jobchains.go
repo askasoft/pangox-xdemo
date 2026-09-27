@@ -89,7 +89,7 @@ func JobChainInitAndStart(tt *tenant.Tenant, cn string, jns ...string) error {
 
 	arg, err := CreateJobArg(tt, jns[0])
 	if err != nil {
-		tt.Logger("JOB").Error("Failed to create JobArg for %q: %v", jns[0], err)
+		tt.Logger("JOB").Errorf("Failed to create JobArg for %q: %v", jns[0], err)
 		return err
 	}
 
@@ -110,12 +110,20 @@ func JobChainInitAndStart(tt *tenant.Tenant, cn string, jns ...string) error {
 }
 
 func JobChainAppendJob(tt *tenant.Tenant, name, locale string, cid int64, csq int, cdt bool) error {
-	tjm := tt.JM()
-
 	arg, err := CreateJobArg(tt, name)
 	if err != nil {
 		return err
 	}
+
+	return JobChainAppendJobWithArg(tt, name, locale, cid, csq, cdt, arg)
+}
+
+// JobChainAppendJobWithArg is like JobChainAppendJob but uses the given arg instead of the
+// job's default-constructed one. This lets a preceding job in the chain pass along parameters
+// (e.g. a visibility filter selected by the user) that the generic chain continuation would
+// otherwise reset to the job's registered default.
+func JobChainAppendJobWithArg(tt *tenant.Tenant, name, locale string, cid int64, csq int, cdt bool, arg IArg) error {
+	tjm := tt.JM()
 
 	if ica, ok := arg.(IChainArg); ok {
 		ica.SetChain(csq, cdt)
