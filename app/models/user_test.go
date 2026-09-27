@@ -15,8 +15,8 @@ func TestEncryptPassword(t *testing.T) {
 	for i := 1; i <= 128; i++ {
 		u.SetPassword(str.Repeat("0", i))
 		fmt.Printf("%d: %d\n", i, len(u.Password))
-		if len(u.Password) > 200 {
-			t.Errorf("%d: %d > 200", i, len(u.Password))
+		if len(u.Password) > 255 {
+			t.Errorf("%d: %d > 255", i, len(u.Password))
 		}
 	}
 }

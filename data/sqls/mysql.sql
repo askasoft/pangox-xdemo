@@ -59,7 +59,7 @@ CREATE TABLE `SCHEMA`.`users` (
 	`id` bigint AUTO_INCREMENT NOT NULL,
 	`name` varchar(100) NOT NULL,
 	`email` varchar(200) NOT NULL,
-	`password` varchar(200) NOT NULL,
+	`password` varchar(255) NOT NULL,
 	`role` varchar(1) NOT NULL,
 	`status` varchar(1) NOT NULL,
 	`secret` bigint NOT NULL,
