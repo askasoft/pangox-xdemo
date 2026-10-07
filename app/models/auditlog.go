@@ -7,6 +7,9 @@ import (
 )
 
 const (
+	AL_TENANTS_CREATE         = "tenants.create"
+	AL_TENANTS_RENAME         = "tenants.rename"
+	AL_TENANTS_DELETE         = "tenants.delete"
 	AL_LOGIN_LOGIN            = "login.login"
 	AL_LOGIN_PWDRST           = "login.password-reset"
 	AL_LOGIN_PWDCHG           = "login.password-change"
@@ -35,6 +38,9 @@ const (
 )
 
 var AL_FUNACTS = []string{
+	AL_TENANTS_CREATE,
+	AL_TENANTS_RENAME,
+	AL_TENANTS_DELETE,
 	AL_LOGIN_LOGIN,
 	AL_LOGIN_PWDRST,
 	AL_LOGIN_PWDCHG,

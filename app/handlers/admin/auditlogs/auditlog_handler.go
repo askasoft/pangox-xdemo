@@ -28,7 +28,14 @@ func bindAuditLogQueryArg(c *xin.Context) (alqa *args.AuditLogQueryArg, err erro
 }
 
 func bindAuditLogMaps(c *xin.Context, h xin.H) {
-	h["AuditLogFuncMap"] = tbsutil.GetAudioLogFuncMap(c.Locale)
+	au := tenant.AuthUser(c)
+	fm := tbsutil.GetAudioLogFuncMap(c.Locale)
+
+	if !app.IsMultiTenant() || !au.IsSuper() {
+		fm.Remove("tenants")
+	}
+
+	h["AuditLogFuncMap"] = fm
 }
 
 func AuditLogIndex(c *xin.Context) {

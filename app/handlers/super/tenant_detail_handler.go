@@ -8,6 +8,7 @@ import (
 	"github.com/askasoft/pangox-xdemo/app"
 	"github.com/askasoft/pangox-xdemo/app/args"
 	"github.com/askasoft/pangox-xdemo/app/middles"
+	"github.com/askasoft/pangox-xdemo/app/models"
 	"github.com/askasoft/pangox-xdemo/app/schema"
 	"github.com/askasoft/pangox-xdemo/app/tenant"
 )
@@ -37,6 +38,8 @@ func TenantCreate(c *xin.Context) {
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
 	}
+
+	_ = tenant.Get(c).AddAuditLog(app.SDB(), c, models.AL_TENANTS_CREATE, ti.Name)
 
 	c.JSON(http.StatusOK, xin.H{
 		"success": tbs.GetText(c.Locale, "success.created"),
@@ -90,6 +93,8 @@ func TenantUpdate(c *xin.Context) {
 			c.JSON(http.StatusInternalServerError, middles.E(c))
 			return
 		}
+
+		_ = tenant.Get(c).AddAuditLog(app.SDB(), c, models.AL_TENANTS_RENAME, te.Oname, te.Name)
 	}
 
 	if err := schema.CommentSchema(te.Name, te.Comment); err != nil {
@@ -134,6 +139,8 @@ func TenantDelete(c *xin.Context) {
 		c.JSON(http.StatusInternalServerError, middles.E(c))
 		return
 	}
+
+	_ = tenant.Get(c).AddAuditLog(app.SDB(), c, models.AL_TENANTS_DELETE, ti.Name)
 
 	c.JSON(http.StatusOK, xin.H{
 		"success": tbs.GetText(c.Locale, "success.deleted"),
