@@ -1,23 +1,19 @@
 package schema
 
 import (
-	"github.com/askasoft/pango/sqx/mysqlx"
 	"github.com/askasoft/pango/sqx/pgsqlx"
 	"github.com/askasoft/pango/sqx/sqlx"
 	"github.com/askasoft/pangox-xdemo/app"
 )
 
 func ResetAutoIncrement(tx sqlx.Sqlx, table string, starts ...int64) error {
-	_, err := tx.Exec(ResetAutoIncrementSQL(table, starts...))
-	return err
-}
-
-func ResetAutoIncrementSQL(table string, starts ...int64) string {
 	switch app.DBType() {
 	case "mysql":
-		return mysqlx.ResetAutoIncrementSQL(table, starts...)
+		// mysql will auto change auto_increment if insert with ID
+		return nil
 	default:
-		return pgsqlx.ResetSequenceSQL(table, "id", starts...)
+		_, err := tx.Exec(pgsqlx.ResetSequenceSQL(table, "id", starts...))
+		return err
 	}
 }
 
