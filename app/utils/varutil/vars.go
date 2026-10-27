@@ -27,7 +27,7 @@ func ValidateVars(fl vad.FieldLevel) error {
 
 	for _, k := range ini.Section("").Keys() {
 		if !IsValidVarName(k) {
-			return xerrs.NewLocaleError("setting.variable.error.name", k)
+			return xerrs.NewLocaleError("setting.error.varname", k)
 		}
 	}
 
