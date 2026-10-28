@@ -15,12 +15,21 @@
 		display: flex;
 	}
 	.scc > ul.nav {
+		flex: 0 0 auto;
 		flex-direction: column;
 		flex-wrap: nowrap;
-		min-width: 200px;
-		max-width: 200px;
+		width: max-content;
+		min-width: 12rem;
+		max-width: min(22rem, calc(100% - 30rem));
 		max-height: calc(100vh - 260px);
 		overflow-y: auto;
+		scrollbar-gutter: stable;
+		position: sticky;
+		top: 133px;
+		z-index: 9;
+	}
+	.scc > ul.nav > li {
+		margin-right: 0.5rem;
 	}
 }
 .scc .tab-content {
@@ -35,7 +44,9 @@ label[editor="%"] {
 	color: #045C92;
 }
 
-.schedule > .doms, .schedule > .dows, .schedule > .hours {
+.schedule > div {
+	display: block !important;
+}
+.schedule > .doms, .schedule > .dows, .schedule > .hours, .schedule + .desc {
 	border-top: 1px dashed var(--ui-lined-color, #ccc);
-	display: block;
 }
