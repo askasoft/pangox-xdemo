@@ -27,6 +27,11 @@ func ReadSettingsFile() ([]*models.Setting, error) {
 		return nil, err
 	}
 
+	for i, s := range settings {
+		if s.Order == 0 {
+			s.Order = i + 1
+		}
+	}
 	return settings, nil
 }
 
