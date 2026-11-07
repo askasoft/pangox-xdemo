@@ -35,6 +35,9 @@ func ServerStats(c *xin.Context) {
 	h["handling"] = middles.Handling
 	h["dbstats"] = app.SDB().Stats()
 	h["jobs"] = jobs.Running()
+	h["revision"] = app.Revision()
+	h["version"] = app.Version()
+	h["versions"] = app.Versions()
 
 	c.IndentedJSON(http.StatusOK, h)
 }
