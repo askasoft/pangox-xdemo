@@ -39,8 +39,9 @@ jobs:
       - name: Build
         run: |
           mkdir dist
-          GOOS=linux GOARCH=amd64 ./build.sh dist/xdemo-linux-amd64
-          GOOS=linux GOARCH=arm64 ./build.sh dist/xdemo-linux-arm64
+          GOOS=windows GOARCH=amd64 ./build.sh dist/xdemo-windows-amd64
+          GOOS=linux   GOARCH=amd64 ./build.sh dist/xdemo-linux-amd64
+          GOOS=linux   GOARCH=arm64 ./build.sh dist/xdemo-linux-arm64
 
       - name: Generate Release Notes and Publish
         id: generate_release_notes
