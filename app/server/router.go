@@ -79,7 +79,7 @@ func configMiddleware() {
 	app.XCA.CookieDomain = ini.GetString("login", "cookieDomain")
 	app.XCA.CookieMaxAge = ini.GetDuration("login", "cookieMaxAge", time.Minute*30)
 	app.XCA.CookieSecure = ini.GetBool("login", "cookieSecure", true)
-	app.XCA.SetCookieSameSite(ini.GetString("login", "cookieSameSite", "strict"))
+	app.XCA.SetCookieSameSite(ini.GetString("login", "cookieSameSite", "lax"))
 
 	app.XCN.Cryptor = app.XCA.Cryptor
 	app.XCN.CookiePath = app.XCA.CookiePath
