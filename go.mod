@@ -6,16 +6,16 @@ require (
 	github.com/askasoft/gogormx v1.0.12
 	github.com/askasoft/pango v1.2.22
 	github.com/askasoft/pangox v1.2.21
-	github.com/askasoft/pangox-assets v1.1.15
+	github.com/askasoft/pangox-assets v1.1.16
 	github.com/crewjam/saml v0.6.3
 	github.com/go-ldap/ldap/v3 v3.4.15
-	github.com/go-sql-driver/mysql v1.10.1
+	github.com/go-sql-driver/mysql v1.10.2
 	github.com/jackc/pgx/v5 v5.13.0
 	github.com/liuzl/gocc v0.0.0-20231231122217-0372e1059ca5
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/xlzd/gotp v0.1.0
 	github.com/xuri/excelize/v2 v2.11.1
-	golang.org/x/net v0.62.0
+	golang.org/x/net v0.63.0
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/driver/postgres v1.6.3
 	gorm.io/gorm v1.31.2
@@ -33,13 +33,13 @@ require (
 	github.com/jackc/pgerrcode v0.0.0-20250907135507-afb5586c32a6 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
-	github.com/jackc/puddle/v2 v2.2.3 // indirect
+	github.com/jackc/puddle/v2 v2.2.4 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jonboulle/clockwork v0.5.0 // indirect
 	github.com/liuzl/cedar-go v0.0.0-20170805034717-80a9c64b256d // indirect
 	github.com/liuzl/da v0.0.0-20180704015230-14771aad5b1d // indirect
-	github.com/richardlehane/mscfb v1.0.9 // indirect
+	github.com/richardlehane/mscfb v1.0.10 // indirect
 	github.com/richardlehane/msoleps v1.0.6 // indirect
 	github.com/russellhaering/goxmldsig v1.6.1 // indirect
 	github.com/tiendc/go-deepcopy v1.7.2 // indirect
